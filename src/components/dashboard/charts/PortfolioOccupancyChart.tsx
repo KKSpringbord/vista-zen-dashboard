@@ -5,7 +5,7 @@ interface PortfolioOccupancyChartData {
   occupancy: number;
   totalUnits: number;
   occupiedUnits?: number;
-  x: number; // For scatter plot positioning
+  month: string; // Month for X-axis
 }
 
 interface PortfolioOccupancyChartProps {
@@ -19,10 +19,9 @@ export function PortfolioOccupancyChart({
   selectedProperties = [], 
   onBarClick 
 }: PortfolioOccupancyChartProps) {
-  // Add x positioning for scatter plot and filter data
-  const processedData = data.map((item, index) => ({
+  // Process data and calculate occupied units
+  const processedData = data.map((item) => ({
     ...item,
-    x: index + 1,
     occupiedUnits: item.occupiedUnits || Math.round(item.totalUnits * item.occupancy / 100)
   }));
   
@@ -94,12 +93,12 @@ export function PortfolioOccupancyChart({
         />
         
         <XAxis 
-          type="number"
-          dataKey="x"
+          type="category"
+          dataKey="month"
           axisLine={false}
           tickLine={false}
-          tick={false}
-          domain={[0, filteredData.length + 1]}
+          tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+          tickMargin={8}
         />
         
         <YAxis 
