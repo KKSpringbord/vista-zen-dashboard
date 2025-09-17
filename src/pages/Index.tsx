@@ -25,6 +25,7 @@ import { EnhancedLineChart } from "@/components/dashboard/charts/EnhancedLineCha
 import { ComboChart } from "@/components/dashboard/charts/ComboChart";
 import { TimelineChart } from "@/components/dashboard/charts/TimelineChart";
 import { LeaseExpiryChart } from "@/components/dashboard/charts/LeaseExpiryChart";
+import { PortfolioOccupancyChart } from "@/components/dashboard/charts/PortfolioOccupancyChart";
 
 // Lease Expiry Schedule data - specific buckets and properties
 const leaseExpiryScheduleData = [
@@ -74,13 +75,17 @@ const leaseExpiryMultiData = [
   { name: 'Q4 2024', retail: 2, office: 1, industrial: 1, mixedUse: 2 },
 ];
 
-const occupancyMultiTrendData = [
-  { name: 'Jan', retail: 92, office: 78, industrial: 95, mixedUse: 85 },
-  { name: 'Feb', retail: 89, office: 82, industrial: 93, mixedUse: 87 },
-  { name: 'Mar', retail: 94, office: 75, industrial: 97, mixedUse: 83 },
-  { name: 'Apr', retail: 96, office: 88, industrial: 94, mixedUse: 89 },
-  { name: 'May', retail: 91, office: 85, industrial: 98, mixedUse: 86 },
-  { name: 'Jun', retail: 93, office: 90, industrial: 96, mixedUse: 91 },
+const portfolioOccupancyData = [
+  { propertyName: 'Riverstone Resi...', occupancy: 92, totalUnits: 45, occupiedUnits: 41 },
+  { propertyName: 'Skyline Business...', occupancy: 78, totalUnits: 32, occupiedUnits: 25 },
+  { propertyName: 'Crystal Unit Po...', occupancy: 95, totalUnits: 28, occupiedUnits: 27 },
+  { propertyName: 'Hello World', occupancy: 85, totalUnits: 15, occupiedUnits: 13 },
+  { propertyName: 'Crescent Height...', occupancy: 88, totalUnits: 22, occupiedUnits: 19 },
+  { propertyName: 'Marina Bay Plaza', occupancy: 91, totalUnits: 38, occupiedUnits: 35 },
+  { propertyName: 'Downtown Tower', occupancy: 73, totalUnits: 55, occupiedUnits: 40 },
+  { propertyName: 'Sunset Gardens', occupancy: 96, totalUnits: 18, occupiedUnits: 17 },
+  { propertyName: 'Tech Hub Center', occupancy: 82, totalUnits: 41, occupiedUnits: 34 },
+  { propertyName: 'Golden Gate Mall', occupancy: 89, totalUnits: 26, occupiedUnits: 23 },
 ];
 
 const revenueVsExpensesData = [
@@ -140,6 +145,10 @@ const Index = () => {
   const handleChartClick = (data: any, seriesKey: string, chartType?: string) => {
     console.log('Chart clicked:', { data, seriesKey, chartType });
     // Here you would implement drill-down logic
+  };
+
+  const handleSingleChartClick = (data: any) => {
+    handleChartClick(data, data.propertyName || 'unknown', 'portfolio-occupancy');
   };
 
   const handleFiltersChange = (filters: Record<string, string | number>) => {
@@ -249,18 +258,13 @@ const Index = () => {
             </ChartCard>
 
             <ChartCard
-              title="Multi-Property Occupancy Trends"
-              description="Occupancy rates by property type over time"
+              title="Portfolio Wise Occupancy Trends"
+              description="Occupancy rates by property"
             >
-              <EnhancedLineChart 
-                data={occupancyMultiTrendData}
-                series={[
-                  { dataKey: 'retail', name: 'Retail', color: 'hsl(var(--chart-primary))', strokeWidth: 2.5 },
-                  { dataKey: 'office', name: 'Office', color: 'hsl(var(--chart-secondary))', strokeWidth: 2.5 },
-                  { dataKey: 'industrial', name: 'Industrial', color: 'hsl(var(--chart-accent))', strokeWidth: 2.5 },
-                  { dataKey: 'mixedUse', name: 'Mixed Use', color: 'hsl(var(--chart-muted))', strokeWidth: 2.5 }
-                ]}
-                onPointClick={handleChartClick}
+              <PortfolioOccupancyChart 
+                data={portfolioOccupancyData}
+                selectedProperties={selectedProperties}
+                onBarClick={handleSingleChartClick}
               />
             </ChartCard>
 
