@@ -80,25 +80,21 @@ const Index = () => {
               title="Total Properties"
               value="12"
               icon={Building2}
-              trend={{ value: 8.2, label: "vs last month", positive: true }}
             />
             <MetricCard
               title="Gross Rental Income"
               value="$124,500"
               icon={DollarSign}
-              trend={{ value: 12.5, label: "vs last month", positive: true }}
             />
             <MetricCard
               title="Total Rentable SF"
               value="45,230"
               icon={Square}
-              trend={{ value: 3.1, label: "vs last month", positive: true }}
             />
             <MetricCard
               title="Occupancy Rate"
               value="87.5%"
               icon={Home}
-              trend={{ value: 2.3, label: "vs last month", positive: true }}
             />
           </div>
 
@@ -108,25 +104,21 @@ const Index = () => {
               title="Total NOI"
               value="$98,750"
               icon={TrendingUp}
-              trend={{ value: 15.3, label: "vs last month", positive: true }}
             />
             <MetricCard
               title="Leases Expiring (12M)"
               value="8"
               icon={Calendar}
-              trend={{ value: -5.2, label: "vs last month", positive: false }}
             />
             <MetricCard
               title="Total Vacant SF"
               value="5,670"
               icon={AlertTriangle}
-              trend={{ value: -12.8, label: "vs last month", positive: true }}
             />
             <MetricCard
               title="Vacancy Loss"
               value="$8,250"
               icon={TrendingDown}
-              trend={{ value: -8.7, label: "vs last month", positive: true }}
             />
           </div>
 
