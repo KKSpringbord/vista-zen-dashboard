@@ -54,6 +54,8 @@ All colors MUST be HSL.
     --chart-secondary: 25 90% 65%;
     --chart-accent: 30 85% 75%;
     --chart-muted: 215 10% 80%;
+    --chart-neutral: 210 10% 70%;
+    --chart-destructive: 0 75% 60%;
 
     --sidebar-background: 0 0% 98%;
 

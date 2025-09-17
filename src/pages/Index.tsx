@@ -141,13 +141,62 @@ const portfolioOccupancyData = [
   { propertyName: 'Hello World', occupancy: 90, totalUnits: 15, month: 'Dec' },
 ];
 
-const revenueVsExpensesData = [
-  { name: 'Jan', revenue: 85000, expenses: 65000, profit: 20000 },
-  { name: 'Feb', revenue: 88000, expenses: 67000, profit: 21000 },
-  { name: 'Mar', revenue: 92000, expenses: 69000, profit: 23000 },
-  { name: 'Apr', revenue: 87000, expenses: 66000, profit: 21000 },
-  { name: 'May', revenue: 95000, expenses: 71000, profit: 24000 },
-  { name: 'Jun', revenue: 98750, expenses: 73000, profit: 25750 },
+// Units/Space Sold Data
+const unitsSoldData = [
+  { name: 'Jan', total: 8, riverstoneResi: 2, skylineBusiness: 1, crystalUnit: 2, helloWorld: 1, crescentHeight: 1, others: 1 },
+  { name: 'Feb', total: 12, riverstoneResi: 3, skylineBusiness: 2, crystalUnit: 3, helloWorld: 2, crescentHeight: 1, others: 1 },
+  { name: 'Mar', total: 6, riverstoneResi: 1, skylineBusiness: 1, crystalUnit: 1, helloWorld: 1, crescentHeight: 1, others: 1 },
+  { name: 'Apr', total: 15, riverstoneResi: 4, skylineBusiness: 3, crystalUnit: 3, helloWorld: 2, crescentHeight: 2, others: 1 },
+  { name: 'May', total: 10, riverstoneResi: 2, skylineBusiness: 2, crystalUnit: 2, helloWorld: 1, crescentHeight: 2, others: 1 },
+  { name: 'Jun', total: 18, riverstoneResi: 5, skylineBusiness: 4, crystalUnit: 4, helloWorld: 2, crescentHeight: 2, others: 1 },
+  { name: 'Jul', total: 14, riverstoneResi: 3, skylineBusiness: 3, crystalUnit: 3, helloWorld: 2, crescentHeight: 2, others: 1 },
+  { name: 'Aug', total: 11, riverstoneResi: 2, skylineBusiness: 2, crystalUnit: 3, helloWorld: 1, crescentHeight: 2, others: 1 },
+  { name: 'Sep', total: 9, riverstoneResi: 2, skylineBusiness: 1, crystalUnit: 2, helloWorld: 1, crescentHeight: 2, others: 1 },
+  { name: 'Oct', total: 13, riverstoneResi: 3, skylineBusiness: 2, crystalUnit: 3, helloWorld: 2, crescentHeight: 2, others: 1 },
+  { name: 'Nov', total: 16, riverstoneResi: 4, skylineBusiness: 3, crystalUnit: 4, helloWorld: 2, crescentHeight: 2, others: 1 },
+  { name: 'Dec', total: 20, riverstoneResi: 5, skylineBusiness: 4, crystalUnit: 5, helloWorld: 3, crescentHeight: 2, others: 1 },
+];
+
+// Rent per Square Feet Data
+const rentPerSqftData = [
+  { name: 'Jan', riverstoneResi: 2.8, skylineBusiness: 3.2, crystalUnit: 4.1, helloWorld: 2.9, crescentHeight: 3.5 },
+  { name: 'Feb', riverstoneResi: 2.9, skylineBusiness: 3.3, crystalUnit: 4.2, helloWorld: 3.0, crescentHeight: 3.6 },
+  { name: 'Mar', riverstoneResi: 2.8, skylineBusiness: 3.1, crystalUnit: 4.0, helloWorld: 2.8, crescentHeight: 3.4 },
+  { name: 'Apr', riverstoneResi: 3.0, skylineBusiness: 3.4, crystalUnit: 4.3, helloWorld: 3.1, crescentHeight: 3.7 },
+  { name: 'May', riverstoneResi: 3.1, skylineBusiness: 3.5, crystalUnit: 4.4, helloWorld: 3.2, crescentHeight: 3.8 },
+  { name: 'Jun', riverstoneResi: 3.2, skylineBusiness: 3.6, crystalUnit: 4.5, helloWorld: 3.3, crescentHeight: 3.9 },
+  { name: 'Jul', riverstoneResi: 3.1, skylineBusiness: 3.4, crystalUnit: 4.3, helloWorld: 3.1, crescentHeight: 3.7 },
+  { name: 'Aug', riverstoneResi: 3.3, skylineBusiness: 3.7, crystalUnit: 4.6, helloWorld: 3.4, crescentHeight: 4.0 },
+  { name: 'Sep', riverstoneResi: 3.2, skylineBusiness: 3.5, crystalUnit: 4.4, helloWorld: 3.2, crescentHeight: 3.8 },
+  { name: 'Oct', riverstoneResi: 3.4, skylineBusiness: 3.8, crystalUnit: 4.7, helloWorld: 3.5, crescentHeight: 4.1 },
+  { name: 'Nov', riverstoneResi: 3.5, skylineBusiness: 3.9, crystalUnit: 4.8, helloWorld: 3.6, crescentHeight: 4.2 },
+  { name: 'Dec', riverstoneResi: 3.6, skylineBusiness: 4.0, crystalUnit: 4.9, helloWorld: 3.7, crescentHeight: 4.3 },
+];
+
+// NOI Data by Property
+const noiData = [
+  { name: 'Jan', riverstoneResi: 18500, skylineBusiness: 15200, crystalUnit: 22800, helloWorld: 8400, crescentHeight: 12100 },
+  { name: 'Feb', riverstoneResi: 19200, skylineBusiness: 15800, crystalUnit: 23500, helloWorld: 8800, crescentHeight: 12600 },
+  { name: 'Mar', riverstoneResi: 18800, skylineBusiness: 15000, crystalUnit: 22200, helloWorld: 8100, crescentHeight: 11900 },
+  { name: 'Apr', riverstoneResi: 20100, skylineBusiness: 16500, crystalUnit: 24200, helloWorld: 9200, crescentHeight: 13400 },
+  { name: 'May', riverstoneResi: 20800, skylineBusiness: 17200, crystalUnit: 25100, helloWorld: 9600, crescentHeight: 14000 },
+  { name: 'Jun', riverstoneResi: 21500, skylineBusiness: 17800, crystalUnit: 25800, helloWorld: 10000, crescentHeight: 14600 },
+  { name: 'Jul', riverstoneResi: 20900, skylineBusiness: 17000, crystalUnit: 24800, helloWorld: 9500, crescentHeight: 13800 },
+  { name: 'Aug', riverstoneResi: 22200, skylineBusiness: 18500, crystalUnit: 26500, helloWorld: 10500, crescentHeight: 15200 },
+  { name: 'Sep', riverstoneResi: 21600, skylineBusiness: 17600, crystalUnit: 25400, helloWorld: 9900, crescentHeight: 14400 },
+  { name: 'Oct', riverstoneResi: 23000, skylineBusiness: 19200, crystalUnit: 27200, helloWorld: 11000, crescentHeight: 16000 },
+  { name: 'Nov', riverstoneResi: 23800, skylineBusiness: 19900, crystalUnit: 28000, helloWorld: 11400, crescentHeight: 16600 },
+  { name: 'Dec', riverstoneResi: 24500, skylineBusiness: 20500, crystalUnit: 28800, helloWorld: 11800, crescentHeight: 17200 },
+];
+
+// Top Tenants Data (80/20 rule applied) - Q4 2024 data
+const topTenantsData = [
+  { name: 'MegaCorp Ltd', revenue: 45000, percentage: 18.2 },
+  { name: 'TechGlobal Inc', revenue: 38000, percentage: 15.4 },
+  { name: 'Healthcare Plus', revenue: 32000, percentage: 13.0 },
+  { name: 'RetailMax Group', revenue: 28000, percentage: 11.4 },
+  { name: 'Finance Solutions', revenue: 25000, percentage: 10.1 },
+  { name: 'Others (15 tenants)', revenue: 79000, percentage: 31.9 },
 ];
 
 const timelineEventsData = [
@@ -322,19 +371,21 @@ const Index = () => {
             </ChartCard>
 
             <ChartCard
-              title="Revenue vs Expenses"
-              description="Monthly financial performance with profit trend"
+              title="Total Units/Space Sold"
+              description="Monthly units sold with property breakdown on hover"
             >
-              <ComboChart 
-                data={revenueVsExpensesData}
+              <EnhancedBarChart 
+                data={unitsSoldData}
                 series={[
-                  { dataKey: 'revenue', name: 'Revenue', color: 'hsl(var(--chart-primary))', type: 'bar', yAxisId: 'left' },
-                  { dataKey: 'expenses', name: 'Expenses', color: 'hsl(var(--chart-secondary))', type: 'bar', yAxisId: 'left' },
-                  { dataKey: 'profit', name: 'Profit Trend', color: 'hsl(var(--chart-accent))', type: 'line', yAxisId: 'right', strokeWidth: 3 }
+                  { dataKey: 'riverstoneResi', name: 'Riverstone Resi...', color: 'hsl(var(--chart-primary))' },
+                  { dataKey: 'skylineBusiness', name: 'Skyline Business...', color: 'hsl(var(--chart-secondary))' },
+                  { dataKey: 'crystalUnit', name: 'Crystal Unit Po...', color: 'hsl(var(--chart-accent))' },
+                  { dataKey: 'helloWorld', name: 'Hello World', color: 'hsl(var(--chart-muted))' },
+                  { dataKey: 'crescentHeight', name: 'Crescent Height...', color: 'hsl(var(--chart-destructive))' },
+                  { dataKey: 'others', name: 'Others', color: 'hsl(var(--chart-neutral))' }
                 ]}
-                leftAxisLabel="Revenue ($)"
-                rightAxisLabel="Profit ($)"
-                onElementClick={handleChartClick}
+                stacked={true}
+                onBarClick={handleChartClick}
               />
             </ChartCard>
 
@@ -343,6 +394,43 @@ const Index = () => {
               description="Property distribution by type"
             >
               <ModernDonutChart data={portfolioMixData} />
+            </ChartCard>
+          </div>
+
+          {/* New Charts Row */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <ChartCard
+              title="Rent per Square Feet"
+              description="Monthly rent per sqft by property"
+            >
+              <EnhancedLineChart 
+                data={rentPerSqftData}
+                series={[
+                  { dataKey: 'riverstoneResi', name: 'Riverstone Resi...', color: 'hsl(var(--chart-primary))' },
+                  { dataKey: 'skylineBusiness', name: 'Skyline Business...', color: 'hsl(var(--chart-secondary))' },
+                  { dataKey: 'crystalUnit', name: 'Crystal Unit Po...', color: 'hsl(var(--chart-accent))' },
+                  { dataKey: 'helloWorld', name: 'Hello World', color: 'hsl(var(--chart-muted))' },
+                  { dataKey: 'crescentHeight', name: 'Crescent Height...', color: 'hsl(var(--chart-destructive))' }
+                ]}
+                onPointClick={handleChartClick}
+              />
+            </ChartCard>
+
+            <ChartCard
+              title="Net Operating Income (NOI)"
+              description="Monthly NOI by property with hover breakdown"
+            >
+              <EnhancedBarChart 
+                data={noiData}
+                series={[
+                  { dataKey: 'riverstoneResi', name: 'Riverstone Resi...', color: 'hsl(var(--chart-primary))' },
+                  { dataKey: 'skylineBusiness', name: 'Skyline Business...', color: 'hsl(var(--chart-secondary))' },
+                  { dataKey: 'crystalUnit', name: 'Crystal Unit Po...', color: 'hsl(var(--chart-accent))' },
+                  { dataKey: 'helloWorld', name: 'Hello World', color: 'hsl(var(--chart-muted))' },
+                  { dataKey: 'crescentHeight', name: 'Crescent Height...', color: 'hsl(var(--chart-destructive))' }
+                ]}
+                onBarClick={handleChartClick}
+              />
             </ChartCard>
           </div>
 
@@ -364,20 +452,13 @@ const Index = () => {
             </ChartCard>
 
             <ChartCard
-              title="Revenue by Top Tenants"
-              description="Multi-series tenant performance comparison"
+              title="Top Revenue Contributors (Q4 2024)"
+              description="80% contributors vs 20% (Others) based on selected timeframe"
             >
               <EnhancedBarChart 
-                data={[
-                  { name: 'Tenant A', current: 35000, previous: 32000, target: 38000 },
-                  { name: 'Tenant B', current: 28000, previous: 30000, target: 29000 },
-                  { name: 'Tenant C', current: 22000, previous: 20000, target: 25000 },
-                  { name: 'Tenant D', current: 18000, previous: 19000, target: 20000 },
-                ]}
+                data={topTenantsData}
                 series={[
-                  { dataKey: 'previous', name: 'Previous Period', color: 'hsl(var(--chart-muted))' },
-                  { dataKey: 'current', name: 'Current Period', color: 'hsl(var(--chart-primary))' },
-                  { dataKey: 'target', name: 'Target', color: 'hsl(var(--chart-accent))' }
+                  { dataKey: 'revenue', name: 'Revenue ($)', color: 'hsl(var(--chart-primary))' }
                 ]}
                 onBarClick={handleChartClick}
               />

@@ -54,6 +54,8 @@ export default {
           secondary: "hsl(var(--chart-secondary))",
           accent: "hsl(var(--chart-accent))",
           muted: "hsl(var(--chart-muted))",
+          neutral: "hsl(var(--chart-neutral))",
+          destructive: "hsl(var(--chart-destructive))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
