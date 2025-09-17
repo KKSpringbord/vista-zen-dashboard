@@ -76,16 +76,16 @@ const leaseExpiryMultiData = [
 ];
 
 const portfolioOccupancyData = [
-  { propertyName: 'Riverstone Resi...', occupancy: 92, totalUnits: 45, occupiedUnits: 41 },
-  { propertyName: 'Skyline Business...', occupancy: 78, totalUnits: 32, occupiedUnits: 25 },
-  { propertyName: 'Crystal Unit Po...', occupancy: 95, totalUnits: 28, occupiedUnits: 27 },
-  { propertyName: 'Hello World', occupancy: 85, totalUnits: 15, occupiedUnits: 13 },
-  { propertyName: 'Crescent Height...', occupancy: 88, totalUnits: 22, occupiedUnits: 19 },
-  { propertyName: 'Marina Bay Plaza', occupancy: 91, totalUnits: 38, occupiedUnits: 35 },
-  { propertyName: 'Downtown Tower', occupancy: 73, totalUnits: 55, occupiedUnits: 40 },
-  { propertyName: 'Sunset Gardens', occupancy: 96, totalUnits: 18, occupiedUnits: 17 },
-  { propertyName: 'Tech Hub Center', occupancy: 82, totalUnits: 41, occupiedUnits: 34 },
-  { propertyName: 'Golden Gate Mall', occupancy: 89, totalUnits: 26, occupiedUnits: 23 },
+  { propertyName: 'Riverstone Resi...', occupancy: 92, totalUnits: 45, occupiedUnits: 41, x: 1 },
+  { propertyName: 'Skyline Business...', occupancy: 78, totalUnits: 32, occupiedUnits: 25, x: 2 },
+  { propertyName: 'Crystal Unit Po...', occupancy: 95, totalUnits: 28, occupiedUnits: 27, x: 3 },
+  { propertyName: 'Hello World', occupancy: 85, totalUnits: 15, occupiedUnits: 13, x: 4 },
+  { propertyName: 'Crescent Height...', occupancy: 88, totalUnits: 22, occupiedUnits: 19, x: 5 },
+  { propertyName: 'Marina Bay Plaza', occupancy: 91, totalUnits: 38, occupiedUnits: 35, x: 6 },
+  { propertyName: 'Downtown Tower', occupancy: 73, totalUnits: 55, occupiedUnits: 40, x: 7 },
+  { propertyName: 'Sunset Gardens', occupancy: 96, totalUnits: 18, occupiedUnits: 17, x: 8 },
+  { propertyName: 'Tech Hub Center', occupancy: 82, totalUnits: 41, occupiedUnits: 34, x: 9 },
+  { propertyName: 'Golden Gate Mall', occupancy: 89, totalUnits: 26, occupiedUnits: 23, x: 10 },
 ];
 
 const revenueVsExpensesData = [

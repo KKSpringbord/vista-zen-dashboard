@@ -1,10 +1,11 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
+import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Cell } from 'recharts';
 
 interface PortfolioOccupancyChartData {
   propertyName: string;
   occupancy: number;
-  totalUnits?: number;
+  totalUnits: number;
   occupiedUnits?: number;
+  x: number; // For scatter plot positioning
 }
 
 interface PortfolioOccupancyChartProps {
@@ -18,40 +19,58 @@ export function PortfolioOccupancyChart({
   selectedProperties = [], 
   onBarClick 
 }: PortfolioOccupancyChartProps) {
-  // Filter data based on selected properties
+  // Add x positioning for scatter plot and filter data
+  const processedData = data.map((item, index) => ({
+    ...item,
+    x: index + 1,
+    occupiedUnits: item.occupiedUnits || Math.round(item.totalUnits * item.occupancy / 100)
+  }));
+  
   const filteredData = selectedProperties.length > 0 
-    ? data.filter(item => selectedProperties.includes(item.propertyName))
-    : data;
+    ? processedData.filter(item => selectedProperties.includes(item.propertyName))
+    : processedData;
 
-  const handleBarClick = (data: any, event: any) => {
+  const handleBubbleClick = (data: any, event: any) => {
     if (onBarClick) {
       onBarClick(data);
     }
   };
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  // Color scale based on occupancy rate
+  const getColor = (occupancy: number) => {
+    if (occupancy >= 90) return 'hsl(var(--chart-primary))';
+    if (occupancy >= 75) return 'hsl(var(--chart-secondary))';
+    if (occupancy >= 60) return 'hsl(var(--chart-accent))';
+    return 'hsl(var(--chart-muted))';
+  };
+
+  // Calculate bubble size based on total units (min 20, max 80)
+  const getBubbleSize = (totalUnits: number, allData: any[]) => {
+    const maxUnits = Math.max(...allData.map(d => d.totalUnits));
+    const minUnits = Math.min(...allData.map(d => d.totalUnits));
+    const ratio = (totalUnits - minUnits) / (maxUnits - minUnits);
+    return 20 + (ratio * 60); // Size between 20 and 80
+  };
+
+  const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
         <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
-          <p className="font-semibold text-foreground mb-2">{label}</p>
+          <p className="font-semibold text-foreground mb-2">{data.propertyName}</p>
           <div className="space-y-1">
             <div className="flex items-center justify-between gap-4">
               <span className="text-muted-foreground">Occupancy Rate:</span>
               <span className="font-medium text-foreground">{data.occupancy}%</span>
             </div>
-            {data.totalUnits && (
-              <>
-                <div className="flex items-center justify-between gap-4">
-                  <span className="text-muted-foreground">Occupied Units:</span>
-                  <span className="font-medium text-foreground">{data.occupiedUnits || Math.round(data.totalUnits * data.occupancy / 100)}</span>
-                </div>
-                <div className="flex items-center justify-between gap-4">
-                  <span className="text-muted-foreground">Total Units:</span>
-                  <span className="font-medium text-foreground">{data.totalUnits}</span>
-                </div>
-              </>
-            )}
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-muted-foreground">Occupied Units:</span>
+              <span className="font-medium text-foreground">{data.occupiedUnits}</span>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-muted-foreground">Total Units:</span>
+              <span className="font-medium text-foreground">{data.totalUnits}</span>
+            </div>
           </div>
         </div>
       );
@@ -61,29 +80,31 @@ export function PortfolioOccupancyChart({
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <BarChart 
-        layout="horizontal"
+      <ScatterChart 
         data={filteredData} 
-        margin={{ top: 20, right: 60, left: 120, bottom: 20 }}
-        onClick={handleBarClick}
+        margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+        onClick={handleBubbleClick}
       >
-        <defs>
-          <linearGradient id="occupancyGradient" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="hsl(var(--chart-primary))" stopOpacity={0.3} />
-            <stop offset="100%" stopColor="hsl(var(--chart-primary))" stopOpacity={0.8} />
-          </linearGradient>
-        </defs>
-        
         <CartesianGrid 
           strokeDasharray="1 4" 
           stroke="hsl(var(--border))" 
           strokeOpacity={0.3}
-          horizontal={false}
-          vertical={true}
+          horizontal={true}
+          vertical={false}
         />
         
         <XAxis 
           type="number"
+          dataKey="x"
+          axisLine={false}
+          tickLine={false}
+          tick={false}
+          domain={[0, filteredData.length + 1]}
+        />
+        
+        <YAxis 
+          type="number"
+          dataKey="occupancy"
           axisLine={false}
           tickLine={false}
           tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
@@ -92,28 +113,19 @@ export function PortfolioOccupancyChart({
           tickFormatter={(value) => `${value}%`}
         />
         
-        <YAxis 
-          type="category"
-          dataKey="propertyName" 
-          axisLine={false}
-          tickLine={false}
-          tick={{ 
-            fontSize: 11, 
-            fill: 'hsl(var(--muted-foreground))'
-          }}
-          tickMargin={8}
-          width={110}
-        />
-        
         <Tooltip content={<CustomTooltip />} />
         
-        <Bar 
-          dataKey="occupancy" 
-          fill="url(#occupancyGradient)"
-          radius={[0, 4, 4, 0]}
-          cursor="pointer"
-        />
-      </BarChart>
+        <Scatter dataKey="occupancy" fill="hsl(var(--chart-primary))">
+          {filteredData.map((entry, index) => (
+            <Cell 
+              key={`cell-${index}`} 
+              fill={getColor(entry.occupancy)}
+              r={getBubbleSize(entry.totalUnits, filteredData)}
+              style={{ cursor: 'pointer', opacity: 0.8 }}
+            />
+          ))}
+        </Scatter>
+      </ScatterChart>
     </ResponsiveContainer>
   );
 }
