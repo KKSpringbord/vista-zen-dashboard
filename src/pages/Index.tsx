@@ -572,14 +572,6 @@ const Index = () => {
             />
           </div>
 
-          {/* Filters Section */}
-          <div className="bg-card rounded-xl border border-border p-6">
-            <ChartFilters 
-              configs={[...timeframeFilters, ...propertyFilters]} 
-              onFiltersChange={handleFiltersChange}
-            />
-          </div>
-
           {/* Enhanced Charts Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <ChartCard
@@ -730,9 +722,10 @@ const Index = () => {
                 series={[
                   { dataKey: 'totalIncome', name: 'Total Income ($)', color: 'hsl(var(--chart-primary))', type: 'bar', yAxisId: 'left' },
                   { dataKey: 'noi', name: 'NOI ($)', color: 'hsl(var(--chart-secondary))', type: 'bar', yAxisId: 'left' },
-                  { dataKey: 'occupancy', name: 'Occupancy (%)', color: 'hsl(var(--chart-accent))', type: 'bar', yAxisId: 'left' }
+                  { dataKey: 'occupancy', name: 'Occupancy (%)', color: 'hsl(var(--chart-accent))', type: 'bar', yAxisId: 'right' }
                 ]}
-                leftAxisLabel="Revenue & Occupancy"
+                leftAxisLabel="Revenue ($)"
+                rightAxisLabel="Occupancy (%)"
                 showLegend={false}
                 onElementClick={handleChartClick}
               />
