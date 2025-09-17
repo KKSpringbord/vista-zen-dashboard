@@ -15,10 +15,15 @@ import { Sidebar } from "@/components/dashboard/Sidebar";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { MetricCard } from "@/components/dashboard/MetricCard";
 import { ChartCard } from "@/components/dashboard/ChartCard";
+import { ChartFilters } from "@/components/dashboard/ChartFilters";
 import { ModernLineChart } from "@/components/dashboard/charts/LineChart";
 import { ModernBarChart } from "@/components/dashboard/charts/BarChart";
 import { ModernAreaChart } from "@/components/dashboard/charts/AreaChart";
 import { ModernDonutChart } from "@/components/dashboard/charts/DonutChart";
+import { EnhancedBarChart } from "@/components/dashboard/charts/EnhancedBarChart";
+import { EnhancedLineChart } from "@/components/dashboard/charts/EnhancedLineChart";
+import { ComboChart } from "@/components/dashboard/charts/ComboChart";
+import { TimelineChart } from "@/components/dashboard/charts/TimelineChart";
 
 // Sample data for charts
 const leaseExpiryData = [
@@ -52,8 +57,84 @@ const portfolioMixData = [
   { name: 'Mixed Use', value: 20, color: 'hsl(var(--chart-muted))' },
 ];
 
+// Enhanced multi-series data
+const leaseExpiryMultiData = [
+  { name: 'Q1 2024', retail: 2, office: 1, industrial: 0, mixedUse: 1 },
+  { name: 'Q2 2024', retail: 3, office: 2, industrial: 1, mixedUse: 0 },
+  { name: 'Q3 2024', retail: 1, office: 0, industrial: 2, mixedUse: 1 },
+  { name: 'Q4 2024', retail: 2, office: 1, industrial: 1, mixedUse: 2 },
+];
+
+const occupancyMultiTrendData = [
+  { name: 'Jan', retail: 92, office: 78, industrial: 95, mixedUse: 85 },
+  { name: 'Feb', retail: 89, office: 82, industrial: 93, mixedUse: 87 },
+  { name: 'Mar', retail: 94, office: 75, industrial: 97, mixedUse: 83 },
+  { name: 'Apr', retail: 96, office: 88, industrial: 94, mixedUse: 89 },
+  { name: 'May', retail: 91, office: 85, industrial: 98, mixedUse: 86 },
+  { name: 'Jun', retail: 93, office: 90, industrial: 96, mixedUse: 91 },
+];
+
+const revenueVsExpensesData = [
+  { name: 'Jan', revenue: 85000, expenses: 65000, profit: 20000 },
+  { name: 'Feb', revenue: 88000, expenses: 67000, profit: 21000 },
+  { name: 'Mar', revenue: 92000, expenses: 69000, profit: 23000 },
+  { name: 'Apr', revenue: 87000, expenses: 66000, profit: 21000 },
+  { name: 'May', revenue: 95000, expenses: 71000, profit: 24000 },
+  { name: 'Jun', revenue: 98750, expenses: 73000, profit: 25750 },
+];
+
+const timelineEventsData = [
+  { name: 'Jan 2024', date: '2024-01', occupancy: 85, events: 2, maintenance: 1 },
+  { name: 'Feb 2024', date: '2024-02', occupancy: 88, events: 1, maintenance: 3 },
+  { name: 'Mar 2024', date: '2024-03', occupancy: 82, events: 0, maintenance: 2 },
+  { name: 'Apr 2024', date: '2024-04', occupancy: 90, events: 3, maintenance: 1 },
+  { name: 'May 2024', date: '2024-05', occupancy: 87, events: 1, maintenance: 0 },
+  { name: 'Jun 2024', date: '2024-06', occupancy: 92, events: 2, maintenance: 2 },
+];
+
+// Filter configurations
+const timeframeFilters = [
+  {
+    key: 'timeframe',
+    label: 'Timeframe',
+    options: [
+      { value: 'month', label: 'This Month' },
+      { value: 'quarter', label: 'This Quarter' },
+      { value: 'year', label: 'Year to Date' },
+      { value: 'all', label: 'All Time' }
+    ],
+    defaultValue: 'year'
+  }
+];
+
+const propertyTypeFilters = [
+  {
+    key: 'propertyType',
+    label: 'Property Type',
+    options: [
+      { value: 'all', label: 'All Properties' },
+      { value: 'retail', label: 'Retail' },
+      { value: 'office', label: 'Office' },
+      { value: 'industrial', label: 'Industrial' },
+      { value: 'mixedUse', label: 'Mixed Use' }
+    ],
+    defaultValue: 'all'
+  }
+];
+
 const Index = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  // Chart interaction handlers
+  const handleChartClick = (data: any, seriesKey: string, chartType?: string) => {
+    console.log('Chart clicked:', { data, seriesKey, chartType });
+    // Here you would implement drill-down logic
+  };
+
+  const handleFiltersChange = (filters: Record<string, string | number>) => {
+    console.log('Filters changed:', filters);
+    // Here you would apply filters to your data
+  };
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -126,35 +207,63 @@ const Index = () => {
             />
           </div>
 
-          {/* Charts Section */}
+          {/* Filters Section */}
+          <div className="bg-card rounded-xl border border-border p-6">
+            <ChartFilters 
+              configs={[...timeframeFilters, ...propertyTypeFilters]} 
+              onFiltersChange={handleFiltersChange}
+            />
+          </div>
+
+          {/* Enhanced Charts Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <ChartCard
-              title="Lease Expiry Schedule"
-              description="Quarterly lease expiration overview"
+              title="Lease Expiry by Property Type"
+              description="Quarterly lease expiration breakdown by category"
             >
-              <ModernBarChart 
-                data={leaseExpiryData} 
-                color="hsl(var(--chart-primary))"
+              <EnhancedBarChart 
+                data={leaseExpiryMultiData}
+                series={[
+                  { dataKey: 'retail', name: 'Retail', color: 'hsl(var(--chart-primary))' },
+                  { dataKey: 'office', name: 'Office', color: 'hsl(var(--chart-secondary))' },
+                  { dataKey: 'industrial', name: 'Industrial', color: 'hsl(var(--chart-accent))' },
+                  { dataKey: 'mixedUse', name: 'Mixed Use', color: 'hsl(var(--chart-muted))' }
+                ]}
+                stacked={true}
+                onBarClick={handleChartClick}
               />
             </ChartCard>
 
             <ChartCard
-              title="Portfolio Occupancy Trends"
-              description="Monthly occupancy rate percentage"
+              title="Multi-Property Occupancy Trends"
+              description="Occupancy rates by property type over time"
             >
-              <ModernAreaChart 
-                data={occupancyTrendData} 
-                color="hsl(var(--chart-secondary))"
+              <EnhancedLineChart 
+                data={occupancyMultiTrendData}
+                series={[
+                  { dataKey: 'retail', name: 'Retail', color: 'hsl(var(--chart-primary))', strokeWidth: 2.5 },
+                  { dataKey: 'office', name: 'Office', color: 'hsl(var(--chart-secondary))', strokeWidth: 2.5 },
+                  { dataKey: 'industrial', name: 'Industrial', color: 'hsl(var(--chart-accent))', strokeWidth: 2.5 },
+                  { dataKey: 'mixedUse', name: 'Mixed Use', color: 'hsl(var(--chart-muted))', strokeWidth: 2.5 }
+                ]}
+                onPointClick={handleChartClick}
               />
             </ChartCard>
 
             <ChartCard
-              title="Rent Growth Trend"
-              description="Year-over-year rent growth percentage"
+              title="Revenue vs Expenses"
+              description="Monthly financial performance with profit trend"
             >
-              <ModernLineChart 
-                data={rentGrowthData} 
-                color="hsl(var(--chart-accent))"
+              <ComboChart 
+                data={revenueVsExpensesData}
+                series={[
+                  { dataKey: 'revenue', name: 'Revenue', color: 'hsl(var(--chart-primary))', type: 'bar', yAxisId: 'left' },
+                  { dataKey: 'expenses', name: 'Expenses', color: 'hsl(var(--chart-secondary))', type: 'bar', yAxisId: 'left' },
+                  { dataKey: 'profit', name: 'Profit Trend', color: 'hsl(var(--chart-accent))', type: 'line', yAxisId: 'right', strokeWidth: 3 }
+                ]}
+                leftAxisLabel="Revenue ($)"
+                rightAxisLabel="Profit ($)"
+                onElementClick={handleChartClick}
               />
             </ChartCard>
 
@@ -166,37 +275,40 @@ const Index = () => {
             </ChartCard>
           </div>
 
-          {/* Additional Charts Row */}
+          {/* Timeline and Events */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <ChartCard
-              title="Revenue by Tenant"
-              description="Top performing tenants"
+              title="Portfolio Events Timeline"
+              description="Occupancy trends with maintenance and event markers"
             >
-              <ModernBarChart 
-                data={[
-                  { name: 'Tenant A', value: 35000 },
-                  { name: 'Tenant B', value: 28000 },
-                  { name: 'Tenant C', value: 22000 },
-                  { name: 'Tenant D', value: 18000 },
-                ]} 
-                color="hsl(var(--chart-primary))"
+              <TimelineChart 
+                data={timelineEventsData}
+                series={[
+                  { dataKey: 'occupancy', name: 'Occupancy Rate', color: 'hsl(var(--chart-primary))', type: 'line' },
+                  { dataKey: 'events', name: 'Events', color: 'hsl(var(--chart-accent))', type: 'scatter', size: 8 },
+                  { dataKey: 'maintenance', name: 'Maintenance', color: 'hsl(var(--chart-secondary))', type: 'scatter', size: 6 }
+                ]}
+                onPointClick={handleChartClick}
               />
             </ChartCard>
 
             <ChartCard
-              title="Net Operating Income"
-              description="Monthly NOI trend"
+              title="Revenue by Top Tenants"
+              description="Multi-series tenant performance comparison"
             >
-              <ModernLineChart 
+              <EnhancedBarChart 
                 data={[
-                  { name: 'Jan', value: 85000 },
-                  { name: 'Feb', value: 88000 },
-                  { name: 'Mar', value: 92000 },
-                  { name: 'Apr', value: 87000 },
-                  { name: 'May', value: 95000 },
-                  { name: 'Jun', value: 98750 },
-                ]} 
-                color="hsl(var(--chart-secondary))"
+                  { name: 'Tenant A', current: 35000, previous: 32000, target: 38000 },
+                  { name: 'Tenant B', current: 28000, previous: 30000, target: 29000 },
+                  { name: 'Tenant C', current: 22000, previous: 20000, target: 25000 },
+                  { name: 'Tenant D', current: 18000, previous: 19000, target: 20000 },
+                ]}
+                series={[
+                  { dataKey: 'previous', name: 'Previous Period', color: 'hsl(var(--chart-muted))' },
+                  { dataKey: 'current', name: 'Current Period', color: 'hsl(var(--chart-primary))' },
+                  { dataKey: 'target', name: 'Target', color: 'hsl(var(--chart-accent))' }
+                ]}
+                onBarClick={handleChartClick}
               />
             </ChartCard>
           </div>
