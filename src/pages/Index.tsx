@@ -591,6 +591,7 @@ const Index = () => {
                 properties={leaseExpiryProperties}
                 selectedProperties={selectedProperties}
                 onBarClick={handleChartClick}
+                showLegend={false}
               />
             </ChartCard>
 
@@ -602,6 +603,7 @@ const Index = () => {
                 data={portfolioOccupancyData}
                 selectedProperties={selectedProperties}
                 onBarClick={handleSingleChartClick}
+                showLegend={false}
               />
             </ChartCard>
 
@@ -721,21 +723,17 @@ const Index = () => {
               title="Top 5 Performing Properties"
               description="Total income, NOI, and occupancy rate by property"
             >
-              <div className="overflow-x-auto">
-                <div className="min-w-[600px] h-full">
-                  <ComboChart 
-                    data={topPerformingPropertiesData}
-                    series={[
-                      { dataKey: 'totalIncome', name: 'Total Income ($)', color: 'hsl(var(--chart-primary))', type: 'bar', yAxisId: 'left' },
-                      { dataKey: 'noi', name: 'NOI ($)', color: 'hsl(var(--chart-secondary))', type: 'bar', yAxisId: 'left' },
-                      { dataKey: 'occupancy', name: 'Occupancy (%)', color: 'hsl(var(--chart-accent))', type: 'bar', yAxisId: 'left' }
-                    ]}
-                    leftAxisLabel="Revenue & Occupancy"
-                    showLegend={false}
-                    onElementClick={handleChartClick}
-                  />
-                </div>
-              </div>
+              <ComboChart 
+                data={topPerformingPropertiesData}
+                series={[
+                  { dataKey: 'totalIncome', name: 'Total Income ($)', color: 'hsl(var(--chart-primary))', type: 'bar', yAxisId: 'left' },
+                  { dataKey: 'noi', name: 'NOI ($)', color: 'hsl(var(--chart-secondary))', type: 'bar', yAxisId: 'left' },
+                  { dataKey: 'occupancy', name: 'Occupancy (%)', color: 'hsl(var(--chart-accent))', type: 'bar', yAxisId: 'left' }
+                ]}
+                leftAxisLabel="Revenue & Occupancy"
+                showLegend={false}
+                onElementClick={handleChartClick}
+              />
             </ChartCard>
 
             <ChartCard

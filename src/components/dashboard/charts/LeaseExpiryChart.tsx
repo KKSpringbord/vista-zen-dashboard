@@ -18,6 +18,7 @@ interface LeaseExpiryChartProps {
   selectedProperties?: string[];
   onPropertyToggle?: (propertyKey: string) => void;
   onBarClick?: (data: any, propertyKey: string) => void;
+  showLegend?: boolean;
 }
 
 export function LeaseExpiryChart({ 
@@ -25,7 +26,8 @@ export function LeaseExpiryChart({
   properties, 
   selectedProperties = [], 
   onPropertyToggle, 
-  onBarClick 
+  onBarClick,
+  showLegend = true
 }: LeaseExpiryChartProps) {
   const [hiddenProperties, setHiddenProperties] = useState<Set<string>>(new Set());
 
@@ -149,7 +151,7 @@ export function LeaseExpiryChart({
           }}
         />
         <Tooltip content={<CustomTooltip />} />
-        <Legend content={<CustomLegend />} />
+        {showLegend && <Legend content={<CustomLegend />} />}
         
         {visibleProperties.map((property) => (
           <Bar 

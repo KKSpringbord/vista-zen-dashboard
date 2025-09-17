@@ -12,12 +12,14 @@ interface PortfolioOccupancyChartProps {
   data: PortfolioOccupancyChartData[];
   selectedProperties?: string[];
   onBarClick?: (data: any) => void;
+  showLegend?: boolean;
 }
 
 export function PortfolioOccupancyChart({ 
   data, 
   selectedProperties = [], 
-  onBarClick 
+  onBarClick,
+  showLegend = true
 }: PortfolioOccupancyChartProps) {
   // Transform data for multi-line chart
   const processedData = data.reduce((acc: any[], item) => {
@@ -115,7 +117,7 @@ export function PortfolioOccupancyChart({
         />
         
         <Tooltip content={<CustomTooltip />} />
-        <Legend />
+        {showLegend && <Legend />}
         
         {displayedProperties.map((propertyName, index) => (
           <Line
