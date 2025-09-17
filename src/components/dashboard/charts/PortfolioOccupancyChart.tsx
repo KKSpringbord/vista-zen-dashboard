@@ -62,14 +62,15 @@ export function PortfolioOccupancyChart({
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart 
+        layout="horizontal"
         data={filteredData} 
-        margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+        margin={{ top: 20, right: 60, left: 120, bottom: 20 }}
         onClick={handleBarClick}
       >
         <defs>
-          <linearGradient id="occupancyGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="hsl(var(--chart-primary))" stopOpacity={0.8} />
-            <stop offset="100%" stopColor="hsl(var(--chart-primary))" stopOpacity={0.3} />
+          <linearGradient id="occupancyGradient" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="hsl(var(--chart-primary))" stopOpacity={0.3} />
+            <stop offset="100%" stopColor="hsl(var(--chart-primary))" stopOpacity={0.8} />
           </linearGradient>
         </defs>
         
@@ -77,26 +78,12 @@ export function PortfolioOccupancyChart({
           strokeDasharray="1 4" 
           stroke="hsl(var(--border))" 
           strokeOpacity={0.3}
-          horizontal={true}
-          vertical={false}
+          horizontal={false}
+          vertical={true}
         />
         
         <XAxis 
-          dataKey="propertyName" 
-          axisLine={false}
-          tickLine={false}
-          tick={{ 
-            fontSize: 11, 
-            fill: 'hsl(var(--muted-foreground))',
-            textAnchor: 'end'
-          }}
-          tickMargin={8}
-          angle={-45}
-          height={80}
-          interval={0}
-        />
-        
-        <YAxis 
+          type="number"
           axisLine={false}
           tickLine={false}
           tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
@@ -105,12 +92,25 @@ export function PortfolioOccupancyChart({
           tickFormatter={(value) => `${value}%`}
         />
         
+        <YAxis 
+          type="category"
+          dataKey="propertyName" 
+          axisLine={false}
+          tickLine={false}
+          tick={{ 
+            fontSize: 11, 
+            fill: 'hsl(var(--muted-foreground))'
+          }}
+          tickMargin={8}
+          width={110}
+        />
+        
         <Tooltip content={<CustomTooltip />} />
         
         <Bar 
           dataKey="occupancy" 
           fill="url(#occupancyGradient)"
-          radius={[4, 4, 0, 0]}
+          radius={[0, 4, 4, 0]}
           cursor="pointer"
         />
       </BarChart>
