@@ -1,4 +1,4 @@
-import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Cell } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 interface PortfolioOccupancyChartData {
   propertyName: string;
@@ -19,57 +19,64 @@ export function PortfolioOccupancyChart({
   selectedProperties = [], 
   onBarClick 
 }: PortfolioOccupancyChartProps) {
-  // Process data and calculate occupied units
-  const processedData = data.map((item) => ({
-    ...item,
-    occupiedUnits: item.occupiedUnits || Math.round(item.totalUnits * item.occupancy / 100)
-  }));
-  
-  const filteredData = selectedProperties.length > 0 
-    ? processedData.filter(item => selectedProperties.includes(item.propertyName))
-    : processedData;
+  // Transform data for multi-line chart
+  const processedData = data.reduce((acc: any[], item) => {
+    const existingMonth = acc.find(d => d.month === item.month);
+    if (existingMonth) {
+      existingMonth[item.propertyName] = item.occupancy;
+    } else {
+      acc.push({
+        month: item.month,
+        [item.propertyName]: item.occupancy
+      });
+    }
+    return acc;
+  }, []);
 
-  const handleBubbleClick = (data: any, event: any) => {
+  // Get unique property names for creating lines
+  const propertyNames = [...new Set(data.map(item => item.propertyName))];
+  
+  // Filter properties if selection is made
+  const displayedProperties = selectedProperties.length > 0 
+    ? propertyNames.filter(prop => selectedProperties.includes(prop))
+    : propertyNames;
+
+  const handleLineClick = (data: any, event: any) => {
     if (onBarClick) {
       onBarClick(data);
     }
   };
 
-  // Color scale based on occupancy rate
-  const getColor = (occupancy: number) => {
-    if (occupancy >= 90) return 'hsl(var(--chart-primary))';
-    if (occupancy >= 75) return 'hsl(var(--chart-secondary))';
-    if (occupancy >= 60) return 'hsl(var(--chart-accent))';
-    return 'hsl(var(--chart-muted))';
-  };
+  // Color palette for different properties
+  const colors = [
+    'hsl(var(--chart-primary))',
+    'hsl(var(--chart-secondary))',
+    'hsl(var(--chart-accent))',
+    'hsl(var(--chart-muted))',
+    '#8B5CF6',
+    '#F59E0B',
+    '#EF4444',
+    '#10B981'
+  ];
 
-  // Calculate bubble size based on total units (min 20, max 80)
-  const getBubbleSize = (totalUnits: number, allData: any[]) => {
-    const maxUnits = Math.max(...allData.map(d => d.totalUnits));
-    const minUnits = Math.min(...allData.map(d => d.totalUnits));
-    const ratio = (totalUnits - minUnits) / (maxUnits - minUnits);
-    return 20 + (ratio * 60); // Size between 20 and 80
-  };
-
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
-      const data = payload[0].payload;
       return (
         <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
-          <p className="font-semibold text-foreground mb-2">{data.propertyName}</p>
+          <p className="font-semibold text-foreground mb-2">{label}</p>
           <div className="space-y-1">
-            <div className="flex items-center justify-between gap-4">
-              <span className="text-muted-foreground">Occupancy Rate:</span>
-              <span className="font-medium text-foreground">{data.occupancy}%</span>
-            </div>
-            <div className="flex items-center justify-between gap-4">
-              <span className="text-muted-foreground">Occupied Units:</span>
-              <span className="font-medium text-foreground">{data.occupiedUnits}</span>
-            </div>
-            <div className="flex items-center justify-between gap-4">
-              <span className="text-muted-foreground">Total Units:</span>
-              <span className="font-medium text-foreground">{data.totalUnits}</span>
-            </div>
+            {payload.map((entry: any, index: number) => (
+              <div key={index} className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-2">
+                  <div 
+                    className="w-3 h-3 rounded-full" 
+                    style={{ backgroundColor: entry.color }}
+                  />
+                  <span className="text-muted-foreground">{entry.dataKey}:</span>
+                </div>
+                <span className="font-medium text-foreground">{entry.value}%</span>
+              </div>
+            ))}
           </div>
         </div>
       );
@@ -79,21 +86,18 @@ export function PortfolioOccupancyChart({
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <ScatterChart 
-        data={filteredData} 
+      <LineChart 
+        data={processedData} 
         margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-        onClick={handleBubbleClick}
+        onClick={handleLineClick}
       >
         <CartesianGrid 
           strokeDasharray="1 4" 
           stroke="hsl(var(--border))" 
           strokeOpacity={0.3}
-          horizontal={true}
-          vertical={false}
         />
         
         <XAxis 
-          type="category"
           dataKey="month"
           axisLine={false}
           tickLine={false}
@@ -102,8 +106,6 @@ export function PortfolioOccupancyChart({
         />
         
         <YAxis 
-          type="number"
-          dataKey="occupancy"
           axisLine={false}
           tickLine={false}
           tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
@@ -113,18 +115,21 @@ export function PortfolioOccupancyChart({
         />
         
         <Tooltip content={<CustomTooltip />} />
+        <Legend />
         
-        <Scatter dataKey="occupancy" fill="hsl(var(--chart-primary))">
-          {filteredData.map((entry, index) => (
-            <Cell 
-              key={`cell-${index}`} 
-              fill={getColor(entry.occupancy)}
-              r={getBubbleSize(entry.totalUnits, filteredData)}
-              style={{ cursor: 'pointer', opacity: 0.8 }}
-            />
-          ))}
-        </Scatter>
-      </ScatterChart>
+        {displayedProperties.map((propertyName, index) => (
+          <Line
+            key={propertyName}
+            type="monotone"
+            dataKey={propertyName}
+            stroke={colors[index % colors.length]}
+            strokeWidth={2}
+            dot={{ r: 4, strokeWidth: 2 }}
+            activeDot={{ r: 6, strokeWidth: 2 }}
+            connectNulls={false}
+          />
+        ))}
+      </LineChart>
     </ResponsiveContainer>
   );
 }
