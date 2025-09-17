@@ -61,10 +61,18 @@ const rentGrowthData = [
 ];
 
 const portfolioMixData = [
-  { name: 'Retail', value: 35, color: 'hsl(var(--chart-primary))' },
-  { name: 'Office', value: 25, color: 'hsl(var(--chart-secondary))' },
-  { name: 'Industrial', value: 20, color: 'hsl(var(--chart-accent))' },
-  { name: 'Mixed Use', value: 20, color: 'hsl(var(--chart-muted))' },
+  { name: 'Retail', value: 18.5 },
+  { name: 'Office', value: 15.2 },
+  { name: 'Industrial', value: 12.8 },
+  { name: 'Mixed Use', value: 11.3 },
+  { name: 'Residential', value: 9.7 },
+  { name: 'Healthcare', value: 8.4 },
+  { name: 'Hospitality', value: 6.9 },
+  { name: 'Education', value: 5.1 },
+  { name: 'Data Centers', value: 4.3 },
+  { name: 'Logistics', value: 3.8 },
+  { name: 'Entertainment', value: 2.2 },
+  { name: 'Government', value: 1.8 },
 ];
 
 // Enhanced multi-series data
