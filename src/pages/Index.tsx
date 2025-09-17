@@ -24,13 +24,22 @@ import { EnhancedBarChart } from "@/components/dashboard/charts/EnhancedBarChart
 import { EnhancedLineChart } from "@/components/dashboard/charts/EnhancedLineChart";
 import { ComboChart } from "@/components/dashboard/charts/ComboChart";
 import { TimelineChart } from "@/components/dashboard/charts/TimelineChart";
+import { LeaseExpiryChart } from "@/components/dashboard/charts/LeaseExpiryChart";
 
-// Sample data for charts
-const leaseExpiryData = [
-  { name: 'Q1', value: 2 },
-  { name: 'Q2', value: 4 },
-  { name: 'Q3', value: 1 },
-  { name: 'Q4', value: 3 },
+// Lease Expiry Schedule data - specific buckets and properties
+const leaseExpiryScheduleData = [
+  { bucket: '0-3 months', riverstoneResi: 1, skylineBusiness: 1, crystalUnit: 0, helloWorld: 0, crescentHeight: 0 },
+  { bucket: '4-6 months', riverstoneResi: 0, skylineBusiness: 4, crystalUnit: 4, helloWorld: 1, crescentHeight: 0 },
+  { bucket: '6-9 months', riverstoneResi: 0, skylineBusiness: 0, crystalUnit: 1, helloWorld: 0, crescentHeight: 0 },
+  { bucket: '9-12 months', riverstoneResi: 0, skylineBusiness: 8, crystalUnit: 6, helloWorld: 0, crescentHeight: 1 },
+];
+
+const leaseExpiryProperties = [
+  { key: 'riverstoneResi', name: 'Riverstone Resi...', color: '#3B82F6' },
+  { key: 'skylineBusiness', name: 'Skyline Business...', color: '#10B981' },
+  { key: 'crystalUnit', name: 'Crystal unit Po...', color: '#F59E0B' },
+  { key: 'helloWorld', name: 'hello world', color: '#EF4444' },
+  { key: 'crescentHeight', name: 'Crescent Height...', color: '#8B5CF6' },
 ];
 
 const occupancyTrendData = [
@@ -107,16 +116,17 @@ const timeframeFilters = [
   }
 ];
 
-const propertyTypeFilters = [
+const propertyFilters = [
   {
-    key: 'propertyType',
-    label: 'Property Type',
+    key: 'selectedProperties',
+    label: 'Properties',
     options: [
       { value: 'all', label: 'All Properties' },
-      { value: 'retail', label: 'Retail' },
-      { value: 'office', label: 'Office' },
-      { value: 'industrial', label: 'Industrial' },
-      { value: 'mixedUse', label: 'Mixed Use' }
+      { value: 'riverstoneResi', label: 'Riverstone Resi...' },
+      { value: 'skylineBusiness', label: 'Skyline Business...' },
+      { value: 'crystalUnit', label: 'Crystal unit Po...' },
+      { value: 'helloWorld', label: 'hello world' },
+      { value: 'crescentHeight', label: 'Crescent Height...' }
     ],
     defaultValue: 'all'
   }
@@ -124,6 +134,7 @@ const propertyTypeFilters = [
 
 const Index = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [selectedProperties, setSelectedProperties] = useState<string[]>([]);
 
   // Chart interaction handlers
   const handleChartClick = (data: any, seriesKey: string, chartType?: string) => {
@@ -133,7 +144,15 @@ const Index = () => {
 
   const handleFiltersChange = (filters: Record<string, string | number>) => {
     console.log('Filters changed:', filters);
-    // Here you would apply filters to your data
+    
+    // Handle property filtering
+    if (filters.selectedProperties) {
+      if (filters.selectedProperties === 'all') {
+        setSelectedProperties([]);
+      } else {
+        setSelectedProperties([filters.selectedProperties as string]);
+      }
+    }
   };
 
   return (
@@ -210,7 +229,7 @@ const Index = () => {
           {/* Filters Section */}
           <div className="bg-card rounded-xl border border-border p-6">
             <ChartFilters 
-              configs={[...timeframeFilters, ...propertyTypeFilters]} 
+              configs={[...timeframeFilters, ...propertyFilters]} 
               onFiltersChange={handleFiltersChange}
             />
           </div>
@@ -218,18 +237,13 @@ const Index = () => {
           {/* Enhanced Charts Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <ChartCard
-              title="Lease Expiry by Property Type"
-              description="Quarterly lease expiration breakdown by category"
+              title="Lease Expiry Schedule"
+              description="Lease expirations by property over time buckets"
             >
-              <EnhancedBarChart 
-                data={leaseExpiryMultiData}
-                series={[
-                  { dataKey: 'retail', name: 'Retail', color: 'hsl(var(--chart-primary))' },
-                  { dataKey: 'office', name: 'Office', color: 'hsl(var(--chart-secondary))' },
-                  { dataKey: 'industrial', name: 'Industrial', color: 'hsl(var(--chart-accent))' },
-                  { dataKey: 'mixedUse', name: 'Mixed Use', color: 'hsl(var(--chart-muted))' }
-                ]}
-                stacked={true}
+              <LeaseExpiryChart 
+                data={leaseExpiryScheduleData}
+                properties={leaseExpiryProperties}
+                selectedProperties={selectedProperties}
                 onBarClick={handleChartClick}
               />
             </ChartCard>
