@@ -26,6 +26,7 @@ import { ComboChart } from "@/components/dashboard/charts/ComboChart";
 import { TimelineChart } from "@/components/dashboard/charts/TimelineChart";
 import { LeaseExpiryChart } from "@/components/dashboard/charts/LeaseExpiryChart";
 import { PortfolioOccupancyChart } from "@/components/dashboard/charts/PortfolioOccupancyChart";
+import { SingleBarChart } from "@/components/dashboard/charts/SingleBarChart";
 
 // Lease Expiry Schedule data - specific buckets and properties
 const leaseExpiryScheduleData = [
@@ -52,13 +53,6 @@ const occupancyTrendData = [
   { name: 'Jun', value: 92 },
 ];
 
-const rentGrowthData = [
-  { name: '2020', value: 2.5 },
-  { name: '2021', value: 3.2 },
-  { name: '2022', value: 4.1 },
-  { name: '2023', value: 3.8 },
-  { name: '2024', value: 4.5 },
-];
 
 const portfolioMixData = [
   { name: 'Retail', value: 18.5 },
@@ -157,7 +151,6 @@ const unitsSoldData = [
   { name: 'Dec', total: 20, riverstoneResi: 5, skylineBusiness: 4, crystalUnit: 5, helloWorld: 3, crescentHeight: 2, others: 1 },
 ];
 
-// Rent per Square Feet Data
 const rentPerSqftData = [
   { name: 'Jan', riverstoneResi: 2.8, skylineBusiness: 3.2, crystalUnit: 4.1, helloWorld: 2.9, crescentHeight: 3.5 },
   { name: 'Feb', riverstoneResi: 2.9, skylineBusiness: 3.3, crystalUnit: 4.2, helloWorld: 3.0, crescentHeight: 3.6 },
@@ -173,20 +166,228 @@ const rentPerSqftData = [
   { name: 'Dec', riverstoneResi: 3.6, skylineBusiness: 4.0, crystalUnit: 4.9, helloWorld: 3.7, crescentHeight: 4.3 },
 ];
 
-// NOI Data by Property
+// NOI Data - Combined totals with property breakdown
 const noiData = [
-  { name: 'Jan', riverstoneResi: 18500, skylineBusiness: 15200, crystalUnit: 22800, helloWorld: 8400, crescentHeight: 12100 },
-  { name: 'Feb', riverstoneResi: 19200, skylineBusiness: 15800, crystalUnit: 23500, helloWorld: 8800, crescentHeight: 12600 },
-  { name: 'Mar', riverstoneResi: 18800, skylineBusiness: 15000, crystalUnit: 22200, helloWorld: 8100, crescentHeight: 11900 },
-  { name: 'Apr', riverstoneResi: 20100, skylineBusiness: 16500, crystalUnit: 24200, helloWorld: 9200, crescentHeight: 13400 },
-  { name: 'May', riverstoneResi: 20800, skylineBusiness: 17200, crystalUnit: 25100, helloWorld: 9600, crescentHeight: 14000 },
-  { name: 'Jun', riverstoneResi: 21500, skylineBusiness: 17800, crystalUnit: 25800, helloWorld: 10000, crescentHeight: 14600 },
-  { name: 'Jul', riverstoneResi: 20900, skylineBusiness: 17000, crystalUnit: 24800, helloWorld: 9500, crescentHeight: 13800 },
-  { name: 'Aug', riverstoneResi: 22200, skylineBusiness: 18500, crystalUnit: 26500, helloWorld: 10500, crescentHeight: 15200 },
-  { name: 'Sep', riverstoneResi: 21600, skylineBusiness: 17600, crystalUnit: 25400, helloWorld: 9900, crescentHeight: 14400 },
-  { name: 'Oct', riverstoneResi: 23000, skylineBusiness: 19200, crystalUnit: 27200, helloWorld: 11000, crescentHeight: 16000 },
-  { name: 'Nov', riverstoneResi: 23800, skylineBusiness: 19900, crystalUnit: 28000, helloWorld: 11400, crescentHeight: 16600 },
-  { name: 'Dec', riverstoneResi: 24500, skylineBusiness: 20500, crystalUnit: 28800, helloWorld: 11800, crescentHeight: 17200 },
+  { 
+    name: 'Jan', 
+    total: 77000,
+    riverstoneResi: 18500, 
+    skylineBusiness: 15200, 
+    crystalUnit: 22800, 
+    helloWorld: 8400, 
+    crescentHeight: 12100 
+  },
+  { 
+    name: 'Feb', 
+    total: 79900,
+    riverstoneResi: 19200, 
+    skylineBusiness: 15800, 
+    crystalUnit: 23500, 
+    helloWorld: 8800, 
+    crescentHeight: 12600 
+  },
+  { 
+    name: 'Mar', 
+    total: 76000,
+    riverstoneResi: 18800, 
+    skylineBusiness: 15000, 
+    crystalUnit: 22200, 
+    helloWorld: 8100, 
+    crescentHeight: 11900 
+  },
+  { 
+    name: 'Apr', 
+    total: 83400,
+    riverstoneResi: 20100, 
+    skylineBusiness: 16500, 
+    crystalUnit: 24200, 
+    helloWorld: 9200, 
+    crescentHeight: 13400 
+  },
+  { 
+    name: 'May', 
+    total: 86700,
+    riverstoneResi: 20800, 
+    skylineBusiness: 17200, 
+    crystalUnit: 25100, 
+    helloWorld: 9600, 
+    crescentHeight: 14000 
+  },
+  { 
+    name: 'Jun', 
+    total: 89700,
+    riverstoneResi: 21500, 
+    skylineBusiness: 17800, 
+    crystalUnit: 25800, 
+    helloWorld: 10000, 
+    crescentHeight: 14600 
+  },
+  { 
+    name: 'Jul', 
+    total: 86000,
+    riverstoneResi: 20900, 
+    skylineBusiness: 17000, 
+    crystalUnit: 24800, 
+    helloWorld: 9500, 
+    crescentHeight: 13800 
+  },
+  { 
+    name: 'Aug', 
+    total: 92900,
+    riverstoneResi: 22200, 
+    skylineBusiness: 18500, 
+    crystalUnit: 26500, 
+    helloWorld: 10500, 
+    crescentHeight: 15200 
+  },
+  { 
+    name: 'Sep', 
+    total: 88900,
+    riverstoneResi: 21600, 
+    skylineBusiness: 17600, 
+    crystalUnit: 25400, 
+    helloWorld: 9900, 
+    crescentHeight: 14400 
+  },
+  { 
+    name: 'Oct', 
+    total: 96400,
+    riverstoneResi: 23000, 
+    skylineBusiness: 19200, 
+    crystalUnit: 27200, 
+    helloWorld: 11000, 
+    crescentHeight: 16000 
+  },
+  { 
+    name: 'Nov', 
+    total: 99700,
+    riverstoneResi: 23800, 
+    skylineBusiness: 19900, 
+    crystalUnit: 28000, 
+    helloWorld: 11400, 
+    crescentHeight: 16600 
+  },
+  { 
+    name: 'Dec', 
+    total: 102800,
+    riverstoneResi: 24500, 
+    skylineBusiness: 20500, 
+    crystalUnit: 28800, 
+    helloWorld: 11800, 
+    crescentHeight: 17200 
+  },
+];
+
+// Rent Growth Data - Combined totals with property breakdown
+const rentGrowthData = [
+  { 
+    name: 'Jan', 
+    total: 126000,
+    riverstoneResi: 28000, 
+    skylineBusiness: 25600, 
+    crystalUnit: 32800, 
+    helloWorld: 14500, 
+    crescentHeight: 25100 
+  },
+  { 
+    name: 'Feb', 
+    total: 130500,
+    riverstoneResi: 29000, 
+    skylineBusiness: 26400, 
+    crystalUnit: 33600, 
+    helloWorld: 15000, 
+    crescentHeight: 26500 
+  },
+  { 
+    name: 'Mar', 
+    total: 124800,
+    riverstoneResi: 28000, 
+    skylineBusiness: 24800, 
+    crystalUnit: 32000, 
+    helloWorld: 14000, 
+    crescentHeight: 26000 
+  },
+  { 
+    name: 'Apr', 
+    total: 135600,
+    riverstoneResi: 30000, 
+    skylineBusiness: 27200, 
+    crystalUnit: 34400, 
+    helloWorld: 15500, 
+    crescentHeight: 28500 
+  },
+  { 
+    name: 'May', 
+    total: 141200,
+    riverstoneResi: 31000, 
+    skylineBusiness: 28000, 
+    crystalUnit: 35200, 
+    helloWorld: 16000, 
+    crescentHeight: 31000 
+  },
+  { 
+    name: 'Jun', 
+    total: 147800,
+    riverstoneResi: 32000, 
+    skylineBusiness: 28800, 
+    crystalUnit: 36000, 
+    helloWorld: 16500, 
+    crescentHeight: 34500 
+  },
+  { 
+    name: 'Jul', 
+    total: 143200,
+    riverstoneResi: 31000, 
+    skylineBusiness: 27200, 
+    crystalUnit: 34400, 
+    helloWorld: 15500, 
+    crescentHeight: 35100 
+  },
+  { 
+    name: 'Aug', 
+    total: 152800,
+    riverstoneResi: 33000, 
+    skylineBusiness: 29600, 
+    crystalUnit: 36800, 
+    helloWorld: 17000, 
+    crescentHeight: 36400 
+  },
+  { 
+    name: 'Sep', 
+    total: 148600,
+    riverstoneResi: 32000, 
+    skylineBusiness: 28000, 
+    crystalUnit: 35200, 
+    helloWorld: 16400, 
+    crescentHeight: 37000 
+  },
+  { 
+    name: 'Oct', 
+    total: 158200,
+    riverstoneResi: 34000, 
+    skylineBusiness: 30400, 
+    crystalUnit: 37600, 
+    helloWorld: 17500, 
+    crescentHeight: 38700 
+  },
+  { 
+    name: 'Nov', 
+    total: 164800,
+    riverstoneResi: 35000, 
+    skylineBusiness: 31200, 
+    crystalUnit: 38400, 
+    helloWorld: 18000, 
+    crescentHeight: 42200 
+  },
+  { 
+    name: 'Dec', 
+    total: 171500,
+    riverstoneResi: 36000, 
+    skylineBusiness: 32000, 
+    crystalUnit: 39200, 
+    helloWorld: 18500, 
+    crescentHeight: 45800 
+  },
 ];
 
 // Top Tenants Data (80/20 rule applied) - Q4 2024 data
@@ -250,7 +451,7 @@ const Index = () => {
   };
 
   const handleSingleChartClick = (data: any) => {
-    handleChartClick(data, data.propertyName || 'unknown', 'portfolio-occupancy');
+    handleChartClick(data, 'total', 'single-bar-chart');
   };
 
   const handleFiltersChange = (filters: Record<string, string | number>) => {
@@ -418,19 +619,34 @@ const Index = () => {
 
             <ChartCard
               title="Net Operating Income (NOI)"
-              description="Monthly NOI by property with hover breakdown"
+              description="Combined monthly NOI with property breakdown on hover"
             >
-              <EnhancedBarChart 
+              <SingleBarChart 
                 data={noiData}
-                series={[
-                  { dataKey: 'riverstoneResi', name: 'Riverstone Resi...', color: 'hsl(var(--chart-primary))' },
-                  { dataKey: 'skylineBusiness', name: 'Skyline Business...', color: 'hsl(var(--chart-secondary))' },
-                  { dataKey: 'crystalUnit', name: 'Crystal Unit Po...', color: 'hsl(var(--chart-accent))' },
-                  { dataKey: 'helloWorld', name: 'Hello World', color: 'hsl(var(--chart-muted))' },
-                  { dataKey: 'crescentHeight', name: 'Crescent Height...', color: 'hsl(var(--chart-destructive))' }
-                ]}
-                onBarClick={handleChartClick}
+                onBarClick={handleSingleChartClick}
+                color="hsl(var(--chart-primary))"
               />
+            </ChartCard>
+          </div>
+
+          {/* Additional Charts Row */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <ChartCard
+              title="Rent Trend Growth Rate"
+              description="Combined monthly rent growth with property breakdown on hover"
+            >
+              <SingleBarChart 
+                data={rentGrowthData}
+                onBarClick={handleSingleChartClick}
+                color="hsl(var(--chart-accent))"
+              />
+            </ChartCard>
+
+            <ChartCard
+              title="Portfolio Industry Mix"
+              description="Property distribution by type"
+            >
+              <ModernDonutChart data={portfolioMixData} />
             </ChartCard>
           </div>
 
