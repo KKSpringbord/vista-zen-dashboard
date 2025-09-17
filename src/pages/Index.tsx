@@ -400,6 +400,40 @@ const topTenantsData = [
   { name: 'Others (15 tenants)', revenue: 79000, percentage: 31.9 },
 ];
 
+// Top 5 Performing Properties Data
+const topPerformingPropertiesData = [
+  { 
+    name: 'Crystal Unit Po...', 
+    totalIncome: 389200, 
+    noi: 311360, 
+    occupancy: 95.2 
+  },
+  { 
+    name: 'Riverstone Resi...', 
+    totalIncome: 372000, 
+    noi: 288600, 
+    occupancy: 92.4 
+  },
+  { 
+    name: 'Crescent Height...', 
+    totalIncome: 358400, 
+    noi: 179200, 
+    occupancy: 88.7 
+  },
+  { 
+    name: 'Skyline Business...', 
+    totalIncome: 332800, 
+    noi: 216320, 
+    occupancy: 83.8 
+  },
+  { 
+    name: 'Hello World', 
+    totalIncome: 198000, 
+    noi: 118800, 
+    occupancy: 88.9 
+  },
+];
+
 const timelineEventsData = [
   { name: 'Jan 2024', date: '2024-01', occupancy: 85, events: 2, maintenance: 1 },
   { name: 'Feb 2024', date: '2024-02', occupancy: 88, events: 1, maintenance: 3 },
@@ -683,6 +717,23 @@ const Index = () => {
 
           {/* Final Charts Row */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <ChartCard
+              title="Top 5 Performing Properties"
+              description="Total income, NOI, and occupancy rate by property"
+            >
+              <ComboChart 
+                data={topPerformingPropertiesData}
+                series={[
+                  { dataKey: 'totalIncome', name: 'Total Income ($)', color: 'hsl(var(--chart-primary))', type: 'bar', yAxisId: 'left' },
+                  { dataKey: 'noi', name: 'NOI ($)', color: 'hsl(var(--chart-secondary))', type: 'bar', yAxisId: 'left' },
+                  { dataKey: 'occupancy', name: 'Occupancy (%)', color: 'hsl(var(--chart-accent))', type: 'line', yAxisId: 'right' }
+                ]}
+                leftAxisLabel="Revenue ($)"
+                rightAxisLabel="Occupancy (%)"
+                onElementClick={handleChartClick}
+              />
+            </ChartCard>
+
             <ChartCard
               title="Market & Competitor Analysis"
               description="Value per square foot comparison"
