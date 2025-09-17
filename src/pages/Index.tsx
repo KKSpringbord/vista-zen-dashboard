@@ -171,7 +171,7 @@ const Index = () => {
           </div>
 
           {/* Additional Charts Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <ChartCard
               title="Revenue by Tenant"
               description="Top performing tenants"
@@ -203,6 +203,26 @@ const Index = () => {
                 color="hsl(var(--chart-secondary))"
               />
             </ChartCard>
+          </div>
+
+          {/* Final Charts Row */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <ChartCard
+              title="Market & Competitor Analysis"
+              description="Value per square foot comparison"
+            >
+              <ModernAreaChart 
+                data={[
+                  { name: '2019', value: 2.8 },
+                  { name: '2020', value: 2.6 },
+                  { name: '2021', value: 3.1 },
+                  { name: '2022', value: 3.4 },
+                  { name: '2023', value: 3.7 },
+                  { name: '2024', value: 4.2 },
+                ]} 
+                color="hsl(var(--chart-accent))"
+              />
+            </ChartCard>
 
             <ChartCard
               title="Space Utilization"
@@ -215,7 +235,7 @@ const Index = () => {
                   { name: 'Q3', value: 44200 },
                   { name: 'Q4', value: 45230 },
                 ]} 
-                color="hsl(var(--chart-accent))"
+                color="hsl(var(--chart-primary))"
               />
             </ChartCard>
           </div>
