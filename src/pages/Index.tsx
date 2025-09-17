@@ -57,11 +57,13 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background flex">
-      <Sidebar collapsed={sidebarCollapsed} />
+      <div className="fixed left-0 top-0 h-screen z-30">
+        <Sidebar collapsed={sidebarCollapsed} />
+      </div>
       
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col" style={{ marginLeft: sidebarCollapsed ? '80px' : '256px' }}>
         {/* Mobile menu button */}
-        <div className="lg:hidden p-4">
+        <div className="lg:hidden p-4 fixed top-0 left-0 z-40 bg-background">
           <Button
             variant="outline"
             size="icon"
@@ -71,9 +73,11 @@ const Index = () => {
           </Button>
         </div>
 
-        <DashboardHeader />
+        <div className="sticky top-0 z-20 bg-background border-b">
+          <DashboardHeader />
+        </div>
         
-        <main className="flex-1 p-6 space-y-6">
+        <main className="flex-1 p-6 space-y-6 overflow-auto">
           {/* Metrics Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <MetricCard

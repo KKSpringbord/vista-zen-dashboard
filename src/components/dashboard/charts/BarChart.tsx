@@ -12,20 +12,9 @@ export function ModernBarChart({ data, dataKey = 'value', color = 'hsl(var(--cha
       <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
         <defs>
           <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={color} stopOpacity={1} />
-            <stop offset="50%" stopColor={color} stopOpacity={0.8} />
-            <stop offset="100%" stopColor={color} stopOpacity={0.3} />
+            <stop offset="0%" stopColor={color} stopOpacity={0.9} />
+            <stop offset="100%" stopColor={color} stopOpacity={0.6} />
           </linearGradient>
-          <filter id="barGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-            <feMerge> 
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-          <filter id="barShadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="0" dy="4" stdDeviation="8" floodColor={color} floodOpacity="0.3"/>
-          </filter>
         </defs>
         <CartesianGrid 
           strokeDasharray="2 4" 
@@ -64,8 +53,7 @@ export function ModernBarChart({ data, dataKey = 'value', color = 'hsl(var(--cha
         <Bar 
           dataKey={dataKey} 
           fill="url(#barGradient)"
-          radius={[8, 8, 0, 0]}
-          filter="url(#barShadow)"
+          radius={[6, 6, 0, 0]}
           style={{
             transition: 'all 0.3s ease',
           }}

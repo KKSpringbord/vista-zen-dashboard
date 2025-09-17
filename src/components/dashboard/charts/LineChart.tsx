@@ -12,20 +12,9 @@ export function ModernLineChart({ data, dataKey = 'value', color = 'hsl(var(--ch
       <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
         <defs>
           <linearGradient id="lineGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={color} stopOpacity={0.4} />
-            <stop offset="50%" stopColor={color} stopOpacity={0.2} />
+            <stop offset="0%" stopColor={color} stopOpacity={0.2} />
             <stop offset="100%" stopColor={color} stopOpacity={0.05} />
           </linearGradient>
-          <filter id="lineGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-            <feMerge> 
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-          <filter id="dotShadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor={color} floodOpacity="0.4"/>
-          </filter>
         </defs>
         <CartesianGrid 
           strokeDasharray="1 4" 
@@ -61,26 +50,22 @@ export function ModernLineChart({ data, dataKey = 'value', color = 'hsl(var(--ch
           type="monotone" 
           dataKey={dataKey} 
           stroke={color}
-          strokeWidth={4}
-          filter="url(#lineGlow)"
+          strokeWidth={2}
           dot={{ 
             fill: color, 
-            strokeWidth: 3, 
-            r: 6,
-            stroke: 'hsl(var(--background))',
-            filter: 'url(#dotShadow)'
+            strokeWidth: 1, 
+            r: 4,
+            stroke: 'hsl(var(--background))'
           }}
           activeDot={{ 
-            r: 10, 
+            r: 6, 
             fill: color,
             stroke: 'hsl(var(--background))',
-            strokeWidth: 4,
-            filter: 'url(#dotShadow)',
+            strokeWidth: 2,
             style: {
               transition: 'all 0.3s ease'
             }
           }}
-          fill="url(#lineGradient)"
         />
       </LineChart>
     </ResponsiveContainer>

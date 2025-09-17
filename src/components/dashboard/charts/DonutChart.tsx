@@ -20,20 +20,10 @@ export function ModernDonutChart({ data }: DonutChartProps) {
         <defs>
           {COLORS.map((color, index) => (
             <linearGradient key={`gradient-${index}`} id={`donutGradient-${index}`} x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor={color} stopOpacity={1} />
+              <stop offset="0%" stopColor={color} stopOpacity={0.9} />
               <stop offset="100%" stopColor={color} stopOpacity={0.7} />
             </linearGradient>
           ))}
-          <filter id="donutGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-            <feMerge> 
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-          <filter id="donutShadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="0" dy="4" stdDeviation="8" floodColor="rgba(0,0,0,0.3)"/>
-          </filter>
         </defs>
         <Pie
           data={data}
@@ -41,9 +31,8 @@ export function ModernDonutChart({ data }: DonutChartProps) {
           cy="50%"
           innerRadius={65}
           outerRadius={110}
-          paddingAngle={3}
+          paddingAngle={2}
           dataKey="value"
-          filter="url(#donutShadow)"
           style={{
             transition: 'all 0.3s ease',
           }}
@@ -53,9 +42,8 @@ export function ModernDonutChart({ data }: DonutChartProps) {
               key={`cell-${index}`} 
               fill={`url(#donutGradient-${index})`}
               stroke="hsl(var(--background))"
-              strokeWidth={2}
+              strokeWidth={1}
               style={{
-                filter: 'url(#donutGlow)',
                 transition: 'all 0.3s ease',
               }}
             />
