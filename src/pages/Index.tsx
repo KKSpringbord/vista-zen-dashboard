@@ -76,18 +76,61 @@ const leaseExpiryMultiData = [
 ];
 
 const portfolioOccupancyData = [
+  // Riverstone Resi... - Full year data
   { propertyName: 'Riverstone Resi...', occupancy: 92, totalUnits: 45, month: 'Jan' },
   { propertyName: 'Riverstone Resi...', occupancy: 88, totalUnits: 45, month: 'Feb' },
   { propertyName: 'Riverstone Resi...', occupancy: 94, totalUnits: 45, month: 'Mar' },
+  { propertyName: 'Riverstone Resi...', occupancy: 91, totalUnits: 45, month: 'Apr' },
+  { propertyName: 'Riverstone Resi...', occupancy: 89, totalUnits: 45, month: 'May' },
+  { propertyName: 'Riverstone Resi...', occupancy: 95, totalUnits: 45, month: 'Jun' },
+  { propertyName: 'Riverstone Resi...', occupancy: 93, totalUnits: 45, month: 'Jul' },
+  { propertyName: 'Riverstone Resi...', occupancy: 96, totalUnits: 45, month: 'Aug' },
+  { propertyName: 'Riverstone Resi...', occupancy: 90, totalUnits: 45, month: 'Sep' },
+  { propertyName: 'Riverstone Resi...', occupancy: 87, totalUnits: 45, month: 'Oct' },
+  { propertyName: 'Riverstone Resi...', occupancy: 92, totalUnits: 45, month: 'Nov' },
+  { propertyName: 'Riverstone Resi...', occupancy: 94, totalUnits: 45, month: 'Dec' },
+  
+  // Skyline Business... - Full year data
   { propertyName: 'Skyline Business...', occupancy: 78, totalUnits: 32, month: 'Jan' },
   { propertyName: 'Skyline Business...', occupancy: 82, totalUnits: 32, month: 'Feb' },
   { propertyName: 'Skyline Business...', occupancy: 80, totalUnits: 32, month: 'Mar' },
+  { propertyName: 'Skyline Business...', occupancy: 84, totalUnits: 32, month: 'Apr' },
+  { propertyName: 'Skyline Business...', occupancy: 86, totalUnits: 32, month: 'May' },
+  { propertyName: 'Skyline Business...', occupancy: 88, totalUnits: 32, month: 'Jun' },
+  { propertyName: 'Skyline Business...', occupancy: 85, totalUnits: 32, month: 'Jul' },
+  { propertyName: 'Skyline Business...', occupancy: 87, totalUnits: 32, month: 'Aug' },
+  { propertyName: 'Skyline Business...', occupancy: 83, totalUnits: 32, month: 'Sep' },
+  { propertyName: 'Skyline Business...', occupancy: 81, totalUnits: 32, month: 'Oct' },
+  { propertyName: 'Skyline Business...', occupancy: 79, totalUnits: 32, month: 'Nov' },
+  { propertyName: 'Skyline Business...', occupancy: 85, totalUnits: 32, month: 'Dec' },
+  
+  // Crystal Unit Po... - Full year data
   { propertyName: 'Crystal Unit Po...', occupancy: 95, totalUnits: 28, month: 'Jan' },
   { propertyName: 'Crystal Unit Po...', occupancy: 93, totalUnits: 28, month: 'Feb' },
   { propertyName: 'Crystal Unit Po...', occupancy: 97, totalUnits: 28, month: 'Mar' },
+  { propertyName: 'Crystal Unit Po...', occupancy: 94, totalUnits: 28, month: 'Apr' },
+  { propertyName: 'Crystal Unit Po...', occupancy: 96, totalUnits: 28, month: 'May' },
+  { propertyName: 'Crystal Unit Po...', occupancy: 98, totalUnits: 28, month: 'Jun' },
+  { propertyName: 'Crystal Unit Po...', occupancy: 95, totalUnits: 28, month: 'Jul' },
+  { propertyName: 'Crystal Unit Po...', occupancy: 97, totalUnits: 28, month: 'Aug' },
+  { propertyName: 'Crystal Unit Po...', occupancy: 93, totalUnits: 28, month: 'Sep' },
+  { propertyName: 'Crystal Unit Po...', occupancy: 92, totalUnits: 28, month: 'Oct' },
+  { propertyName: 'Crystal Unit Po...', occupancy: 94, totalUnits: 28, month: 'Nov' },
+  { propertyName: 'Crystal Unit Po...', occupancy: 96, totalUnits: 28, month: 'Dec' },
+  
+  // Hello World - Full year data
   { propertyName: 'Hello World', occupancy: 85, totalUnits: 15, month: 'Jan' },
   { propertyName: 'Hello World', occupancy: 90, totalUnits: 15, month: 'Feb' },
   { propertyName: 'Hello World', occupancy: 87, totalUnits: 15, month: 'Mar' },
+  { propertyName: 'Hello World', occupancy: 92, totalUnits: 15, month: 'Apr' },
+  { propertyName: 'Hello World', occupancy: 88, totalUnits: 15, month: 'May' },
+  { propertyName: 'Hello World', occupancy: 94, totalUnits: 15, month: 'Jun' },
+  { propertyName: 'Hello World', occupancy: 91, totalUnits: 15, month: 'Jul' },
+  { propertyName: 'Hello World', occupancy: 89, totalUnits: 15, month: 'Aug' },
+  { propertyName: 'Hello World', occupancy: 86, totalUnits: 15, month: 'Sep' },
+  { propertyName: 'Hello World', occupancy: 83, totalUnits: 15, month: 'Oct' },
+  { propertyName: 'Hello World', occupancy: 87, totalUnits: 15, month: 'Nov' },
+  { propertyName: 'Hello World', occupancy: 90, totalUnits: 15, month: 'Dec' },
 ];
 
 const revenueVsExpensesData = [
