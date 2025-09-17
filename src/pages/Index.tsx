@@ -622,6 +622,7 @@ const Index = () => {
                   { dataKey: 'others', name: 'Others', color: 'hsl(var(--chart-neutral))' }
                 ]}
                 stacked={true}
+                showLegend={false}
                 onBarClick={handleChartClick}
               />
             </ChartCard>
@@ -649,6 +650,7 @@ const Index = () => {
                   { dataKey: 'helloWorld', name: 'Hello World', color: 'hsl(var(--chart-muted))' },
                   { dataKey: 'crescentHeight', name: 'Crescent Height...', color: 'hsl(var(--chart-destructive))' }
                 ]}
+                showLegend={false}
                 onPointClick={handleChartClick}
               />
             </ChartCard>
