@@ -65,18 +65,24 @@ export function LeaseExpiryChart({
           <p className="text-sm text-muted-foreground mb-2">Total Expiries: {totalExpiries}</p>
           {payload
             .filter((entry: any) => entry.value > 0)
-            .map((entry: any, index: number) => (
-              <div key={index} className="flex items-center justify-between gap-3 text-sm">
-                <div className="flex items-center gap-2">
-                  <div 
-                    className="w-3 h-3 rounded-sm" 
-                    style={{ backgroundColor: entry.color }}
-                  />
-                  <span className="text-muted-foreground">{entry.name}:</span>
+            .map((entry: any, index: number) => {
+              // Find the property info to get the correct color
+              const property = properties.find(p => p.key === entry.dataKey);
+              const color = property?.color || entry.color;
+              
+              return (
+                <div key={index} className="flex items-center justify-between gap-3 text-sm">
+                  <div className="flex items-center gap-2">
+                    <div 
+                      className="w-3 h-3 rounded-sm flex-shrink-0" 
+                      style={{ backgroundColor: color }}
+                    />
+                    <span className="text-muted-foreground">{entry.name || property?.name}:</span>
+                  </div>
+                  <span className="font-medium text-foreground">{entry.value}</span>
                 </div>
-                <span className="font-medium text-foreground">{entry.value}</span>
-              </div>
-            ))}
+              );
+            })}
         </div>
       );
     }
