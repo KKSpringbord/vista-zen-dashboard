@@ -33,36 +33,51 @@ export function SingleBarChart({
               <span className="font-semibold text-foreground">${formatValue(data.total)}</span>
             </div>
             
-            {/* Property breakdown */}
+            {/* Property breakdown with colors */}
             <div className="space-y-1">
               <p className="text-xs font-medium text-muted-foreground mb-2">Property Breakdown:</p>
               {data.riverstoneResi && (
-                <div className="flex justify-between text-xs">
-                  <span className="text-muted-foreground">Riverstone Resi...:</span>
+                <div className="flex justify-between items-center text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-sm bg-[hsl(var(--chart-primary))]"></div>
+                    <span className="text-muted-foreground">Riverstone Resi...:</span>
+                  </div>
                   <span className="font-medium">${formatValue(data.riverstoneResi)}</span>
                 </div>
               )}
               {data.skylineBusiness && (
-                <div className="flex justify-between text-xs">
-                  <span className="text-muted-foreground">Skyline Business...:</span>
+                <div className="flex justify-between items-center text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-sm bg-[hsl(var(--chart-secondary))]"></div>
+                    <span className="text-muted-foreground">Skyline Business...:</span>
+                  </div>
                   <span className="font-medium">${formatValue(data.skylineBusiness)}</span>
                 </div>
               )}
               {data.crystalUnit && (
-                <div className="flex justify-between text-xs">
-                  <span className="text-muted-foreground">Crystal Unit Po...:</span>
+                <div className="flex justify-between items-center text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-sm bg-[hsl(var(--chart-accent))]"></div>
+                    <span className="text-muted-foreground">Crystal Unit Po...:</span>
+                  </div>
                   <span className="font-medium">${formatValue(data.crystalUnit)}</span>
                 </div>
               )}
               {data.helloWorld && (
-                <div className="flex justify-between text-xs">
-                  <span className="text-muted-foreground">Hello World:</span>
+                <div className="flex justify-between items-center text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-sm bg-[hsl(var(--chart-muted))]"></div>
+                    <span className="text-muted-foreground">Hello World:</span>
+                  </div>
                   <span className="font-medium">${formatValue(data.helloWorld)}</span>
                 </div>
               )}
               {data.crescentHeight && (
-                <div className="flex justify-between text-xs">
-                  <span className="text-muted-foreground">Crescent Height...:</span>
+                <div className="flex justify-between items-center text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-sm bg-[hsl(var(--chart-destructive))]"></div>
+                    <span className="text-muted-foreground">Crescent Height...:</span>
+                  </div>
                   <span className="font-medium">${formatValue(data.crescentHeight)}</span>
                 </div>
               )}

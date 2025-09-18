@@ -674,32 +674,6 @@ const Index = () => {
                 showLegend={false}
                 onBarClick={handleChartClick}
               />
-              <div className="flex flex-wrap gap-3 mt-3 text-xs justify-center">
-                <div className="flex items-center gap-1">
-                  <div className="w-3 h-3 bg-[hsl(var(--chart-primary))]"></div>
-                  <span>Riverstone Resi...</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-3 h-3 bg-[hsl(var(--chart-secondary))]"></div>
-                  <span>Skyline Business...</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-3 h-3 bg-[hsl(var(--chart-accent))]"></div>
-                  <span>Crystal Unit Po...</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-3 h-3 bg-[hsl(var(--chart-muted))]"></div>
-                  <span>Hello World</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-3 h-3 bg-[hsl(var(--chart-destructive))]"></div>
-                  <span>Crescent Height...</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-3 h-3 bg-[hsl(var(--chart-neutral))]"></div>
-                  <span>Others</span>
-                </div>
-              </div>
             </ChartCard>
 
             <ChartCard
@@ -728,28 +702,6 @@ const Index = () => {
                 showLegend={false}
                 onPointClick={handleChartClick}
               />
-              <div className="flex flex-wrap gap-3 mt-3 text-xs justify-center">
-                <div className="flex items-center gap-1">
-                  <div className="w-3 h-0.5 bg-[hsl(var(--chart-primary))]"></div>
-                  <span>Riverstone Resi...</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-3 h-0.5 bg-[hsl(var(--chart-secondary))]"></div>
-                  <span>Skyline Business...</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-3 h-0.5 bg-[hsl(var(--chart-accent))]"></div>
-                  <span>Crystal Unit Po...</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-3 h-0.5 bg-[hsl(var(--chart-muted))]"></div>
-                  <span>Hello World</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-3 h-0.5 bg-[hsl(var(--chart-destructive))]"></div>
-                  <span>Crescent Height...</span>
-                </div>
-              </div>
             </ChartCard>
 
             <ChartCard
