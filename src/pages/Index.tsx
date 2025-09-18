@@ -534,7 +534,6 @@ const Index = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [selectedProperties, setSelectedProperties] = useState<string[]>([]);
   const [selectedCompetitorProperty, setSelectedCompetitorProperty] = useState<string>('Crystal Unit Po...');
-  const [selectedMetric, setSelectedMetric] = useState<string>('marketRate');
 
   // Chart interaction handlers
   const handleChartClick = (data: any, seriesKey: string, chartType?: string) => {
@@ -769,9 +768,9 @@ const Index = () => {
           <div className="grid grid-cols-1 gap-6">
             <ChartCard
               title="Market & Competitor Analysis"
-              description={`${selectedMetric === 'marketRate' ? 'Market Rate' : selectedMetric === 'askingRate' ? 'Asking Rate' : 'Occupancy %'} comparison for ${selectedCompetitorProperty}`}
+              description={`Complete competitor comparison for ${selectedCompetitorProperty}`}
             >
-              <div className="mb-4 flex gap-4">
+              <div className="mb-4">
                 <select 
                   value={selectedCompetitorProperty}
                   onChange={(e) => setSelectedCompetitorProperty(e.target.value)}
@@ -781,27 +780,69 @@ const Index = () => {
                     <option key={property} value={property}>{property}</option>
                   ))}
                 </select>
-                <select 
-                  value={selectedMetric}
-                  onChange={(e) => setSelectedMetric(e.target.value)}
-                  className="px-3 py-2 border border-border rounded-md bg-background text-foreground"
-                >
-                  <option value="marketRate">Market Rate</option>
-                  <option value="askingRate">Asking Rate</option>
-                  <option value="occupancy">Occupancy %</option>
-                </select>
               </div>
-              <EnhancedLineChart 
-                data={competitorAnalysisData[selectedCompetitorProperty][selectedMetric]}
-                series={[
-                  { dataKey: 'myProperty', name: selectedCompetitorProperty, color: 'hsl(var(--chart-primary))' },
-                  { dataKey: 'Competitor A', name: 'Competitor A', color: 'hsl(var(--chart-secondary))' },
-                  { dataKey: 'Competitor B', name: 'Competitor B', color: 'hsl(var(--chart-accent))' },
-                  { dataKey: 'Competitor C', name: 'Competitor C', color: 'hsl(var(--chart-muted))' }
-                ]}
-                showLegend={true}
-                onPointClick={handleChartClick}
-              />
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div>
+                  <h4 className="text-sm font-medium mb-3">Market Rate ($/sqft)</h4>
+                  <EnhancedLineChart 
+                    data={competitorAnalysisData[selectedCompetitorProperty].marketRate}
+                    series={[
+                      { dataKey: 'myProperty', name: selectedCompetitorProperty, color: 'hsl(var(--chart-primary))' },
+                      { dataKey: 'Competitor A', name: 'Competitor A', color: 'hsl(var(--chart-secondary))' },
+                      { dataKey: 'Competitor B', name: 'Competitor B', color: 'hsl(var(--chart-accent))' },
+                      { dataKey: 'Competitor C', name: 'Competitor C', color: 'hsl(var(--chart-muted))' }
+                    ]}
+                    showLegend={false}
+                    onPointClick={handleChartClick}
+                  />
+                </div>
+                <div>
+                  <h4 className="text-sm font-medium mb-3">Asking Rate ($/sqft)</h4>
+                  <EnhancedLineChart 
+                    data={competitorAnalysisData[selectedCompetitorProperty].askingRate}
+                    series={[
+                      { dataKey: 'myProperty', name: selectedCompetitorProperty, color: 'hsl(var(--chart-primary))' },
+                      { dataKey: 'Competitor A', name: 'Competitor A', color: 'hsl(var(--chart-secondary))' },
+                      { dataKey: 'Competitor B', name: 'Competitor B', color: 'hsl(var(--chart-accent))' },
+                      { dataKey: 'Competitor C', name: 'Competitor C', color: 'hsl(var(--chart-muted))' }
+                    ]}
+                    showLegend={false}
+                    onPointClick={handleChartClick}
+                  />
+                </div>
+                <div>
+                  <h4 className="text-sm font-medium mb-3">Occupancy Rate (%)</h4>
+                  <EnhancedLineChart 
+                    data={competitorAnalysisData[selectedCompetitorProperty].occupancy}
+                    series={[
+                      { dataKey: 'myProperty', name: selectedCompetitorProperty, color: 'hsl(var(--chart-primary))' },
+                      { dataKey: 'Competitor A', name: 'Competitor A', color: 'hsl(var(--chart-secondary))' },
+                      { dataKey: 'Competitor B', name: 'Competitor B', color: 'hsl(var(--chart-accent))' },
+                      { dataKey: 'Competitor C', name: 'Competitor C', color: 'hsl(var(--chart-muted))' }
+                    ]}
+                    showLegend={false}
+                    onPointClick={handleChartClick}
+                  />
+                </div>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-4 justify-center">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-[hsl(var(--chart-primary))]"></div>
+                  <span className="text-sm">{selectedCompetitorProperty}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-[hsl(var(--chart-secondary))]"></div>
+                  <span className="text-sm">Competitor A</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-[hsl(var(--chart-accent))]"></div>
+                  <span className="text-sm">Competitor B</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-[hsl(var(--chart-muted))]"></div>
+                  <span className="text-sm">Competitor C</span>
+                </div>
+              </div>
             </ChartCard>
           </div>
         </main>
