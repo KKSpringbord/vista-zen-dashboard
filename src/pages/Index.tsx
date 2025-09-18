@@ -434,6 +434,38 @@ const topPerformingPropertiesData = [
   },
 ];
 
+// Market & Competitor Analysis Data by Property
+const competitorAnalysisData = {
+  'Crystal Unit Po...': [
+    { name: 'Jan', myProperty: 4.1, 'Competitor A': 3.8, 'Competitor B': 3.9, 'Competitor C': 4.0, marketAverage: 3.95 },
+    { name: 'Feb', myProperty: 4.2, 'Competitor A': 3.9, 'Competitor B': 4.0, 'Competitor C': 4.1, marketAverage: 4.05 },
+    { name: 'Mar', myProperty: 4.0, 'Competitor A': 3.7, 'Competitor B': 3.8, 'Competitor C': 3.9, marketAverage: 3.85 },
+    { name: 'Apr', myProperty: 4.3, 'Competitor A': 4.0, 'Competitor B': 4.1, 'Competitor C': 4.2, marketAverage: 4.15 },
+    { name: 'May', myProperty: 4.4, 'Competitor A': 4.1, 'Competitor B': 4.2, 'Competitor C': 4.3, marketAverage: 4.25 },
+    { name: 'Jun', myProperty: 4.5, 'Competitor A': 4.2, 'Competitor B': 4.3, 'Competitor C': 4.4, marketAverage: 4.35 },
+    { name: 'Jul', myProperty: 4.3, 'Competitor A': 4.0, 'Competitor B': 4.1, 'Competitor C': 4.2, marketAverage: 4.15 },
+    { name: 'Aug', myProperty: 4.6, 'Competitor A': 4.3, 'Competitor B': 4.4, 'Competitor C': 4.5, marketAverage: 4.45 },
+    { name: 'Sep', myProperty: 4.4, 'Competitor A': 4.1, 'Competitor B': 4.2, 'Competitor C': 4.3, marketAverage: 4.25 },
+    { name: 'Oct', myProperty: 4.7, 'Competitor A': 4.4, 'Competitor B': 4.5, 'Competitor C': 4.6, marketAverage: 4.55 },
+    { name: 'Nov', myProperty: 4.8, 'Competitor A': 4.5, 'Competitor B': 4.6, 'Competitor C': 4.7, marketAverage: 4.65 },
+    { name: 'Dec', myProperty: 4.9, 'Competitor A': 4.6, 'Competitor B': 4.7, 'Competitor C': 4.8, marketAverage: 4.75 },
+  ],
+  'Riverstone Resi...': [
+    { name: 'Jan', myProperty: 2.8, 'Competitor X': 2.6, 'Competitor Y': 2.7, 'Competitor Z': 2.9, marketAverage: 2.75 },
+    { name: 'Feb', myProperty: 2.9, 'Competitor X': 2.7, 'Competitor Y': 2.8, 'Competitor Z': 3.0, marketAverage: 2.85 },
+    { name: 'Mar', myProperty: 2.8, 'Competitor X': 2.5, 'Competitor Y': 2.6, 'Competitor Z': 2.8, marketAverage: 2.68 },
+    { name: 'Apr', myProperty: 3.0, 'Competitor X': 2.8, 'Competitor Y': 2.9, 'Competitor Z': 3.1, marketAverage: 2.95 },
+    { name: 'May', myProperty: 3.1, 'Competitor X': 2.9, 'Competitor Y': 3.0, 'Competitor Z': 3.2, marketAverage: 3.05 },
+    { name: 'Jun', myProperty: 3.2, 'Competitor X': 3.0, 'Competitor Y': 3.1, 'Competitor Z': 3.3, marketAverage: 3.15 },
+    { name: 'Jul', myProperty: 3.1, 'Competitor X': 2.8, 'Competitor Y': 2.9, 'Competitor Z': 3.1, marketAverage: 2.98 },
+    { name: 'Aug', myProperty: 3.3, 'Competitor X': 3.1, 'Competitor Y': 3.2, 'Competitor Z': 3.4, marketAverage: 3.25 },
+    { name: 'Sep', myProperty: 3.2, 'Competitor X': 2.9, 'Competitor Y': 3.0, 'Competitor Z': 3.2, marketAverage: 3.08 },
+    { name: 'Oct', myProperty: 3.4, 'Competitor X': 3.2, 'Competitor Y': 3.3, 'Competitor Z': 3.5, marketAverage: 3.35 },
+    { name: 'Nov', myProperty: 3.5, 'Competitor X': 3.3, 'Competitor Y': 3.4, 'Competitor Z': 3.6, marketAverage: 3.45 },
+    { name: 'Dec', myProperty: 3.6, 'Competitor X': 3.4, 'Competitor Y': 3.5, 'Competitor Z': 3.7, marketAverage: 3.55 },
+  ]
+};
+
 const timelineEventsData = [
   { name: 'Jan 2024', date: '2024-01', occupancy: 85, events: 2, maintenance: 1 },
   { name: 'Feb 2024', date: '2024-02', occupancy: 88, events: 1, maintenance: 3 },
@@ -477,6 +509,7 @@ const propertyFilters = [
 const Index = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [selectedProperties, setSelectedProperties] = useState<string[]>([]);
+  const [selectedCompetitorProperty, setSelectedCompetitorProperty] = useState<string>('Crystal Unit Po...');
 
   // Chart interaction handlers
   const handleChartClick = (data: any, seriesKey: string, chartType?: string) => {
@@ -673,31 +706,6 @@ const Index = () => {
             </ChartCard>
 
             <ChartCard
-              title="Portfolio Industry Mix"
-              description="Property distribution by type"
-            >
-              <ModernDonutChart data={portfolioMixData} />
-            </ChartCard>
-          </div>
-
-          {/* Timeline and Events */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <ChartCard
-              title="Portfolio Events Timeline"
-              description="Occupancy trends with maintenance and event markers"
-            >
-              <TimelineChart 
-                data={timelineEventsData}
-                series={[
-                  { dataKey: 'occupancy', name: 'Occupancy Rate', color: 'hsl(var(--chart-primary))', type: 'line' },
-                  { dataKey: 'events', name: 'Events', color: 'hsl(var(--chart-accent))', type: 'scatter', size: 8 },
-                  { dataKey: 'maintenance', name: 'Maintenance', color: 'hsl(var(--chart-secondary))', type: 'scatter', size: 6 }
-                ]}
-                onPointClick={handleChartClick}
-              />
-            </ChartCard>
-
-            <ChartCard
               title="Top Revenue Contributors (Q4 2024)"
               description="80% contributors vs 20% (Others) based on selected timeframe"
             >
@@ -712,7 +720,7 @@ const Index = () => {
           </div>
 
           {/* Final Charts Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6">
             <ChartCard
               title="Top 5 Performing Properties"
               description="Total income, NOI, and occupancy rate by property"
@@ -730,36 +738,36 @@ const Index = () => {
                 onElementClick={handleChartClick}
               />
             </ChartCard>
+          </div>
 
+          {/* Market Analysis - Full Width */}
+          <div className="grid grid-cols-1 gap-6">
             <ChartCard
               title="Market & Competitor Analysis"
-              description="Value per square foot comparison"
+              description={`Rent per sqft comparison for ${selectedCompetitorProperty}`}
             >
-              <ModernAreaChart 
-                data={[
-                  { name: '2019', value: 2.8 },
-                  { name: '2020', value: 2.6 },
-                  { name: '2021', value: 3.1 },
-                  { name: '2022', value: 3.4 },
-                  { name: '2023', value: 3.7 },
-                  { name: '2024', value: 4.2 },
-                ]} 
-                color="hsl(var(--chart-accent))"
-              />
-            </ChartCard>
-
-            <ChartCard
-              title="Space Utilization"
-              description="Square footage breakdown"
-            >
-              <ModernAreaChart 
-                data={[
-                  { name: 'Q1', value: 42000 },
-                  { name: 'Q2', value: 43500 },
-                  { name: 'Q3', value: 44200 },
-                  { name: 'Q4', value: 45230 },
-                ]} 
-                color="hsl(var(--chart-primary))"
+              <div className="mb-4">
+                <select 
+                  value={selectedCompetitorProperty}
+                  onChange={(e) => setSelectedCompetitorProperty(e.target.value)}
+                  className="px-3 py-2 border border-border rounded-md bg-background text-foreground"
+                >
+                  {Object.keys(competitorAnalysisData).map(property => (
+                    <option key={property} value={property}>{property}</option>
+                  ))}
+                </select>
+              </div>
+              <EnhancedLineChart 
+                data={competitorAnalysisData[selectedCompetitorProperty]}
+                series={[
+                  { dataKey: 'myProperty', name: selectedCompetitorProperty, color: 'hsl(var(--chart-primary))' },
+                  { dataKey: 'Competitor A', name: 'Competitor A', color: 'hsl(var(--chart-secondary))' },
+                  { dataKey: 'Competitor B', name: 'Competitor B', color: 'hsl(var(--chart-accent))' },
+                  { dataKey: 'Competitor C', name: 'Competitor C', color: 'hsl(var(--chart-muted))' },
+                  { dataKey: 'marketAverage', name: 'Market Average', color: 'hsl(var(--chart-destructive))' }
+                ]}
+                showLegend={true}
+                onPointClick={handleChartClick}
               />
             </ChartCard>
           </div>
