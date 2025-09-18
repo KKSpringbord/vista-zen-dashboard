@@ -50,16 +50,26 @@ export function EnhancedBarChart({
       return (
         <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
           <p className="font-semibold text-foreground mb-2">{label}</p>
-          {payload.map((entry: any, index: number) => (
-            <div key={index} className="flex items-center gap-2 text-sm">
-              <div 
-                className="w-3 h-3 rounded-sm" 
-                style={{ backgroundColor: entry.color }}
-              />
-              <span className="text-muted-foreground">{entry.name}:</span>
-              <span className="font-medium text-foreground">{entry.value.toLocaleString()}</span>
-            </div>
-          ))}
+          {payload
+            .filter((entry: any) => entry.value > 0)
+            .map((entry: any, index: number) => {
+              // Find the series info to get the correct color
+              const seriesInfo = series.find(s => s.dataKey === entry.dataKey);
+              const color = seriesInfo?.color || entry.color;
+              
+              return (
+                <div key={index} className="flex items-center justify-between gap-3 text-sm">
+                  <div className="flex items-center gap-2">
+                    <div 
+                      className="w-3 h-3 rounded-sm flex-shrink-0" 
+                      style={{ backgroundColor: color }}
+                    />
+                    <span className="text-muted-foreground">{entry.name || seriesInfo?.name}:</span>
+                  </div>
+                  <span className="font-medium text-foreground">{entry.value.toLocaleString()}</span>
+                </div>
+              );
+            })}
         </div>
       );
     }
