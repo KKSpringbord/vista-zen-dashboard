@@ -436,34 +436,58 @@ const topPerformingPropertiesData = [
 
 // Market & Competitor Analysis Data by Property
 const competitorAnalysisData = {
-  'Crystal Unit Po...': [
-    { name: 'Jan', myProperty: 4.1, 'Competitor A': 3.8, 'Competitor B': 3.9, 'Competitor C': 4.0, marketAverage: 3.95 },
-    { name: 'Feb', myProperty: 4.2, 'Competitor A': 3.9, 'Competitor B': 4.0, 'Competitor C': 4.1, marketAverage: 4.05 },
-    { name: 'Mar', myProperty: 4.0, 'Competitor A': 3.7, 'Competitor B': 3.8, 'Competitor C': 3.9, marketAverage: 3.85 },
-    { name: 'Apr', myProperty: 4.3, 'Competitor A': 4.0, 'Competitor B': 4.1, 'Competitor C': 4.2, marketAverage: 4.15 },
-    { name: 'May', myProperty: 4.4, 'Competitor A': 4.1, 'Competitor B': 4.2, 'Competitor C': 4.3, marketAverage: 4.25 },
-    { name: 'Jun', myProperty: 4.5, 'Competitor A': 4.2, 'Competitor B': 4.3, 'Competitor C': 4.4, marketAverage: 4.35 },
-    { name: 'Jul', myProperty: 4.3, 'Competitor A': 4.0, 'Competitor B': 4.1, 'Competitor C': 4.2, marketAverage: 4.15 },
-    { name: 'Aug', myProperty: 4.6, 'Competitor A': 4.3, 'Competitor B': 4.4, 'Competitor C': 4.5, marketAverage: 4.45 },
-    { name: 'Sep', myProperty: 4.4, 'Competitor A': 4.1, 'Competitor B': 4.2, 'Competitor C': 4.3, marketAverage: 4.25 },
-    { name: 'Oct', myProperty: 4.7, 'Competitor A': 4.4, 'Competitor B': 4.5, 'Competitor C': 4.6, marketAverage: 4.55 },
-    { name: 'Nov', myProperty: 4.8, 'Competitor A': 4.5, 'Competitor B': 4.6, 'Competitor C': 4.7, marketAverage: 4.65 },
-    { name: 'Dec', myProperty: 4.9, 'Competitor A': 4.6, 'Competitor B': 4.7, 'Competitor C': 4.8, marketAverage: 4.75 },
-  ],
-  'Riverstone Resi...': [
-    { name: 'Jan', myProperty: 2.8, 'Competitor X': 2.6, 'Competitor Y': 2.7, 'Competitor Z': 2.9, marketAverage: 2.75 },
-    { name: 'Feb', myProperty: 2.9, 'Competitor X': 2.7, 'Competitor Y': 2.8, 'Competitor Z': 3.0, marketAverage: 2.85 },
-    { name: 'Mar', myProperty: 2.8, 'Competitor X': 2.5, 'Competitor Y': 2.6, 'Competitor Z': 2.8, marketAverage: 2.68 },
-    { name: 'Apr', myProperty: 3.0, 'Competitor X': 2.8, 'Competitor Y': 2.9, 'Competitor Z': 3.1, marketAverage: 2.95 },
-    { name: 'May', myProperty: 3.1, 'Competitor X': 2.9, 'Competitor Y': 3.0, 'Competitor Z': 3.2, marketAverage: 3.05 },
-    { name: 'Jun', myProperty: 3.2, 'Competitor X': 3.0, 'Competitor Y': 3.1, 'Competitor Z': 3.3, marketAverage: 3.15 },
-    { name: 'Jul', myProperty: 3.1, 'Competitor X': 2.8, 'Competitor Y': 2.9, 'Competitor Z': 3.1, marketAverage: 2.98 },
-    { name: 'Aug', myProperty: 3.3, 'Competitor X': 3.1, 'Competitor Y': 3.2, 'Competitor Z': 3.4, marketAverage: 3.25 },
-    { name: 'Sep', myProperty: 3.2, 'Competitor X': 2.9, 'Competitor Y': 3.0, 'Competitor Z': 3.2, marketAverage: 3.08 },
-    { name: 'Oct', myProperty: 3.4, 'Competitor X': 3.2, 'Competitor Y': 3.3, 'Competitor Z': 3.5, marketAverage: 3.35 },
-    { name: 'Nov', myProperty: 3.5, 'Competitor X': 3.3, 'Competitor Y': 3.4, 'Competitor Z': 3.6, marketAverage: 3.45 },
-    { name: 'Dec', myProperty: 3.6, 'Competitor X': 3.4, 'Competitor Y': 3.5, 'Competitor Z': 3.7, marketAverage: 3.55 },
-  ]
+  'Crystal Unit Po...': {
+    marketRate: [
+      { name: 'Jan', myProperty: 4.1, 'Competitor A': 3.8, 'Competitor B': 3.9, 'Competitor C': 4.0 },
+      { name: 'Feb', myProperty: 4.2, 'Competitor A': 3.9, 'Competitor B': 4.0, 'Competitor C': 4.1 },
+      { name: 'Mar', myProperty: 4.0, 'Competitor A': 3.7, 'Competitor B': 3.8, 'Competitor C': 3.9 },
+      { name: 'Apr', myProperty: 4.3, 'Competitor A': 4.0, 'Competitor B': 4.1, 'Competitor C': 4.2 },
+      { name: 'May', myProperty: 4.4, 'Competitor A': 4.1, 'Competitor B': 4.2, 'Competitor C': 4.3 },
+      { name: 'Jun', myProperty: 4.5, 'Competitor A': 4.2, 'Competitor B': 4.3, 'Competitor C': 4.4 }
+    ],
+    askingRate: [
+      { name: 'Jan', myProperty: 4.3, 'Competitor A': 4.0, 'Competitor B': 4.1, 'Competitor C': 4.2 },
+      { name: 'Feb', myProperty: 4.4, 'Competitor A': 4.1, 'Competitor B': 4.2, 'Competitor C': 4.3 },
+      { name: 'Mar', myProperty: 4.2, 'Competitor A': 3.9, 'Competitor B': 4.0, 'Competitor C': 4.1 },
+      { name: 'Apr', myProperty: 4.5, 'Competitor A': 4.2, 'Competitor B': 4.3, 'Competitor C': 4.4 },
+      { name: 'May', myProperty: 4.6, 'Competitor A': 4.3, 'Competitor B': 4.4, 'Competitor C': 4.5 },
+      { name: 'Jun', myProperty: 4.7, 'Competitor A': 4.4, 'Competitor B': 4.5, 'Competitor C': 4.6 }
+    ],
+    occupancy: [
+      { name: 'Jan', myProperty: 95.2, 'Competitor A': 88.5, 'Competitor B': 90.2, 'Competitor C': 87.8 },
+      { name: 'Feb', myProperty: 94.8, 'Competitor A': 89.1, 'Competitor B': 91.0, 'Competitor C': 88.5 },
+      { name: 'Mar', myProperty: 96.1, 'Competitor A': 87.9, 'Competitor B': 89.8, 'Competitor C': 86.9 },
+      { name: 'Apr', myProperty: 95.7, 'Competitor A': 90.2, 'Competitor B': 92.1, 'Competitor C': 89.4 },
+      { name: 'May', myProperty: 96.3, 'Competitor A': 91.5, 'Competitor B': 93.2, 'Competitor C': 90.8 },
+      { name: 'Jun', myProperty: 95.9, 'Competitor A': 92.1, 'Competitor B': 94.0, 'Competitor C': 91.5 }
+    ]
+  },
+  'Riverstone Resi...': {
+    marketRate: [
+      { name: 'Jan', myProperty: 2.8, 'Competitor X': 2.6, 'Competitor Y': 2.7, 'Competitor Z': 2.9 },
+      { name: 'Feb', myProperty: 2.9, 'Competitor X': 2.7, 'Competitor Y': 2.8, 'Competitor Z': 3.0 },
+      { name: 'Mar', myProperty: 2.8, 'Competitor X': 2.5, 'Competitor Y': 2.6, 'Competitor Z': 2.8 },
+      { name: 'Apr', myProperty: 3.0, 'Competitor X': 2.8, 'Competitor Y': 2.9, 'Competitor Z': 3.1 },
+      { name: 'May', myProperty: 3.1, 'Competitor X': 2.9, 'Competitor Y': 3.0, 'Competitor Z': 3.2 },
+      { name: 'Jun', myProperty: 3.2, 'Competitor X': 3.0, 'Competitor Y': 3.1, 'Competitor Z': 3.3 }
+    ],
+    askingRate: [
+      { name: 'Jan', myProperty: 3.0, 'Competitor X': 2.8, 'Competitor Y': 2.9, 'Competitor Z': 3.1 },
+      { name: 'Feb', myProperty: 3.1, 'Competitor X': 2.9, 'Competitor Y': 3.0, 'Competitor Z': 3.2 },
+      { name: 'Mar', myProperty: 3.0, 'Competitor X': 2.7, 'Competitor Y': 2.8, 'Competitor Z': 3.0 },
+      { name: 'Apr', myProperty: 3.2, 'Competitor X': 3.0, 'Competitor Y': 3.1, 'Competitor Z': 3.3 },
+      { name: 'May', myProperty: 3.3, 'Competitor X': 3.1, 'Competitor Y': 3.2, 'Competitor Z': 3.4 },
+      { name: 'Jun', myProperty: 3.4, 'Competitor X': 3.2, 'Competitor Y': 3.3, 'Competitor Z': 3.5 }
+    ],
+    occupancy: [
+      { name: 'Jan', myProperty: 92.4, 'Competitor X': 85.2, 'Competitor Y': 87.5, 'Competitor Z': 89.1 },
+      { name: 'Feb', myProperty: 91.8, 'Competitor X': 86.0, 'Competitor Y': 88.2, 'Competitor Z': 89.8 },
+      { name: 'Mar', myProperty: 93.2, 'Competitor X': 84.8, 'Competitor Y': 86.9, 'Competitor Z': 88.5 },
+      { name: 'Apr', myProperty: 92.9, 'Competitor X': 87.1, 'Competitor Y': 89.3, 'Competitor Z': 90.7 },
+      { name: 'May', myProperty: 93.5, 'Competitor X': 88.4, 'Competitor Y': 90.6, 'Competitor Z': 91.9 },
+      { name: 'Jun', myProperty: 92.7, 'Competitor X': 89.1, 'Competitor Y': 91.2, 'Competitor Z': 92.5 }
+    ]
+  }
 };
 
 const timelineEventsData = [
@@ -510,6 +534,7 @@ const Index = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [selectedProperties, setSelectedProperties] = useState<string[]>([]);
   const [selectedCompetitorProperty, setSelectedCompetitorProperty] = useState<string>('Crystal Unit Po...');
+  const [selectedMetric, setSelectedMetric] = useState<string>('marketRate');
 
   // Chart interaction handlers
   const handleChartClick = (data: any, seriesKey: string, chartType?: string) => {
@@ -744,9 +769,9 @@ const Index = () => {
           <div className="grid grid-cols-1 gap-6">
             <ChartCard
               title="Market & Competitor Analysis"
-              description={`Rent per sqft comparison for ${selectedCompetitorProperty}`}
+              description={`${selectedMetric === 'marketRate' ? 'Market Rate' : selectedMetric === 'askingRate' ? 'Asking Rate' : 'Occupancy %'} comparison for ${selectedCompetitorProperty}`}
             >
-              <div className="mb-4">
+              <div className="mb-4 flex gap-4">
                 <select 
                   value={selectedCompetitorProperty}
                   onChange={(e) => setSelectedCompetitorProperty(e.target.value)}
@@ -756,15 +781,23 @@ const Index = () => {
                     <option key={property} value={property}>{property}</option>
                   ))}
                 </select>
+                <select 
+                  value={selectedMetric}
+                  onChange={(e) => setSelectedMetric(e.target.value)}
+                  className="px-3 py-2 border border-border rounded-md bg-background text-foreground"
+                >
+                  <option value="marketRate">Market Rate</option>
+                  <option value="askingRate">Asking Rate</option>
+                  <option value="occupancy">Occupancy %</option>
+                </select>
               </div>
               <EnhancedLineChart 
-                data={competitorAnalysisData[selectedCompetitorProperty]}
+                data={competitorAnalysisData[selectedCompetitorProperty][selectedMetric]}
                 series={[
                   { dataKey: 'myProperty', name: selectedCompetitorProperty, color: 'hsl(var(--chart-primary))' },
                   { dataKey: 'Competitor A', name: 'Competitor A', color: 'hsl(var(--chart-secondary))' },
                   { dataKey: 'Competitor B', name: 'Competitor B', color: 'hsl(var(--chart-accent))' },
-                  { dataKey: 'Competitor C', name: 'Competitor C', color: 'hsl(var(--chart-muted))' },
-                  { dataKey: 'marketAverage', name: 'Market Average', color: 'hsl(var(--chart-destructive))' }
+                  { dataKey: 'Competitor C', name: 'Competitor C', color: 'hsl(var(--chart-muted))' }
                 ]}
                 showLegend={true}
                 onPointClick={handleChartClick}
