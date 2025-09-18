@@ -434,84 +434,60 @@ const topPerformingPropertiesData = [
   },
 ];
 
-// Market & Competitor Analysis Data by Property - Combined format
+// Market & Competitor Analysis Data by Property
 const competitorAnalysisData = {
-  'Crystal Unit Po...': [
-    { 
-      name: 'Jan', 
-      myPropertyMarket: 4.1, competitorAMarket: 3.8, competitorBMarket: 3.9, competitorCMarket: 4.0,
-      myPropertyAsking: 4.3, competitorAAsking: 4.0, competitorBAsking: 4.1, competitorCAsking: 4.2,
-      myPropertyOccupancy: 95.2, competitorAOccupancy: 88.5, competitorBOccupancy: 90.2, competitorCOccupancy: 87.8
-    },
-    { 
-      name: 'Feb', 
-      myPropertyMarket: 4.2, competitorAMarket: 3.9, competitorBMarket: 4.0, competitorCMarket: 4.1,
-      myPropertyAsking: 4.4, competitorAAsking: 4.1, competitorBAsking: 4.2, competitorCAsking: 4.3,
-      myPropertyOccupancy: 94.8, competitorAOccupancy: 89.1, competitorBOccupancy: 91.0, competitorCOccupancy: 88.5
-    },
-    { 
-      name: 'Mar', 
-      myPropertyMarket: 4.0, competitorAMarket: 3.7, competitorBMarket: 3.8, competitorCMarket: 3.9,
-      myPropertyAsking: 4.2, competitorAAsking: 3.9, competitorBAsking: 4.0, competitorCAsking: 4.1,
-      myPropertyOccupancy: 96.1, competitorAOccupancy: 87.9, competitorBOccupancy: 89.8, competitorCOccupancy: 86.9
-    },
-    { 
-      name: 'Apr', 
-      myPropertyMarket: 4.3, competitorAMarket: 4.0, competitorBMarket: 4.1, competitorCMarket: 4.2,
-      myPropertyAsking: 4.5, competitorAAsking: 4.2, competitorBAsking: 4.3, competitorCAsking: 4.4,
-      myPropertyOccupancy: 95.7, competitorAOccupancy: 90.2, competitorBOccupancy: 92.1, competitorCOccupancy: 89.4
-    },
-    { 
-      name: 'May', 
-      myPropertyMarket: 4.4, competitorAMarket: 4.1, competitorBMarket: 4.2, competitorCMarket: 4.3,
-      myPropertyAsking: 4.6, competitorAAsking: 4.3, competitorBAsking: 4.4, competitorCAsking: 4.5,
-      myPropertyOccupancy: 96.3, competitorAOccupancy: 91.5, competitorBOccupancy: 93.2, competitorCOccupancy: 90.8
-    },
-    { 
-      name: 'Jun', 
-      myPropertyMarket: 4.5, competitorAMarket: 4.2, competitorBMarket: 4.3, competitorCMarket: 4.4,
-      myPropertyAsking: 4.7, competitorAAsking: 4.4, competitorBAsking: 4.5, competitorCAsking: 4.6,
-      myPropertyOccupancy: 95.9, competitorAOccupancy: 92.1, competitorBOccupancy: 94.0, competitorCOccupancy: 91.5
-    }
-  ],
-  'Riverstone Resi...': [
-    { 
-      name: 'Jan', 
-      myPropertyMarket: 2.8, competitorAMarket: 2.6, competitorBMarket: 2.7, competitorCMarket: 2.9,
-      myPropertyAsking: 3.0, competitorAAsking: 2.8, competitorBAsking: 2.9, competitorCAsking: 3.1,
-      myPropertyOccupancy: 92.4, competitorAOccupancy: 85.2, competitorBOccupancy: 87.5, competitorCOccupancy: 89.1
-    },
-    { 
-      name: 'Feb', 
-      myPropertyMarket: 2.9, competitorAMarket: 2.7, competitorBMarket: 2.8, competitorCMarket: 3.0,
-      myPropertyAsking: 3.1, competitorAAsking: 2.9, competitorBAsking: 3.0, competitorCAsking: 3.2,
-      myPropertyOccupancy: 91.8, competitorAOccupancy: 86.0, competitorBOccupancy: 88.2, competitorCOccupancy: 89.8
-    },
-    { 
-      name: 'Mar', 
-      myPropertyMarket: 2.8, competitorAMarket: 2.5, competitorBMarket: 2.6, competitorCMarket: 2.8,
-      myPropertyAsking: 3.0, competitorAAsking: 2.7, competitorBAsking: 2.8, competitorCAsking: 3.0,
-      myPropertyOccupancy: 93.2, competitorAOccupancy: 84.8, competitorBOccupancy: 86.9, competitorCOccupancy: 88.5
-    },
-    { 
-      name: 'Apr', 
-      myPropertyMarket: 3.0, competitorAMarket: 2.8, competitorBMarket: 2.9, competitorCMarket: 3.1,
-      myPropertyAsking: 3.2, competitorAAsking: 3.0, competitorBAsking: 3.1, competitorCAsking: 3.3,
-      myPropertyOccupancy: 92.9, competitorAOccupancy: 87.1, competitorBOccupancy: 89.3, competitorCOccupancy: 90.7
-    },
-    { 
-      name: 'May', 
-      myPropertyMarket: 3.1, competitorAMarket: 2.9, competitorBMarket: 3.0, competitorCMarket: 3.2,
-      myPropertyAsking: 3.3, competitorAAsking: 3.1, competitorBAsking: 3.2, competitorCAsking: 3.4,
-      myPropertyOccupancy: 93.5, competitorAOccupancy: 88.4, competitorBOccupancy: 90.6, competitorCOccupancy: 91.9
-    },
-    { 
-      name: 'Jun', 
-      myPropertyMarket: 3.2, competitorAMarket: 3.0, competitorBMarket: 3.1, competitorCMarket: 3.3,
-      myPropertyAsking: 3.4, competitorAAsking: 3.2, competitorBAsking: 3.3, competitorCAsking: 3.5,
-      myPropertyOccupancy: 92.7, competitorAOccupancy: 89.1, competitorBOccupancy: 91.2, competitorCOccupancy: 92.5
-    }
-  ]
+  'Crystal Unit Po...': {
+    marketRate: [
+      { name: 'Jan', myProperty: 4.1, 'Competitor A': 3.8, 'Competitor B': 3.9, 'Competitor C': 4.0 },
+      { name: 'Feb', myProperty: 4.2, 'Competitor A': 3.9, 'Competitor B': 4.0, 'Competitor C': 4.1 },
+      { name: 'Mar', myProperty: 4.0, 'Competitor A': 3.7, 'Competitor B': 3.8, 'Competitor C': 3.9 },
+      { name: 'Apr', myProperty: 4.3, 'Competitor A': 4.0, 'Competitor B': 4.1, 'Competitor C': 4.2 },
+      { name: 'May', myProperty: 4.4, 'Competitor A': 4.1, 'Competitor B': 4.2, 'Competitor C': 4.3 },
+      { name: 'Jun', myProperty: 4.5, 'Competitor A': 4.2, 'Competitor B': 4.3, 'Competitor C': 4.4 }
+    ],
+    askingRate: [
+      { name: 'Jan', myProperty: 4.3, 'Competitor A': 4.0, 'Competitor B': 4.1, 'Competitor C': 4.2 },
+      { name: 'Feb', myProperty: 4.4, 'Competitor A': 4.1, 'Competitor B': 4.2, 'Competitor C': 4.3 },
+      { name: 'Mar', myProperty: 4.2, 'Competitor A': 3.9, 'Competitor B': 4.0, 'Competitor C': 4.1 },
+      { name: 'Apr', myProperty: 4.5, 'Competitor A': 4.2, 'Competitor B': 4.3, 'Competitor C': 4.4 },
+      { name: 'May', myProperty: 4.6, 'Competitor A': 4.3, 'Competitor B': 4.4, 'Competitor C': 4.5 },
+      { name: 'Jun', myProperty: 4.7, 'Competitor A': 4.4, 'Competitor B': 4.5, 'Competitor C': 4.6 }
+    ],
+    occupancy: [
+      { name: 'Jan', myProperty: 95.2, 'Competitor A': 88.5, 'Competitor B': 90.2, 'Competitor C': 87.8 },
+      { name: 'Feb', myProperty: 94.8, 'Competitor A': 89.1, 'Competitor B': 91.0, 'Competitor C': 88.5 },
+      { name: 'Mar', myProperty: 96.1, 'Competitor A': 87.9, 'Competitor B': 89.8, 'Competitor C': 86.9 },
+      { name: 'Apr', myProperty: 95.7, 'Competitor A': 90.2, 'Competitor B': 92.1, 'Competitor C': 89.4 },
+      { name: 'May', myProperty: 96.3, 'Competitor A': 91.5, 'Competitor B': 93.2, 'Competitor C': 90.8 },
+      { name: 'Jun', myProperty: 95.9, 'Competitor A': 92.1, 'Competitor B': 94.0, 'Competitor C': 91.5 }
+    ]
+  },
+  'Riverstone Resi...': {
+    marketRate: [
+      { name: 'Jan', myProperty: 2.8, 'Competitor A': 2.6, 'Competitor B': 2.7, 'Competitor C': 2.9 },
+      { name: 'Feb', myProperty: 2.9, 'Competitor A': 2.7, 'Competitor B': 2.8, 'Competitor C': 3.0 },
+      { name: 'Mar', myProperty: 2.8, 'Competitor A': 2.5, 'Competitor B': 2.6, 'Competitor C': 2.8 },
+      { name: 'Apr', myProperty: 3.0, 'Competitor A': 2.8, 'Competitor B': 2.9, 'Competitor C': 3.1 },
+      { name: 'May', myProperty: 3.1, 'Competitor A': 2.9, 'Competitor B': 3.0, 'Competitor C': 3.2 },
+      { name: 'Jun', myProperty: 3.2, 'Competitor A': 3.0, 'Competitor B': 3.1, 'Competitor C': 3.3 }
+    ],
+    askingRate: [
+      { name: 'Jan', myProperty: 3.0, 'Competitor A': 2.8, 'Competitor B': 2.9, 'Competitor C': 3.1 },
+      { name: 'Feb', myProperty: 3.1, 'Competitor A': 2.9, 'Competitor B': 3.0, 'Competitor C': 3.2 },
+      { name: 'Mar', myProperty: 3.0, 'Competitor A': 2.7, 'Competitor B': 2.8, 'Competitor C': 3.0 },
+      { name: 'Apr', myProperty: 3.2, 'Competitor A': 3.0, 'Competitor B': 3.1, 'Competitor C': 3.3 },
+      { name: 'May', myProperty: 3.3, 'Competitor A': 3.1, 'Competitor B': 3.2, 'Competitor C': 3.4 },
+      { name: 'Jun', myProperty: 3.4, 'Competitor A': 3.2, 'Competitor B': 3.3, 'Competitor C': 3.5 }
+    ],
+    occupancy: [
+      { name: 'Jan', myProperty: 92.4, 'Competitor A': 85.2, 'Competitor B': 87.5, 'Competitor C': 89.1 },
+      { name: 'Feb', myProperty: 91.8, 'Competitor A': 86.0, 'Competitor B': 88.2, 'Competitor C': 89.8 },
+      { name: 'Mar', myProperty: 93.2, 'Competitor A': 84.8, 'Competitor B': 86.9, 'Competitor C': 88.5 },
+      { name: 'Apr', myProperty: 92.9, 'Competitor A': 87.1, 'Competitor B': 89.3, 'Competitor C': 90.7 },
+      { name: 'May', myProperty: 93.5, 'Competitor A': 88.4, 'Competitor B': 90.6, 'Competitor C': 91.9 },
+      { name: 'Jun', myProperty: 92.7, 'Competitor A': 89.1, 'Competitor B': 91.2, 'Competitor C': 92.5 }
+    ]
+  }
 };
 
 const timelineEventsData = [
