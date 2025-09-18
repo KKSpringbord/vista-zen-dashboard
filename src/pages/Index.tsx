@@ -635,7 +635,7 @@ const Index = () => {
                 properties={leaseExpiryProperties}
                 selectedProperties={selectedProperties}
                 onBarClick={handleChartClick}
-                showLegend={false}
+                showLegend={true}
               />
             </ChartCard>
 
@@ -666,7 +666,7 @@ const Index = () => {
                   { dataKey: 'others', name: 'Others', color: 'hsl(var(--chart-neutral))' }
                 ]}
                 stacked={true}
-                showLegend={false}
+                showLegend={true}
                 onBarClick={handleChartClick}
               />
             </ChartCard>
@@ -793,24 +793,6 @@ const Index = () => {
                       onPointClick={handleChartClick}
                     />
                   </div>
-                  <div className="flex flex-wrap gap-2 mt-2 text-xs">
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-0.5 bg-[hsl(var(--chart-primary))]"></div>
-                      <span>{selectedCompetitorProperty}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-0.5 bg-[hsl(var(--chart-secondary))]"></div>
-                      <span>Competitor A</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-0.5 bg-[hsl(var(--chart-accent))]"></div>
-                      <span>Competitor B</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-0.5 bg-[hsl(var(--chart-muted))]"></div>
-                      <span>Competitor C</span>
-                    </div>
-                  </div>
                 </div>
                 <div>
                   <h4 className="text-sm font-medium mb-2">Asking Rate ($/sqft)</h4>
@@ -827,24 +809,6 @@ const Index = () => {
                       onPointClick={handleChartClick}
                     />
                   </div>
-                  <div className="flex flex-wrap gap-2 mt-2 text-xs">
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-0.5 bg-[hsl(var(--chart-primary))]"></div>
-                      <span>{selectedCompetitorProperty}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-0.5 bg-[hsl(var(--chart-secondary))]"></div>
-                      <span>Competitor A</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-0.5 bg-[hsl(var(--chart-accent))]"></div>
-                      <span>Competitor B</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-0.5 bg-[hsl(var(--chart-muted))]"></div>
-                      <span>Competitor C</span>
-                    </div>
-                  </div>
                 </div>
                 <div>
                   <h4 className="text-sm font-medium mb-2">Occupancy Rate (%)</h4>
@@ -860,24 +824,6 @@ const Index = () => {
                       showLegend={false}
                       onPointClick={handleChartClick}
                     />
-                  </div>
-                  <div className="flex flex-wrap gap-2 mt-2 text-xs">
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-0.5 bg-[hsl(var(--chart-primary))]"></div>
-                      <span>{selectedCompetitorProperty}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-0.5 bg-[hsl(var(--chart-secondary))]"></div>
-                      <span>Competitor A</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-0.5 bg-[hsl(var(--chart-accent))]"></div>
-                      <span>Competitor B</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-0.5 bg-[hsl(var(--chart-muted))]"></div>
-                      <span>Competitor C</span>
-                    </div>
                   </div>
                 </div>
               </div>
