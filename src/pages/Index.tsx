@@ -635,7 +635,7 @@ const Index = () => {
                 properties={leaseExpiryProperties}
                 selectedProperties={selectedProperties}
                 onBarClick={handleChartClick}
-                showLegend={true}
+                showLegend={false}
               />
             </ChartCard>
 
@@ -666,7 +666,7 @@ const Index = () => {
                   { dataKey: 'others', name: 'Others', color: 'hsl(var(--chart-neutral))' }
                 ]}
                 stacked={true}
-                showLegend={true}
+                showLegend={false}
                 onBarClick={handleChartClick}
               />
             </ChartCard>
