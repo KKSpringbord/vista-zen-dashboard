@@ -1,4 +1,4 @@
-import { Calendar, Filter, RefreshCw } from "lucide-react";
+import { Calendar, Filter, RefreshCw, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -8,13 +8,28 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export function DashboardHeader() {
+interface DashboardHeaderProps {
+  sidebarCollapsed?: boolean;
+  onToggleSidebar?: () => void;
+}
+
+export function DashboardHeader({ sidebarCollapsed, onToggleSidebar }: DashboardHeaderProps) {
   return (
-    <div className="bg-card border-b border-border px-6 py-4">
+    <div className="bg-gradient-to-r from-card to-card/95 border-b border-border/50 px-6 py-4 shadow-sm backdrop-blur-sm">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-sm text-muted-foreground">Overview of your property portfolio</p>
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onToggleSidebar}
+            className="hover:bg-accent/50 transition-colors"
+          >
+            <Menu className="w-5 h-5" />
+          </Button>
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+            <p className="text-sm text-muted-foreground">Overview of your property portfolio</p>
+          </div>
         </div>
         
         <div className="flex items-center gap-3">

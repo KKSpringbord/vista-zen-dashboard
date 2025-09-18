@@ -31,7 +31,7 @@ interface SidebarProps {
 export function Sidebar({ collapsed = false }: SidebarProps) {
   return (
     <div className={cn(
-      "h-screen bg-card border-r border-border flex flex-col transition-all duration-300",
+      "h-screen bg-card/95 backdrop-blur-sm border-r border-border/50 flex flex-col transition-all duration-300 shadow-xl",
       collapsed ? "w-16" : "w-64"
     )}>
       {/* Logo */}
