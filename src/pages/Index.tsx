@@ -701,12 +701,20 @@ const Index = () => {
 
             <ChartCard
               title="Net Operating Income (NOI)"
-              description="Combined monthly NOI with property breakdown on hover"
+              description="Combined monthly NOI with property breakdown"
             >
-              <SingleBarChart 
+              <EnhancedBarChart 
                 data={noiData}
-                onBarClick={handleSingleChartClick}
-                color="hsl(var(--chart-primary))"
+                series={[
+                  { dataKey: 'riverstoneResi', name: 'Riverstone Residential', color: 'hsl(var(--chart-primary))' },
+                  { dataKey: 'skylineBusiness', name: 'Skyline Business Center', color: 'hsl(var(--chart-secondary))' },
+                  { dataKey: 'crystalUnit', name: 'Crystal Unit Portfolio', color: 'hsl(var(--chart-accent))' },
+                  { dataKey: 'helloWorld', name: 'Hello World Complex', color: 'hsl(var(--chart-muted))' },
+                  { dataKey: 'crescentHeight', name: 'Crescent Heights', color: 'hsl(20 70% 50%)' }
+                ]}
+                stacked={true}
+                showLegend={false}
+                onBarClick={handleChartClick}
               />
             </ChartCard>
           </div>
@@ -715,12 +723,19 @@ const Index = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <ChartCard
               title="Rent Trend Growth Rate"
-              description="Combined monthly rent growth with property breakdown on hover"
+              description="Monthly rent growth rate by property"
             >
-              <SingleBarChart 
+              <EnhancedBarChart 
                 data={rentGrowthData}
-                onBarClick={handleSingleChartClick}
-                color="hsl(var(--chart-accent))"
+                series={[
+                  { dataKey: 'riverstoneResi', name: 'Riverstone Residential', color: 'hsl(var(--chart-primary))' },
+                  { dataKey: 'skylineBusiness', name: 'Skyline Business Center', color: 'hsl(var(--chart-secondary))' },
+                  { dataKey: 'crystalUnit', name: 'Crystal Unit Portfolio', color: 'hsl(var(--chart-accent))' },
+                  { dataKey: 'helloWorld', name: 'Hello World Complex', color: 'hsl(var(--chart-muted))' },
+                  { dataKey: 'crescentHeight', name: 'Crescent Heights', color: 'hsl(25 75% 55%)' }
+                ]}
+                showLegend={false}
+                onBarClick={handleChartClick}
               />
             </ChartCard>
 

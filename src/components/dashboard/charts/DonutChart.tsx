@@ -45,6 +45,8 @@ export function ModernDonutChart({ data }: DonutChartProps) {
               outerRadius={110}
               paddingAngle={2}
               dataKey="value"
+              labelLine={false}
+              label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
               style={{
                 transition: 'all 0.3s ease',
               }}
@@ -61,6 +63,17 @@ export function ModernDonutChart({ data }: DonutChartProps) {
                 />
               ))}
             </Pie>
+            
+            {/* Center Total */}
+            <text 
+              x="50%" 
+              y="50%" 
+              textAnchor="middle" 
+              dominantBaseline="middle" 
+              className="fill-foreground text-2xl font-bold"
+            >
+              {total}
+            </text>
             <Tooltip
               contentStyle={{
                 backgroundColor: 'hsl(var(--popover))',
