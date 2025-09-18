@@ -129,14 +129,14 @@ export function EnhancedLineChart({
           tickMargin={8}
         />
         <Tooltip content={<CustomTooltip />} />
-        {showLegend && <Legend content={<CustomLegend />} />}
+        {showLegend ? <Legend content={<CustomLegend />} /> : null}
         
         {series.map((s, index) => (
           <Line 
             key={s.dataKey}
             type={curved ? "monotone" : "linear"}
             dataKey={s.dataKey}
-            name={s.name}
+            name={showLegend ? s.name : undefined}
             stroke={s.color}
             strokeWidth={s.strokeWidth || 2.5}
             dot={{ 
