@@ -72,51 +72,60 @@ const StackingPlan = () => {
 
   return (
     <div className="flex min-h-screen w-full bg-background">
-      <Sidebar collapsed={sidebarCollapsed} />
+      {/* Fixed Sidebar */}
+      <div className={`fixed left-0 top-0 h-full z-10 transition-transform duration-300 ${
+        sidebarCollapsed ? '-translate-x-full' : 'translate-x-0'
+      }`}>
+        <Sidebar collapsed={false} />
+      </div>
       
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header with hamburger menu */}
-        <header className="h-14 flex items-center justify-between border-b px-4 bg-background">
+      {/* Main Content Area */}
+      <div className={`flex-1 transition-all duration-300 ${
+        sidebarCollapsed ? 'ml-0' : 'ml-64'
+      }`}>
+        {/* Fixed Header */}
+        <header className="h-12 flex items-center justify-between border-b px-4 bg-background sticky top-0 z-20">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="lg:hidden"
           >
             <Menu className="h-5 w-5" />
           </Button>
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold text-primary">Stacking Plan</h1>
+            <h1 className="text-xl font-bold text-primary">Stacking Plan</h1>
           </div>
         </header>
 
-        <main className="flex-1 overflow-auto p-6">
-          <div className="max-w-full space-y-6">
-            {/* Property Selection and Details */}
-            <Card>
-              <CardHeader className="pb-4">
-                <div className="flex flex-col lg:flex-row gap-6">
-                  <div className="flex-1">
-                    <div className="flex flex-wrap gap-4 mb-4">
-                      <Select value={selectedProperty.name} onValueChange={() => {}}>
-                        <SelectTrigger className="w-[200px]">
-                          <SelectValue placeholder="Select Property" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {properties.map(property => (
-                            <SelectItem key={property.id} value={property.name}>
-                              {property.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      
-                      <Button variant="outline">
-                        Show Plan
-                      </Button>
-                    </div>
+        {/* Main Content */}
+        <main className="p-4">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 h-[calc(100vh-5rem)]">
+            
+            {/* Left Panel - Property Info & Controls */}
+            <div className="xl:col-span-1 space-y-3">
+              
+              {/* Property Selection & Templates */}
+              <Card>
+                <CardContent className="p-4">
+                  <div className="space-y-3">
+                    <Select value={selectedProperty.name} onValueChange={() => {}}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Property" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {properties.map(property => (
+                          <SelectItem key={property.id} value={property.name}>
+                            {property.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    
+                    <Button variant="outline" className="w-full">
+                      Show Plan
+                    </Button>
 
-                    <div className="flex gap-3 mb-4">
+                    <div className="grid grid-cols-3 gap-2">
                       {['A', 'B', 'C'].map(template => (
                         <Button
                           key={template}
@@ -124,194 +133,182 @@ const StackingPlan = () => {
                           size="sm"
                           onClick={() => setSelectedTemplate(template)}
                         >
-                          Template {template}
+                          {template}
                         </Button>
                       ))}
                     </div>
                   </div>
-                </div>
-              </CardHeader>
+                </CardContent>
+              </Card>
 
-              <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                  {/* Property Image */}
-                  <div className="lg:col-span-1">
-                    <div className="aspect-[4/3] bg-muted rounded-lg flex items-center justify-center">
-                      <img 
-                        src="/api/placeholder/300/200" 
-                        alt={selectedProperty.name}
-                        className="w-full h-full object-cover rounded-lg"
-                      />
+              {/* Property Details */}
+              <Card>
+                <CardContent className="p-4">
+                  <div className="aspect-video bg-muted rounded-lg mb-3 overflow-hidden">
+                    <img 
+                      src="/api/placeholder/300/200" 
+                      alt={selectedProperty.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div>
+                      <div className="text-muted-foreground">Location</div>
+                      <div className="font-semibold text-xs">{selectedProperty.location}</div>
+                    </div>
+                    <div>
+                      <div className="text-muted-foreground">Total SF</div>
+                      <div className="font-semibold text-xs">{selectedProperty.totalSF.toLocaleString()}</div>
+                    </div>
+                    <div>
+                      <div className="text-muted-foreground">Vacant</div>
+                      <div className="font-semibold text-xs">{vacantPercent}% | {selectedProperty.vacantSF.toLocaleString()}</div>
+                    </div>
+                    <div>
+                      <div className="text-muted-foreground">Occupied</div>
+                      <div className="font-semibold text-xs">{occupancyPercent}% | {selectedProperty.occupiedSF.toLocaleString()}</div>
+                    </div>
+                    <div>
+                      <div className="text-muted-foreground">Floors</div>
+                      <div className="font-semibold text-xs">{selectedProperty.floors}</div>
+                    </div>
+                    <div>
+                      <div className="text-muted-foreground">Income</div>
+                      <div className="font-semibold text-xs">${selectedProperty.totalIncome.toLocaleString()}</div>
                     </div>
                   </div>
+                </CardContent>
+              </Card>
 
-                  {/* Property Details */}
-                  <div className="lg:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="space-y-1">
-                      <div className="text-sm font-medium text-muted-foreground">Location</div>
-                      <div className="font-semibold">{selectedProperty.location}</div>
+              {/* Year Selection & Actions */}
+              <Card>
+                <CardContent className="p-4">
+                  <div className="space-y-3">
+                    <div className="grid grid-cols-2 gap-2">
+                      {['2025', '2026', '2027', '2028'].map(year => (
+                        <Button
+                          key={year}
+                          variant={selectedYear === year ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => setSelectedYear(year)}
+                        >
+                          {year}
+                        </Button>
+                      ))}
                     </div>
                     
-                    <div className="space-y-1">
-                      <div className="text-sm font-medium text-muted-foreground">Total SF</div>
-                      <div className="font-semibold">{selectedProperty.totalSF.toLocaleString()} sf</div>
-                    </div>
-                    
-                    <div className="space-y-1">
-                      <div className="text-sm font-medium text-muted-foreground">Vacant SF</div>
-                      <div className="font-semibold">{vacantPercent}% | {selectedProperty.vacantSF.toLocaleString()} sf</div>
-                    </div>
-                    
-                    <div className="space-y-1">
-                      <div className="text-sm font-medium text-muted-foreground">Occupied SF</div>
-                      <div className="font-semibold">{occupancyPercent}% | {selectedProperty.occupiedSF.toLocaleString()} sf</div>
-                    </div>
-
-                    <div className="space-y-1">
-                      <div className="text-sm font-medium text-muted-foreground">Floors</div>
-                      <div className="font-semibold">{selectedProperty.floors}</div>
-                    </div>
-                    
-                    <div className="space-y-1">
-                      <div className="text-sm font-medium text-muted-foreground">Total Income</div>
-                      <div className="font-semibold">${selectedProperty.totalIncome.toLocaleString()}</div>
-                    </div>
-                    
-                    <div className="space-y-1">
-                      <div className="text-sm font-medium text-muted-foreground">Average Rent per SF</div>
-                      <div className="font-semibold">${selectedProperty.avgRentPerSF}</div>
-                    </div>
-                    
-                    <div className="space-y-1">
-                      <div className="text-sm font-medium text-muted-foreground">Expirations - 12 Months</div>
-                      <div className="font-semibold">{selectedProperty.expirations12Months}</div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Year Selection and Controls */}
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex flex-wrap items-center justify-between gap-4">
-                  <div className="flex flex-wrap gap-2">
-                    {['2025', '2026', '2027', '2028'].map(year => (
-                      <Button
-                        key={year}
-                        variant={selectedYear === year ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => setSelectedYear(year)}
-                      >
-                        {year}
-                      </Button>
-                    ))}
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" className="w-full">
                       <FileDown className="h-4 w-4 mr-2" />
                       Export PDF
                     </Button>
-                  </div>
 
-                  <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="sm">
-                      <Maximize2 className="h-4 w-4" />
+                    <Button variant="ghost" size="sm" className="w-full">
+                      <Maximize2 className="h-4 w-4 mr-2" />
+                      Full Screen
                     </Button>
                   </div>
-                </div>
 
-                {/* Status Legend */}
-                <div className="flex flex-wrap gap-4 mt-4 pt-4 border-t">
-                  <Badge variant="secondary" className={statusColors.occupied}>Occupied</Badge>
-                  <Badge variant="secondary" className={statusColors.vacant}>Vacant</Badge>
-                  <Badge variant="secondary" className={statusColors.expiring}>Expirations</Badge>
-                  <Badge variant="secondary" className={statusColors.booked}>Booked/Lease Signed</Badge>
-                </div>
-              </CardContent>
-            </Card>
+                  {/* Status Legend */}
+                  <div className="grid grid-cols-2 gap-2 mt-4 pt-3 border-t">
+                    <Badge variant="secondary" className={`${statusColors.occupied} text-[10px] py-1`}>Occupied</Badge>
+                    <Badge variant="secondary" className={`${statusColors.vacant} text-[10px] py-1`}>Vacant</Badge>
+                    <Badge variant="secondary" className={`${statusColors.expiring} text-[10px] py-1`}>Expirations</Badge>
+                    <Badge variant="secondary" className={`${statusColors.booked} text-[10px] py-1`}>Booked</Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
-            {/* Stacking Plan Visual */}
-            <Card>
-              <CardContent className="p-6">
-                <div className="relative">
-                  {/* Main Building Floors */}
-                  <div className="grid gap-2 mb-4">
+            {/* Right Panel - Stacking Plan (Immediate Visibility) */}
+            <div className="xl:col-span-2">
+              <Card className="h-full">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">Building Stacking Plan - {selectedYear}</CardTitle>
+                </CardHeader>
+                <CardContent className="p-4 overflow-auto">
+                  <div className="space-y-2">
+                    
+                    {/* Main Building Floors */}
                     {[5, 4, 3, 2, 1].map(floor => {
                       const suites = suiteData[floor] || [];
                       const summary = getFloorSummary(floor);
                       
                       return (
                         <div key={floor} className="flex gap-2 items-center">
-                          {/* Left Side Suites */}
-                          <div className="flex-1 grid grid-cols-1 gap-1">
+                          {/* Left Suite */}
+                          <div className="flex-1">
                             {suites[0] && (
                               <div className={`
                                 p-3 rounded border-2 text-sm font-medium transition-all hover:shadow-md cursor-pointer
                                 ${statusColors[suites[0].status]}
                               `}>
                                 <div className="font-semibold">{suites[0].id}</div>
-                                {suites[0].tenant && <div className="text-xs mt-1">{suites[0].tenant}</div>}
+                                {suites[0].tenant && <div className="text-xs mt-1 truncate">{suites[0].tenant}</div>}
                                 <div className="text-xs">{suites[0].sf} sf</div>
-                                {suites[0].expiry && <div className="text-xs">Ex on: {suites[0].expiry}</div>}
+                                {suites[0].expiry && <div className="text-xs">Ex: {suites[0].expiry}</div>}
                               </div>
                             )}
                           </div>
 
-                          {/* Right Side Suites */}
-                          <div className="flex-1 grid grid-cols-1 gap-1">
+                          {/* Right Suite */}
+                          <div className="flex-1">
                             {suites[1] && (
                               <div className={`
                                 p-3 rounded border-2 text-sm font-medium transition-all hover:shadow-md cursor-pointer
                                 ${statusColors[suites[1].status]}
                               `}>
                                 <div className="font-semibold">{suites[1].id}</div>
-                                {suites[1].tenant && <div className="text-xs mt-1">{suites[1].tenant}</div>}
+                                {suites[1].tenant && <div className="text-xs mt-1 truncate">{suites[1].tenant}</div>}
                                 <div className="text-xs">{suites[1].sf} sf</div>
                               </div>
                             )}
                           </div>
 
-                          {/* Floor Number and Summary */}
-                          <div className="w-16 text-center">
+                          {/* Floor Number */}
+                          <div className="w-12 text-center">
                             <div className="bg-muted rounded p-2 text-sm font-bold">{floor}</div>
                           </div>
-                          <div className="w-32 text-xs text-muted-foreground">
-                            <div>{summary.totalSF.toLocaleString()} sf</div>
-                            <div>{summary.vacantSF} Vacant sf</div>
+                          
+                          {/* Floor Summary */}
+                          <div className="w-20 text-xs text-muted-foreground">
+                            <div>{summary.totalSF.toLocaleString()}</div>
+                            <div>{summary.vacantSF} vacant</div>
                           </div>
                         </div>
                       );
                     })}
-                  </div>
 
-                  {/* Basement and Parking Levels */}
-                  <div className="grid gap-2 pt-4 border-t">
-                    {['B1', 'B2'].map(level => (
-                      <div key={level} className="flex gap-2 items-center">
-                        <div className="flex-1 bg-slate-200 p-8 rounded text-center font-semibold text-slate-600">
-                          {level}
+                    {/* Basement & Parking Levels */}
+                    <div className="border-t pt-2 mt-4">
+                      {['B1', 'B2'].map(level => (
+                        <div key={level} className="flex gap-2 items-center mb-2">
+                          <div className="flex-1 bg-slate-200 p-4 rounded text-center font-semibold text-slate-600 text-sm">
+                            {level} - Basement
+                          </div>
+                          <div className="w-12 text-center">
+                            <div className="bg-muted rounded p-2 text-sm font-bold text-muted-foreground">-</div>
+                          </div>
+                          <div className="w-20"></div>
                         </div>
-                        <div className="w-16 text-center">
-                          <div className="bg-muted rounded p-2 text-sm font-bold text-muted-foreground">-</div>
-                        </div>
-                        <div className="w-32"></div>
-                      </div>
-                    ))}
+                      ))}
 
-                    {['P1', 'P2', 'P3'].map(level => (
-                      <div key={level} className="flex gap-2 items-center">
-                        <div className="flex-1 bg-purple-200 p-8 rounded text-center font-semibold text-purple-700">
-                          {level}
+                      {['P1', 'P2', 'P3'].map(level => (
+                        <div key={level} className="flex gap-2 items-center mb-2">
+                          <div className="flex-1 bg-purple-200 p-4 rounded text-center font-semibold text-purple-700 text-sm">
+                            {level} - Parking
+                          </div>
+                          <div className="w-12 text-center">
+                            <div className="bg-muted rounded p-2 text-sm font-bold text-muted-foreground">-</div>
+                          </div>
+                          <div className="w-20"></div>
                         </div>
-                        <div className="w-16 text-center">
-                          <div className="bg-muted rounded p-2 text-sm font-bold text-muted-foreground">-</div>
-                        </div>
-                        <div className="w-32"></div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </main>
       </div>
