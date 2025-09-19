@@ -6,8 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Sidebar } from "@/components/dashboard/Sidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { Search, Plus, Eye, FileText, Edit, Trash2, ChevronUp, ChevronDown } from "lucide-react";
+import { Search, Plus, Eye, Edit, Trash2, ChevronUp, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const PropertyListing = () => {
@@ -99,7 +98,6 @@ const PropertyListing = () => {
       <div className="flex">
         <Sidebar />
         <div className="flex-1 flex flex-col">
-          <DashboardHeader />
           <main className="flex-1 p-6">
             <div className="flex items-center justify-between mb-6">
               <div>
@@ -148,35 +146,36 @@ const PropertyListing = () => {
 
                 {/* Table */}
                 <div className="overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead 
-                          className="cursor-pointer select-none"
-                          onClick={() => handleSort('name')}
-                        >
-                          <div className="flex items-center gap-1">
-                            Property Name
-                            {sortField === 'name' && (
-                              sortDirection === 'asc' ? 
-                              <ChevronUp className="w-4 h-4" /> : 
-                              <ChevronDown className="w-4 h-4" />
-                            )}
-                            {sortField !== 'name' && <ChevronUp className="w-4 h-4 opacity-30" />}
-                          </div>
-                        </TableHead>
-                        <TableHead>City</TableHead>
-                        <TableHead>State</TableHead>
-                        <TableHead>Property Type</TableHead>
-                        <TableHead>Total Floors</TableHead>
-                        <TableHead>Total RSF</TableHead>
-                        <TableHead>Occupancy %</TableHead>
-                        <TableHead>Vacant SF</TableHead>
-                        <TableHead>Expiration &lt; 12 Months</TableHead>
-                        <TableHead>Stacking Plan</TableHead>
-                        <TableHead>Action</TableHead>
-                      </TableRow>
-                    </TableHeader>
+                  <div className="min-w-full">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead 
+                            className="cursor-pointer select-none min-w-[120px]"
+                            onClick={() => handleSort('name')}
+                          >
+                            <div className="flex items-center gap-1">
+                              Property Name
+                              {sortField === 'name' && (
+                                sortDirection === 'asc' ? 
+                                <ChevronUp className="w-4 h-4" /> : 
+                                <ChevronDown className="w-4 h-4" />
+                              )}
+                              {sortField !== 'name' && <ChevronUp className="w-4 h-4 opacity-30" />}
+                            </div>
+                          </TableHead>
+                          <TableHead className="min-w-[80px]">City</TableHead>
+                          <TableHead className="min-w-[80px]">State</TableHead>
+                          <TableHead className="min-w-[120px]">Property Type</TableHead>
+                          <TableHead className="min-w-[90px]">Total Floors</TableHead>
+                          <TableHead className="min-w-[90px]">Total RSF</TableHead>
+                          <TableHead className="min-w-[100px]">Occupancy %</TableHead>
+                          <TableHead className="min-w-[90px]">Vacant SF</TableHead>
+                          <TableHead className="min-w-[140px]">Expiration &lt; 12 Months</TableHead>
+                          <TableHead className="min-w-[120px]">Stacking Plan</TableHead>
+                          <TableHead className="min-w-[120px]">Action</TableHead>
+                        </TableRow>
+                      </TableHeader>
                     <TableBody>
                       {filteredProperties.map((property, index) => (
                         <TableRow key={property.id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
@@ -226,13 +225,6 @@ const PropertyListing = () => {
                               <Button 
                                 size="sm" 
                                 className="w-8 h-8 p-0 bg-orange-500 hover:bg-orange-600"
-                                title="View Reports"
-                              >
-                                <FileText className="w-4 h-4" />
-                              </Button>
-                              <Button 
-                                size="sm" 
-                                className="w-8 h-8 p-0 bg-orange-500 hover:bg-orange-600"
                                 title="Edit Property"
                               >
                                 <Edit className="w-4 h-4" />
@@ -248,8 +240,9 @@ const PropertyListing = () => {
                           </TableCell>
                         </TableRow>
                       ))}
-                    </TableBody>
-                  </Table>
+                      </TableBody>
+                    </Table>
+                  </div>
                 </div>
 
                 {/* Pagination */}
