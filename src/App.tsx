@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import PropertyManagement from "./pages/PropertyManagement";
 import PropertyListing from "./pages/property/PropertyListing";
 import AddProperty from "./pages/property/AddProperty";
 import AddFloor from "./pages/property/AddFloor";
@@ -24,7 +23,6 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/properties" element={<PropertyManagement />} />
           <Route path="/properties/listing" element={<PropertyListing />} />
           <Route path="/properties/add-property" element={<AddProperty />} />
           <Route path="/properties/add-floor" element={<AddFloor />} />
