@@ -195,355 +195,276 @@ const StackingPlan = () => {
       <div className={`flex-1 transition-all duration-300 ${
         sidebarCollapsed ? 'ml-0' : 'ml-64'
       }`}>
-        {/* Fixed Header */}
-        <header className="h-12 flex items-center justify-between border-b px-4 bg-background sticky top-0 z-20">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
+        {/* Enhanced Header with Property Controls */}
+        <header className="h-16 flex items-center justify-between border-b px-4 bg-background sticky top-0 z-20 shadow-sm">
           <div className="flex items-center gap-4">
-            <h1 className="text-xl font-bold text-primary">Stacking Plan</h1>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+            
+            {/* Property Selection */}
+            <Select value={selectedProperty.name} onValueChange={() => {}}>
+              <SelectTrigger className="w-48">
+                <SelectValue placeholder="Select Property" />
+              </SelectTrigger>
+              <SelectContent>
+                {properties.map(property => (
+                  <SelectItem key={property.id} value={property.name}>
+                    {property.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            
+            <Button variant="outline" size="sm">
+              Show Plan
+            </Button>
+
+            {/* Templates */}
+            <div className="flex gap-1">
+              {['A', 'B', 'C'].map(template => (
+                <Button
+                  key={template}
+                  variant={selectedTemplate === template ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSelectedTemplate(template)}
+                  className="w-10"
+                >
+                  {template}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            {/* Year Selection */}
+            <div className="flex gap-1">
+              {['2025', '2026', '2027', '2028'].map(year => (
+                <Button
+                  key={year}
+                  variant={selectedYear === year ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSelectedYear(year)}
+                  className="text-xs"
+                >
+                  {year}
+                </Button>
+              ))}
+            </div>
+
+            {/* Status Filters */}
+            <div className="flex gap-1">
+              <Button
+                variant={selectedStatus === 'all' ? 'default' : 'outline'}
+                size="sm"
+                className="text-xs"
+                onClick={() => setSelectedStatus('all')}
+              >
+                All
+              </Button>
+              {['occupied', 'vacant', 'expiring', 'booked'].map(status => (
+                <Button
+                  key={status}
+                  variant={selectedStatus === status ? 'default' : 'outline'}
+                  size="sm"
+                  className={`text-xs capitalize ${selectedStatus === status ? '' : statusColors[status]}`}
+                  onClick={() => setSelectedStatus(status)}
+                >
+                  {status}
+                </Button>
+              ))}
+            </div>
+
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search suites..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-8 h-9 w-48"
+              />
+            </div>
+
+            {/* Zoom Controls */}
+            <div className="flex items-center gap-1">
+              <Button variant="outline" size="sm" onClick={handleZoomOut}>
+                <ZoomOut className="h-4 w-4" />
+              </Button>
+              <span className="text-xs font-medium min-w-[45px] text-center">{zoomLevel}%</span>
+              <Button variant="outline" size="sm" onClick={handleZoomIn}>
+                <ZoomIn className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-1">
+              <Button variant="outline" size="sm">
+                <FileDown className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="sm">
+                <Maximize2 className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </header>
 
-        {/* Main Content */}
-        <main className="p-4">
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 h-[calc(100vh-5rem)]">
+        {/* Main Content - Full Height Stacking Plan */}
+        <main className="p-4 h-[calc(100vh-4rem)]">
+          <div className="h-full">
             
-            {/* Left Panel - Property Info & Controls */}
-            <div className="xl:col-span-1 space-y-3">
-              
-              {/* Property Selection & Templates */}
-              <Card>
-                <CardContent className="p-4">
-                  <div className="space-y-3">
-                    <Select value={selectedProperty.name} onValueChange={() => {}}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Property" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {properties.map(property => (
-                          <SelectItem key={property.id} value={property.name}>
-                            {property.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    
-                    <Button variant="outline" className="w-full">
-                      Show Plan
-                    </Button>
-
-                    <div className="grid grid-cols-3 gap-2">
-                      {['A', 'B', 'C'].map(template => (
-                        <Button
-                          key={template}
-                          variant={selectedTemplate === template ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => setSelectedTemplate(template)}
-                        >
-                          {template}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Property Details */}
-              <Card>
-                <CardContent className="p-4">
-                  <div className="aspect-video bg-muted rounded-lg mb-3 overflow-hidden">
-                    <img 
-                      src="/api/placeholder/300/200" 
-                      alt={selectedProperty.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-2 text-sm">
-                    <div>
-                      <div className="text-muted-foreground">Location</div>
-                      <div className="font-semibold text-xs">{selectedProperty.location}</div>
-                    </div>
-                    <div>
-                      <div className="text-muted-foreground">Total SF</div>
-                      <div className="font-semibold text-xs">{selectedProperty.totalSF.toLocaleString()}</div>
-                    </div>
-                    <div>
-                      <div className="text-muted-foreground">Vacant</div>
-                      <div className="font-semibold text-xs">{vacantPercent}% | {selectedProperty.vacantSF.toLocaleString()}</div>
-                    </div>
-                    <div>
-                      <div className="text-muted-foreground">Occupied</div>
-                      <div className="font-semibold text-xs">{occupancyPercent}% | {selectedProperty.occupiedSF.toLocaleString()}</div>
-                    </div>
-                    <div>
-                      <div className="text-muted-foreground">Floors</div>
-                      <div className="font-semibold text-xs">{selectedProperty.floors}</div>
-                    </div>
-                    <div>
-                      <div className="text-muted-foreground">Income</div>
-                      <div className="font-semibold text-xs">${selectedProperty.totalIncome.toLocaleString()}</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Year Selection & Actions */}
-              <Card>
-                <CardContent className="p-4">
-                  <div className="space-y-3">
-                    <div className="grid grid-cols-2 gap-2">
-                      {['2025', '2026', '2027', '2028'].map(year => (
-                        <Button
-                          key={year}
-                          variant={selectedYear === year ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => setSelectedYear(year)}
-                        >
-                          {year}
-                        </Button>
-                      ))}
-                    </div>
-
-                    {/* Suite Search */}
-                    <div className="relative">
-                      <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        placeholder="Search suites..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-8 h-9"
-                      />
-                    </div>
-
-                    {/* Zoom Controls */}
-                    <div className="flex items-center gap-2">
-                      <Button variant="outline" size="sm" onClick={handleZoomOut}>
-                        <ZoomOut className="h-4 w-4" />
-                      </Button>
-                      <span className="text-xs font-medium min-w-[45px] text-center">{zoomLevel}%</span>
-                      <Button variant="outline" size="sm" onClick={handleZoomIn}>
-                        <ZoomIn className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    
-                    <Button variant="outline" size="sm" className="w-full">
-                      <FileDown className="h-4 w-4 mr-2" />
-                      Export PDF
-                    </Button>
-
-                    <Button variant="ghost" size="sm" className="w-full">
-                      <Maximize2 className="h-4 w-4 mr-2" />
-                      Full Screen
-                    </Button>
-                  </div>
-
-                  {/* Status Legend - Interactive Filters */}
-                  <div className="space-y-2 mt-4 pt-3 border-t">
-                    <div className="text-xs font-medium text-muted-foreground mb-2">Filter by Status:</div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <Button
-                        variant={selectedStatus === 'all' ? 'default' : 'outline'}
-                        size="sm"
-                        className="text-[10px] h-6"
-                        onClick={() => setSelectedStatus('all')}
-                      >
-                        All
-                      </Button>
-                      <Button
-                        variant={selectedStatus === 'occupied' ? 'default' : 'outline'}
-                        size="sm"
-                        className={`text-[10px] h-6 ${selectedStatus === 'occupied' ? '' : statusColors.occupied}`}
-                        onClick={() => setSelectedStatus('occupied')}
-                      >
-                        Occupied
-                      </Button>
-                      <Button
-                        variant={selectedStatus === 'vacant' ? 'default' : 'outline'}
-                        size="sm"
-                        className={`text-[10px] h-6 ${selectedStatus === 'vacant' ? '' : statusColors.vacant}`}
-                        onClick={() => setSelectedStatus('vacant')}
-                      >
-                        Vacant
-                      </Button>
-                      <Button
-                        variant={selectedStatus === 'expiring' ? 'default' : 'outline'}
-                        size="sm"
-                        className={`text-[10px] h-6 ${selectedStatus === 'expiring' ? '' : statusColors.expiring}`}
-                        onClick={() => setSelectedStatus('expiring')}
-                      >
-                        Expiring
-                      </Button>
-                      <Button
-                        variant={selectedStatus === 'booked' ? 'default' : 'outline'}
-                        size="sm"
-                        className={`text-[10px] h-6 ${selectedStatus === 'booked' ? '' : statusColors.booked}`}
-                        onClick={() => setSelectedStatus('booked')}
-                      >
-                        Booked
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Right Panel - Fixed Stacking Plan Container */}
-            <div className="xl:col-span-2">
-              <Card className="h-full">
-                <CardHeader className="pb-3 flex-shrink-0">
-                  <div className="flex items-center justify-between">
+            {/* Full Height Stacking Plan Container */}
+            <Card className="h-full">
+              <CardHeader className="pb-3 flex-shrink-0">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
                     <CardTitle className="text-lg">Building Stacking Plan - {selectedYear}</CardTitle>
-                    {selectedSuite && (
-                      <Button variant="outline" size="sm" onClick={() => setSelectedSuite(null)}>
-                        <Info className="h-4 w-4 mr-2" />
-                        {selectedSuite.id} Selected
-                      </Button>
-                    )}
+                    <div className="text-sm text-muted-foreground">
+                      {selectedProperty.location} • {occupancyPercent}% Occupied • {selectedProperty.floors} Floors
+                    </div>
                   </div>
-                </CardHeader>
-                <CardContent className="p-0 flex-1">
-                  <ScrollArea className="h-[calc(100vh-16rem)] px-4">
-                    <div 
-                      className="space-y-3 py-4 building-container" 
-                      style={{ 
-                        transform: `scale(${zoomLevel / 100})`,
-                        transformOrigin: 'top left',
-                        width: `${10000 / zoomLevel}%`
-                      }}
-                    >
+                  {selectedSuite && (
+                    <Badge variant="outline">
+                      <Info className="h-3 w-3 mr-1" />
+                      {selectedSuite.id} - {selectedSuite.tenant || 'Vacant'} ({selectedSuite.sf} sf)
+                    </Badge>
+                  )}
+                </div>
+              </CardHeader>
+              <CardContent className="p-0 flex-1">
+                <ScrollArea className="h-[calc(100vh-12rem)] px-4">
+                  <div 
+                    className="space-y-3 py-4 building-container" 
+                    style={{ 
+                      transform: `scale(${zoomLevel / 100})`,
+                      transformOrigin: 'top left',
+                      width: `${10000 / zoomLevel}%`
+                    }}
+                  >
                     
-                      {/* Building Outline */}
-                      <div className="bg-gradient-to-b from-muted/30 to-muted/10 border-2 border-muted rounded-lg p-3 building-shadow">
+                    {/* Building Outline */}
+                    <div className="bg-gradient-to-b from-muted/30 to-muted/10 border-2 border-muted rounded-lg p-3 building-shadow">
+                      
+                      {/* Main Building Floors */}
+                      {[5, 4, 3, 2, 1].map(floor => {
+                        const allSuites = suiteDataByYear[selectedYear]?.[floor] || [];
+                        const suites = filteredSuites(allSuites);
+                        const summary = getFloorSummary(floor);
                         
-                        {/* Main Building Floors */}
-                        {[5, 4, 3, 2, 1].map(floor => {
-                          const allSuites = suiteDataByYear[selectedYear]?.[floor] || [];
-                          const suites = filteredSuites(allSuites);
-                          const summary = getFloorSummary(floor);
-                          
-                          return (
-                            <div key={floor} className="mb-3">
-                              {/* Floor Header */}
-                              <div className="flex items-center justify-between mb-2">
-                                <div className="flex items-center gap-2">
-                                  <div className="bg-primary text-primary-foreground rounded px-3 py-1 text-sm font-bold min-w-[80px] text-center">
-                                    Floor {floor}
-                                  </div>
-                                  <div className="text-xs text-muted-foreground">
-                                    {summary.totalSF.toLocaleString()} sf • {allSuites.length} suites • {summary.vacantSF.toLocaleString()} sf vacant
-                                  </div>
+                        return (
+                          <div key={floor} className="mb-3">
+                            {/* Floor Header */}
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center gap-2">
+                                <div className="bg-primary text-primary-foreground rounded px-3 py-1 text-sm font-bold min-w-[80px] text-center">
+                                  Floor {floor}
                                 </div>
-                              </div>
-
-                              {/* Suites Grid - CSS Grid for flexible layout */}
-                              <div className="bg-muted/10 border border-muted/30 rounded-lg p-2 min-h-[80px]">
-                                <div 
-                                  className="grid gap-1 auto-rows-fr overflow-x-auto"
-                                  style={{
-                                    gridTemplateColumns: `repeat(auto-fit, minmax(120px, 1fr))`,
-                                    maxWidth: '100%'
-                                  }}
-                                >
-                                  {suites.map((suite) => (
-                                    <div
-                                      key={suite.id}
-                                      className={`
-                                        p-2 rounded border-2 text-xs font-medium cursor-pointer
-                                        transition-all duration-300 hover:shadow-lg hover:scale-105
-                                        ${statusColors[suite.status]} ${getSuiteBlur(suite)}
-                                        ${selectedSuite?.id === suite.id ? 'ring-2 ring-primary ring-offset-2' : ''}
-                                      `}
-                                      style={{
-                                        width: `${getSuiteWidth(suite.sf)}px`,
-                                        minWidth: '120px',
-                                        opacity: getSuiteOpacity(suite),
-                                        height: '64px'
-                                      }}
-                                      onClick={() => handleSuiteClick(suite)}
-                                    >
-                                      <div className="font-bold text-xs">{suite.id}</div>
-                                      {suite.tenant && (
-                                        <div className="text-[10px] mt-1 truncate font-medium">
-                                          {suite.tenant}
-                                        </div>
-                                      )}
-                                      <div className="text-[10px] font-medium">{suite.sf} sf</div>
-                                      {suite.expiry && (
-                                        <div className="text-[9px] opacity-80">
-                                          {suite.expiry}
-                                        </div>
-                                      )}
-                                    </div>
-                                  ))}
+                                <div className="text-xs text-muted-foreground">
+                                  {summary.totalSF.toLocaleString()} sf • {allSuites.length} suites • {summary.vacantSF.toLocaleString()} sf vacant
                                 </div>
                               </div>
                             </div>
-                          );
-                        })}
 
-                        {/* Basement & Parking Levels - Redesigned for consistency */}
-                        <div className="border-t-2 border-muted pt-3 mt-3">
-                          {[
-                            { id: 'B1', name: 'Basement 1', color: 'bg-slate-100 border-slate-300 text-slate-700' },
-                            { id: 'B2', name: 'Basement 2', color: 'bg-slate-100 border-slate-300 text-slate-700' }
-                          ].map(level => (
-                            <div key={level.id} className="mb-3">
-                              <div className="flex items-center justify-between mb-2">
-                                <div className="flex items-center gap-2">
-                                  <div className="bg-muted text-muted-foreground rounded px-3 py-1 text-sm font-bold min-w-[80px] text-center">
-                                    {level.id}
+                            {/* Suites Single Row - Flex Layout with Horizontal Scroll */}
+                            <div className="bg-muted/10 border border-muted/30 rounded-lg p-2 min-h-[80px] overflow-x-auto">
+                              <div className="flex gap-1 min-w-fit">
+                                {suites.map((suite) => (
+                                  <div
+                                    key={suite.id}
+                                    className={`
+                                      p-2 rounded border-2 text-xs font-medium cursor-pointer flex-shrink-0
+                                      transition-all duration-300 hover:shadow-lg hover:scale-105 suite-hover-effect
+                                      ${statusColors[suite.status]} ${getSuiteBlur(suite)}
+                                      ${selectedSuite?.id === suite.id ? 'ring-2 ring-primary ring-offset-2' : ''}
+                                    `}
+                                    style={{
+                                      width: `${getSuiteWidth(suite.sf)}px`,
+                                      minWidth: '120px',
+                                      opacity: getSuiteOpacity(suite),
+                                      height: '64px'
+                                    }}
+                                    onClick={() => handleSuiteClick(suite)}
+                                  >
+                                    <div className="font-bold text-xs">{suite.id}</div>
+                                    {suite.tenant && (
+                                      <div className="text-[10px] mt-1 truncate font-medium">
+                                        {suite.tenant}
+                                      </div>
+                                    )}
+                                    <div className="text-[10px] font-medium">{suite.sf} sf</div>
+                                    {suite.expiry && (
+                                      <div className="text-[9px] opacity-80">
+                                        {suite.expiry}
+                                      </div>
+                                    )}
                                   </div>
-                                  <div className="text-xs text-muted-foreground">
-                                    Storage & Mechanical
-                                  </div>
-                                </div>
+                                ))}
                               </div>
-                              <div className="bg-muted/10 border border-muted/30 rounded-lg p-2">
-                                <div className={`p-4 rounded border-2 text-center font-semibold text-sm ${level.color} h-16 flex items-center justify-center`}>
-                                  {level.name} - Storage & Utilities
+                            </div>
+                          </div>
+                        );
+                      })}
+
+                      {/* Basement & Parking Levels - Redesigned for consistency */}
+                      <div className="border-t-2 border-muted pt-3 mt-3">
+                        {[
+                          { id: 'B1', name: 'Basement 1', color: 'bg-slate-100 border-slate-300 text-slate-700' },
+                          { id: 'B2', name: 'Basement 2', color: 'bg-slate-100 border-slate-300 text-slate-700' }
+                        ].map(level => (
+                          <div key={level.id} className="mb-3">
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center gap-2">
+                                <div className="bg-muted text-muted-foreground rounded px-3 py-1 text-sm font-bold min-w-[80px] text-center">
+                                  {level.id}
+                                </div>
+                                <div className="text-xs text-muted-foreground">
+                                  Storage & Mechanical
                                 </div>
                               </div>
                             </div>
-                          ))}
-
-                          {[
-                            { id: 'P1', name: 'Parking Level 1', color: 'bg-purple-100 border-purple-300 text-purple-700' },
-                            { id: 'P2', name: 'Parking Level 2', color: 'bg-purple-100 border-purple-300 text-purple-700' },
-                            { id: 'P3', name: 'Parking Level 3', color: 'bg-purple-100 border-purple-300 text-purple-700' }
-                          ].map(level => (
-                            <div key={level.id} className="mb-3">
-                              <div className="flex items-center justify-between mb-2">
-                                <div className="flex items-center gap-2">
-                                  <div className="bg-muted text-muted-foreground rounded px-3 py-1 text-sm font-bold min-w-[80px] text-center">
-                                    {level.id}
-                                  </div>
-                                  <div className="text-xs text-muted-foreground">
-                                    Vehicle parking
-                                  </div>
-                                </div>
+                            <div className="bg-muted/10 border border-muted/30 rounded-lg p-2">
+                              <div className={`p-4 rounded border-2 text-center font-semibold text-sm ${level.color} h-16 flex items-center justify-center`}>
+                                {level.name} - Storage & Utilities
                               </div>
-                              <div className="bg-muted/10 border border-muted/30 rounded-lg p-2">
-                                <div className={`p-4 rounded border-2 text-center font-semibold text-sm ${level.color} h-16 flex items-center justify-center`}>
-                                  {level.name} - 50 Parking Spaces
+                            </div>
+                          </div>
+                        ))}
+
+                        {[
+                          { id: 'P1', name: 'Parking Level 1', color: 'bg-purple-100 border-purple-300 text-purple-700' },
+                          { id: 'P2', name: 'Parking Level 2', color: 'bg-purple-100 border-purple-300 text-purple-700' },
+                          { id: 'P3', name: 'Parking Level 3', color: 'bg-purple-100 border-purple-300 text-purple-700' }
+                        ].map(level => (
+                          <div key={level.id} className="mb-3">
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center gap-2">
+                                <div className="bg-muted text-muted-foreground rounded px-3 py-1 text-sm font-bold min-w-[80px] text-center">
+                                  {level.id}
+                                </div>
+                                <div className="text-xs text-muted-foreground">
+                                  Vehicle parking
                                 </div>
                               </div>
                             </div>
-                          ))}
-                        </div>
-
+                            <div className="bg-muted/10 border border-muted/30 rounded-lg p-2">
+                              <div className={`p-4 rounded border-2 text-center font-semibold text-sm ${level.color} h-16 flex items-center justify-center`}>
+                                {level.name} - 50 Parking Spaces
+                              </div>
+                            </div>
+                          </div>
+                        ))}
                       </div>
 
                     </div>
-                  </ScrollArea>
-                </CardContent>
-              </Card>
-            </div>
+
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
           </div>
         </main>
       </div>
