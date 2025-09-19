@@ -23,28 +23,92 @@ const properties = [
   }
 ];
 
-// Mock data for suites
-const suiteData = {
-  5: [
-    { id: 'S501', tenant: 'Systems Inc.', sf: 500, status: 'occupied', expiry: '08-30-2026', type: 'office' },
-    { id: 'S502', tenant: '', sf: 500, status: 'vacant', expiry: '', type: 'office' }
-  ],
-  4: [
-    { id: 'S401', tenant: 'Medical', sf: 500, status: 'expiring', expiry: '07-31-2026', type: 'medical' },
-    { id: 'S402', tenant: '', sf: 500, status: 'vacant', expiry: '', type: 'office' }
-  ],
-  3: [
-    { id: 'S301', tenant: 'Solution', sf: 500, status: 'expiring', expiry: '05-31-2027', type: 'office' },
-    { id: 'S302', tenant: '', sf: 500, status: 'vacant', expiry: '', type: 'office' }
-  ],
-  2: [
-    { id: 'S201', tenant: 'New Tech', sf: 500, status: 'expiring', expiry: '03-31-2026', type: 'tech' },
-    { id: 'S202', tenant: '', sf: 500, status: 'vacant', expiry: '', type: 'office' }
-  ],
-  1: [
-    { id: 'S100', tenant: 'Aptitude Medical Systems Inc.', sf: 500, status: 'occupied', expiry: '11-30-2025', type: 'medical' },
-    { id: 'S102', tenant: '', sf: 500, status: 'vacant', expiry: '', type: 'office' }
-  ]
+// Mock data for suites by year
+const suiteDataByYear = {
+  2025: {
+    5: [
+      { id: 'S501', tenant: 'Systems Inc.', sf: 800, status: 'occupied', expiry: '08-30-2026', type: 'office' },
+      { id: 'S502', tenant: '', sf: 300, status: 'vacant', expiry: '', type: 'office' },
+      { id: 'S503', tenant: 'Design Co.', sf: 600, status: 'occupied', expiry: '12-31-2025', type: 'creative' },
+      { id: 'S504', tenant: '', sf: 400, status: 'vacant', expiry: '', type: 'office' },
+      { id: 'S505', tenant: 'Law Firm', sf: 1200, status: 'occupied', expiry: '06-30-2027', type: 'legal' },
+      { id: 'S506', tenant: '', sf: 500, status: 'booked', expiry: '01-15-2026', type: 'office' }
+    ],
+    4: [
+      { id: 'S401', tenant: 'Medical', sf: 700, status: 'expiring', expiry: '07-31-2025', type: 'medical' },
+      { id: 'S402', tenant: '', sf: 350, status: 'vacant', expiry: '', type: 'office' },
+      { id: 'S403', tenant: 'Tech Start', sf: 900, status: 'occupied', expiry: '09-30-2026', type: 'tech' },
+      { id: 'S404', tenant: '', sf: 450, status: 'vacant', expiry: '', type: 'office' },
+      { id: 'S405', tenant: 'Consulting', sf: 650, status: 'occupied', expiry: '03-31-2027', type: 'consulting' },
+      { id: 'S406', tenant: 'Finance Ltd', sf: 550, status: 'expiring', expiry: '11-30-2025', type: 'finance' }
+    ],
+    3: [
+      { id: 'S301', tenant: 'Solution', sf: 600, status: 'expiring', expiry: '05-31-2025', type: 'office' },
+      { id: 'S302', tenant: '', sf: 400, status: 'vacant', expiry: '', type: 'office' },
+      { id: 'S303', tenant: 'Marketing', sf: 750, status: 'occupied', expiry: '12-15-2026', type: 'marketing' },
+      { id: 'S304', tenant: '', sf: 300, status: 'vacant', expiry: '', type: 'office' },
+      { id: 'S305', tenant: 'Real Estate', sf: 850, status: 'occupied', expiry: '08-31-2027', type: 'realestate' },
+      { id: 'S306', tenant: '', sf: 500, status: 'booked', expiry: '02-28-2026', type: 'office' }
+    ],
+    2: [
+      { id: 'S201', tenant: 'New Tech', sf: 1000, status: 'expiring', expiry: '03-31-2025', type: 'tech' },
+      { id: 'S202', tenant: '', sf: 350, status: 'vacant', expiry: '', type: 'office' },
+      { id: 'S203', tenant: 'Insurance', sf: 700, status: 'occupied', expiry: '10-31-2026', type: 'insurance' },
+      { id: 'S204', tenant: '', sf: 400, status: 'vacant', expiry: '', type: 'office' },
+      { id: 'S205', tenant: 'Accounting', sf: 600, status: 'occupied', expiry: '07-31-2027', type: 'accounting' },
+      { id: 'S206', tenant: 'Healthcare', sf: 450, status: 'occupied', expiry: '04-30-2026', type: 'healthcare' }
+    ],
+    1: [
+      { id: 'S101', tenant: 'Aptitude Medical Systems Inc.', sf: 1100, status: 'occupied', expiry: '11-30-2025', type: 'medical' },
+      { id: 'S102', tenant: '', sf: 300, status: 'vacant', expiry: '', type: 'office' },
+      { id: 'S103', tenant: 'Engineering', sf: 800, status: 'occupied', expiry: '09-15-2026', type: 'engineering' },
+      { id: 'S104', tenant: '', sf: 400, status: 'vacant', expiry: '', type: 'office' },
+      { id: 'S105', tenant: 'Retail Corp', sf: 650, status: 'occupied', expiry: '12-31-2026', type: 'retail' },
+      { id: 'S106', tenant: '', sf: 500, status: 'booked', expiry: '03-15-2026', type: 'office' }
+    ]
+  },
+  2026: {
+    5: [
+      { id: 'S501', tenant: 'Systems Inc.', sf: 800, status: 'occupied', expiry: '08-30-2028', type: 'office' },
+      { id: 'S502', tenant: 'New Tenant A', sf: 300, status: 'occupied', expiry: '12-31-2027', type: 'office' },
+      { id: 'S503', tenant: '', sf: 600, status: 'vacant', expiry: '', type: 'creative' },
+      { id: 'S504', tenant: 'Tech Firm', sf: 400, status: 'occupied', expiry: '06-30-2028', type: 'office' },
+      { id: 'S505', tenant: 'Law Firm', sf: 1200, status: 'occupied', expiry: '06-30-2029', type: 'legal' },
+      { id: 'S506', tenant: 'StartUp B', sf: 500, status: 'occupied', expiry: '01-15-2028', type: 'office' }
+    ],
+    4: [
+      { id: 'S401', tenant: 'Medical Plus', sf: 700, status: 'occupied', expiry: '07-31-2028', type: 'medical' },
+      { id: 'S402', tenant: '', sf: 350, status: 'vacant', expiry: '', type: 'office' },
+      { id: 'S403', tenant: 'Tech Start', sf: 900, status: 'occupied', expiry: '09-30-2028', type: 'tech' },
+      { id: 'S404', tenant: 'New Co', sf: 450, status: 'occupied', expiry: '11-30-2027', type: 'office' },
+      { id: 'S405', tenant: 'Consulting', sf: 650, status: 'occupied', expiry: '03-31-2029', type: 'consulting' },
+      { id: 'S406', tenant: '', sf: 550, status: 'vacant', expiry: '', type: 'finance' }
+    ],
+    3: [
+      { id: 'S301', tenant: 'Solution Plus', sf: 600, status: 'occupied', expiry: '05-31-2028', type: 'office' },
+      { id: 'S302', tenant: 'Small Biz', sf: 400, status: 'occupied', expiry: '08-31-2027', type: 'office' },
+      { id: 'S303', tenant: 'Marketing', sf: 750, status: 'occupied', expiry: '12-15-2028', type: 'marketing' },
+      { id: 'S304', tenant: '', sf: 300, status: 'vacant', expiry: '', type: 'office' },
+      { id: 'S305', tenant: 'Real Estate', sf: 850, status: 'occupied', expiry: '08-31-2029', type: 'realestate' },
+      { id: 'S306', tenant: 'Design Studio', sf: 500, status: 'occupied', expiry: '02-28-2028', type: 'office' }
+    ],
+    2: [
+      { id: 'S201', tenant: 'Newer Tech', sf: 1000, status: 'occupied', expiry: '03-31-2028', type: 'tech' },
+      { id: 'S202', tenant: 'Agency Co', sf: 350, status: 'occupied', expiry: '07-15-2027', type: 'office' },
+      { id: 'S203', tenant: 'Insurance', sf: 700, status: 'occupied', expiry: '10-31-2028', type: 'insurance' },
+      { id: 'S204', tenant: '', sf: 400, status: 'vacant', expiry: '', type: 'office' },
+      { id: 'S205', tenant: 'Accounting', sf: 600, status: 'occupied', expiry: '07-31-2029', type: 'accounting' },
+      { id: 'S206', tenant: 'Healthcare', sf: 450, status: 'occupied', expiry: '04-30-2028', type: 'healthcare' }
+    ],
+    1: [
+      { id: 'S101', tenant: '', sf: 1100, status: 'vacant', expiry: '', type: 'medical' },
+      { id: 'S102', tenant: 'Service Co', sf: 300, status: 'occupied', expiry: '09-30-2027', type: 'office' },
+      { id: 'S103', tenant: 'Engineering', sf: 800, status: 'occupied', expiry: '09-15-2028', type: 'engineering' },
+      { id: 'S104', tenant: 'Logistics', sf: 400, status: 'occupied', expiry: '05-31-2027', type: 'office' },
+      { id: 'S105', tenant: 'Retail Corp', sf: 650, status: 'occupied', expiry: '12-31-2028', type: 'retail' },
+      { id: 'S106', tenant: 'Event Co', sf: 500, status: 'occupied', expiry: '03-15-2028', type: 'office' }
+    ]
+  }
 };
 
 const statusColors = {
@@ -59,15 +123,32 @@ const StackingPlan = () => {
   const [selectedYear, setSelectedYear] = useState('2025');
   const [selectedTemplate, setSelectedTemplate] = useState('A');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState('all');
 
   const occupancyPercent = Math.round((selectedProperty.occupiedSF / selectedProperty.totalSF) * 100);
   const vacantPercent = Math.round((selectedProperty.vacantSF / selectedProperty.totalSF) * 100);
 
   const getFloorSummary = (floor: number) => {
-    const suites = suiteData[floor] || [];
+    const suites = suiteDataByYear[selectedYear]?.[floor] || [];
     const totalSF = suites.reduce((sum, suite) => sum + suite.sf, 0);
     const vacantSF = suites.filter(s => s.status === 'vacant').reduce((sum, suite) => sum + suite.sf, 0);
     return { totalSF, vacantSF };
+  };
+
+  const getSuiteWidth = (sf: number, maxSf: number = 1200) => {
+    // Calculate width as percentage based on square footage, with minimum 120px
+    const percentage = Math.max(10, (sf / maxSf) * 100);
+    return Math.min(percentage, 30); // Cap at 30% to prevent overly wide suites
+  };
+
+  const getSuiteOpacity = (suite: any) => {
+    if (selectedStatus === 'all') return 1;
+    return suite.status === selectedStatus ? 1 : 0.3;
+  };
+
+  const getSuiteBlur = (suite: any) => {
+    if (selectedStatus === 'all') return '';
+    return suite.status === selectedStatus ? '' : 'blur-sm';
   };
 
   return (
@@ -209,12 +290,51 @@ const StackingPlan = () => {
                     </Button>
                   </div>
 
-                  {/* Status Legend */}
-                  <div className="grid grid-cols-2 gap-2 mt-4 pt-3 border-t">
-                    <Badge variant="secondary" className={`${statusColors.occupied} text-[10px] py-1`}>Occupied</Badge>
-                    <Badge variant="secondary" className={`${statusColors.vacant} text-[10px] py-1`}>Vacant</Badge>
-                    <Badge variant="secondary" className={`${statusColors.expiring} text-[10px] py-1`}>Expirations</Badge>
-                    <Badge variant="secondary" className={`${statusColors.booked} text-[10px] py-1`}>Booked</Badge>
+                  {/* Status Legend - Interactive Filters */}
+                  <div className="space-y-2 mt-4 pt-3 border-t">
+                    <div className="text-xs font-medium text-muted-foreground mb-2">Filter by Status:</div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button
+                        variant={selectedStatus === 'all' ? 'default' : 'outline'}
+                        size="sm"
+                        className="text-[10px] h-6"
+                        onClick={() => setSelectedStatus('all')}
+                      >
+                        All
+                      </Button>
+                      <Button
+                        variant={selectedStatus === 'occupied' ? 'default' : 'outline'}
+                        size="sm"
+                        className={`text-[10px] h-6 ${selectedStatus === 'occupied' ? '' : statusColors.occupied}`}
+                        onClick={() => setSelectedStatus('occupied')}
+                      >
+                        Occupied
+                      </Button>
+                      <Button
+                        variant={selectedStatus === 'vacant' ? 'default' : 'outline'}
+                        size="sm"
+                        className={`text-[10px] h-6 ${selectedStatus === 'vacant' ? '' : statusColors.vacant}`}
+                        onClick={() => setSelectedStatus('vacant')}
+                      >
+                        Vacant
+                      </Button>
+                      <Button
+                        variant={selectedStatus === 'expiring' ? 'default' : 'outline'}
+                        size="sm"
+                        className={`text-[10px] h-6 ${selectedStatus === 'expiring' ? '' : statusColors.expiring}`}
+                        onClick={() => setSelectedStatus('expiring')}
+                      >
+                        Expiring
+                      </Button>
+                      <Button
+                        variant={selectedStatus === 'booked' ? 'default' : 'outline'}
+                        size="sm"
+                        className={`text-[10px] h-6 ${selectedStatus === 'booked' ? '' : statusColors.booked}`}
+                        onClick={() => setSelectedStatus('booked')}
+                      >
+                        Booked
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -231,49 +351,52 @@ const StackingPlan = () => {
                     
                     {/* Main Building Floors */}
                     {[5, 4, 3, 2, 1].map(floor => {
-                      const suites = suiteData[floor] || [];
+                      const suites = suiteDataByYear[selectedYear]?.[floor] || [];
                       const summary = getFloorSummary(floor);
                       
                       return (
-                        <div key={floor} className="flex gap-2 items-center">
-                          {/* Left Suite */}
-                          <div className="flex-1">
-                            {suites[0] && (
-                              <div className={`
-                                p-3 rounded border-2 text-sm font-medium transition-all hover:shadow-md cursor-pointer
-                                ${statusColors[suites[0].status]}
-                              `}>
-                                <div className="font-semibold">{suites[0].id}</div>
-                                {suites[0].tenant && <div className="text-xs mt-1 truncate">{suites[0].tenant}</div>}
-                                <div className="text-xs">{suites[0].sf} sf</div>
-                                {suites[0].expiry && <div className="text-xs">Ex: {suites[0].expiry}</div>}
+                        <div key={floor} className="mb-4">
+                          {/* Floor Header */}
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <div className="bg-primary text-primary-foreground rounded px-3 py-1 text-sm font-bold">
+                                Floor {floor}
                               </div>
-                            )}
+                              <div className="text-xs text-muted-foreground">
+                                {summary.totalSF.toLocaleString()} sf total • {summary.vacantSF.toLocaleString()} sf vacant
+                              </div>
+                            </div>
                           </div>
 
-                          {/* Right Suite */}
-                          <div className="flex-1">
-                            {suites[1] && (
-                              <div className={`
-                                p-3 rounded border-2 text-sm font-medium transition-all hover:shadow-md cursor-pointer
-                                ${statusColors[suites[1].status]}
-                              `}>
-                                <div className="font-semibold">{suites[1].id}</div>
-                                {suites[1].tenant && <div className="text-xs mt-1 truncate">{suites[1].tenant}</div>}
-                                <div className="text-xs">{suites[1].sf} sf</div>
+                          {/* Suites Row - 6 suites with proportional widths */}
+                          <div className="flex gap-1 bg-muted/20 p-2 rounded-lg">
+                            {suites.map((suite, index) => (
+                              <div
+                                key={suite.id}
+                                className={`
+                                  min-w-[100px] p-2 rounded border-2 text-xs font-medium 
+                                  transition-all duration-300 hover:shadow-md cursor-pointer
+                                  ${statusColors[suite.status]} ${getSuiteBlur(suite)}
+                                `}
+                                style={{
+                                  width: `${getSuiteWidth(suite.sf)}%`,
+                                  opacity: getSuiteOpacity(suite)
+                                }}
+                              >
+                                <div className="font-semibold text-xs">{suite.id}</div>
+                                {suite.tenant && (
+                                  <div className="text-[10px] mt-1 truncate font-medium">
+                                    {suite.tenant}
+                                  </div>
+                                )}
+                                <div className="text-[10px] font-medium">{suite.sf} sf</div>
+                                {suite.expiry && (
+                                  <div className="text-[10px] opacity-80">
+                                    Ex: {suite.expiry}
+                                  </div>
+                                )}
                               </div>
-                            )}
-                          </div>
-
-                          {/* Floor Number */}
-                          <div className="w-12 text-center">
-                            <div className="bg-muted rounded p-2 text-sm font-bold">{floor}</div>
-                          </div>
-                          
-                          {/* Floor Summary */}
-                          <div className="w-20 text-xs text-muted-foreground">
-                            <div>{summary.totalSF.toLocaleString()}</div>
-                            <div>{summary.vacantSF} vacant</div>
+                            ))}
                           </div>
                         </div>
                       );
