@@ -3,8 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sidebar } from '@/components/dashboard/Sidebar';
-import { FileDown, Maximize2, Menu } from 'lucide-react';
+import { FileDown, Maximize2, Menu, ZoomIn, ZoomOut, Search, Info } from 'lucide-react';
 
 // Mock data for properties
 const properties = [
@@ -23,7 +25,7 @@ const properties = [
   }
 ];
 
-// Mock data for suites by year
+// Mock data for suites by year - Extended to test many suites per floor
 const suiteDataByYear = {
   2025: {
     5: [
@@ -32,7 +34,16 @@ const suiteDataByYear = {
       { id: 'S503', tenant: 'Design Co.', sf: 600, status: 'occupied', expiry: '12-31-2025', type: 'creative' },
       { id: 'S504', tenant: '', sf: 400, status: 'vacant', expiry: '', type: 'office' },
       { id: 'S505', tenant: 'Law Firm', sf: 1200, status: 'occupied', expiry: '06-30-2027', type: 'legal' },
-      { id: 'S506', tenant: '', sf: 500, status: 'booked', expiry: '01-15-2026', type: 'office' }
+      { id: 'S506', tenant: '', sf: 500, status: 'booked', expiry: '01-15-2026', type: 'office' },
+      { id: 'S507', tenant: 'Tech Co', sf: 450, status: 'occupied', expiry: '03-31-2026', type: 'tech' },
+      { id: 'S508', tenant: '', sf: 350, status: 'vacant', expiry: '', type: 'office' },
+      { id: 'S509', tenant: 'Marketing Firm', sf: 700, status: 'expiring', expiry: '06-30-2025', type: 'marketing' },
+      { id: 'S510', tenant: 'Consulting', sf: 600, status: 'occupied', expiry: '09-30-2026', type: 'consulting' },
+      { id: 'S511', tenant: '', sf: 250, status: 'vacant', expiry: '', type: 'office' },
+      { id: 'S512', tenant: 'Finance Co', sf: 800, status: 'booked', expiry: '12-31-2025', type: 'finance' },
+      { id: 'S513', tenant: 'Health Services', sf: 550, status: 'occupied', expiry: '07-31-2027', type: 'healthcare' },
+      { id: 'S514', tenant: '', sf: 400, status: 'vacant', expiry: '', type: 'office' },
+      { id: 'S515', tenant: 'Engineering', sf: 900, status: 'expiring', expiry: '05-31-2025', type: 'engineering' }
     ],
     4: [
       { id: 'S401', tenant: 'Medical', sf: 700, status: 'expiring', expiry: '07-31-2025', type: 'medical' },
@@ -124,6 +135,9 @@ const StackingPlan = () => {
   const [selectedTemplate, setSelectedTemplate] = useState('A');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('all');
+  const [zoomLevel, setZoomLevel] = useState(100);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedSuite, setSelectedSuite] = useState(null);
 
   const occupancyPercent = Math.round((selectedProperty.occupiedSF / selectedProperty.totalSF) * 100);
   const vacantPercent = Math.round((selectedProperty.vacantSF / selectedProperty.totalSF) * 100);
@@ -136,9 +150,11 @@ const StackingPlan = () => {
   };
 
   const getSuiteWidth = (sf: number, maxSf: number = 1200) => {
-    // Calculate width as percentage based on square footage, with minimum 120px
-    const percentage = Math.max(10, (sf / maxSf) * 100);
-    return Math.min(percentage, 30); // Cap at 30% to prevent overly wide suites
+    // Base width calculation with minimum 120px and maximum 200px
+    const minWidth = 120;
+    const maxWidth = 200;
+    const calculatedWidth = Math.max(minWidth, Math.min(maxWidth, (sf / maxSf) * maxWidth));
+    return calculatedWidth;
   };
 
   const getSuiteOpacity = (suite: any) => {
@@ -149,6 +165,21 @@ const StackingPlan = () => {
   const getSuiteBlur = (suite: any) => {
     if (selectedStatus === 'all') return '';
     return suite.status === selectedStatus ? '' : 'blur-sm';
+  };
+
+  const handleZoomIn = () => setZoomLevel(prev => Math.min(prev + 25, 200));
+  const handleZoomOut = () => setZoomLevel(prev => Math.max(prev - 25, 50));
+  
+  const handleSuiteClick = (suite: any) => {
+    setSelectedSuite(selectedSuite?.id === suite.id ? null : suite);
+  };
+
+  const filteredSuites = (suites: any[]) => {
+    if (!searchTerm) return suites;
+    return suites.filter(suite => 
+      suite.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      suite.tenant.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   };
 
   return (
@@ -278,6 +309,28 @@ const StackingPlan = () => {
                         </Button>
                       ))}
                     </div>
+
+                    {/* Suite Search */}
+                    <div className="relative">
+                      <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        placeholder="Search suites..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="pl-8 h-9"
+                      />
+                    </div>
+
+                    {/* Zoom Controls */}
+                    <div className="flex items-center gap-2">
+                      <Button variant="outline" size="sm" onClick={handleZoomOut}>
+                        <ZoomOut className="h-4 w-4" />
+                      </Button>
+                      <span className="text-xs font-medium min-w-[45px] text-center">{zoomLevel}%</span>
+                      <Button variant="outline" size="sm" onClick={handleZoomIn}>
+                        <ZoomIn className="h-4 w-4" />
+                      </Button>
+                    </div>
                     
                     <Button variant="outline" size="sm" className="w-full">
                       <FileDown className="h-4 w-4 mr-2" />
@@ -340,95 +393,154 @@ const StackingPlan = () => {
               </Card>
             </div>
 
-            {/* Right Panel - Stacking Plan (Immediate Visibility) */}
+            {/* Right Panel - Fixed Stacking Plan Container */}
             <div className="xl:col-span-2">
               <Card className="h-full">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg">Building Stacking Plan - {selectedYear}</CardTitle>
+                <CardHeader className="pb-3 flex-shrink-0">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-lg">Building Stacking Plan - {selectedYear}</CardTitle>
+                    {selectedSuite && (
+                      <Button variant="outline" size="sm" onClick={() => setSelectedSuite(null)}>
+                        <Info className="h-4 w-4 mr-2" />
+                        {selectedSuite.id} Selected
+                      </Button>
+                    )}
+                  </div>
                 </CardHeader>
-                <CardContent className="p-4 overflow-auto">
-                  <div className="space-y-2">
+                <CardContent className="p-0 flex-1">
+                  <ScrollArea className="h-[calc(100vh-16rem)] px-4">
+                    <div 
+                      className="space-y-3 py-4 building-container" 
+                      style={{ 
+                        transform: `scale(${zoomLevel / 100})`,
+                        transformOrigin: 'top left',
+                        width: `${10000 / zoomLevel}%`
+                      }}
+                    >
                     
-                    {/* Main Building Floors */}
-                    {[5, 4, 3, 2, 1].map(floor => {
-                      const suites = suiteDataByYear[selectedYear]?.[floor] || [];
-                      const summary = getFloorSummary(floor);
-                      
-                      return (
-                        <div key={floor} className="mb-4">
-                          {/* Floor Header */}
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <div className="bg-primary text-primary-foreground rounded px-3 py-1 text-sm font-bold">
-                                Floor {floor}
+                      {/* Building Outline */}
+                      <div className="bg-gradient-to-b from-muted/30 to-muted/10 border-2 border-muted rounded-lg p-3 building-shadow">
+                        
+                        {/* Main Building Floors */}
+                        {[5, 4, 3, 2, 1].map(floor => {
+                          const allSuites = suiteDataByYear[selectedYear]?.[floor] || [];
+                          const suites = filteredSuites(allSuites);
+                          const summary = getFloorSummary(floor);
+                          
+                          return (
+                            <div key={floor} className="mb-3">
+                              {/* Floor Header */}
+                              <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-2">
+                                  <div className="bg-primary text-primary-foreground rounded px-3 py-1 text-sm font-bold min-w-[80px] text-center">
+                                    Floor {floor}
+                                  </div>
+                                  <div className="text-xs text-muted-foreground">
+                                    {summary.totalSF.toLocaleString()} sf • {allSuites.length} suites • {summary.vacantSF.toLocaleString()} sf vacant
+                                  </div>
+                                </div>
                               </div>
-                              <div className="text-xs text-muted-foreground">
-                                {summary.totalSF.toLocaleString()} sf total • {summary.vacantSF.toLocaleString()} sf vacant
+
+                              {/* Suites Grid - CSS Grid for flexible layout */}
+                              <div className="bg-muted/10 border border-muted/30 rounded-lg p-2 min-h-[80px]">
+                                <div 
+                                  className="grid gap-1 auto-rows-fr overflow-x-auto"
+                                  style={{
+                                    gridTemplateColumns: `repeat(auto-fit, minmax(120px, 1fr))`,
+                                    maxWidth: '100%'
+                                  }}
+                                >
+                                  {suites.map((suite) => (
+                                    <div
+                                      key={suite.id}
+                                      className={`
+                                        p-2 rounded border-2 text-xs font-medium cursor-pointer
+                                        transition-all duration-300 hover:shadow-lg hover:scale-105
+                                        ${statusColors[suite.status]} ${getSuiteBlur(suite)}
+                                        ${selectedSuite?.id === suite.id ? 'ring-2 ring-primary ring-offset-2' : ''}
+                                      `}
+                                      style={{
+                                        width: `${getSuiteWidth(suite.sf)}px`,
+                                        minWidth: '120px',
+                                        opacity: getSuiteOpacity(suite),
+                                        height: '64px'
+                                      }}
+                                      onClick={() => handleSuiteClick(suite)}
+                                    >
+                                      <div className="font-bold text-xs">{suite.id}</div>
+                                      {suite.tenant && (
+                                        <div className="text-[10px] mt-1 truncate font-medium">
+                                          {suite.tenant}
+                                        </div>
+                                      )}
+                                      <div className="text-[10px] font-medium">{suite.sf} sf</div>
+                                      {suite.expiry && (
+                                        <div className="text-[9px] opacity-80">
+                                          {suite.expiry}
+                                        </div>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
                               </div>
                             </div>
-                          </div>
+                          );
+                        })}
 
-                          {/* Suites Row - 6 suites with proportional widths */}
-                          <div className="flex gap-1 bg-muted/20 p-2 rounded-lg">
-                            {suites.map((suite, index) => (
-                              <div
-                                key={suite.id}
-                                className={`
-                                  min-w-[100px] p-2 rounded border-2 text-xs font-medium 
-                                  transition-all duration-300 hover:shadow-md cursor-pointer
-                                  ${statusColors[suite.status]} ${getSuiteBlur(suite)}
-                                `}
-                                style={{
-                                  width: `${getSuiteWidth(suite.sf)}%`,
-                                  opacity: getSuiteOpacity(suite)
-                                }}
-                              >
-                                <div className="font-semibold text-xs">{suite.id}</div>
-                                {suite.tenant && (
-                                  <div className="text-[10px] mt-1 truncate font-medium">
-                                    {suite.tenant}
+                        {/* Basement & Parking Levels - Redesigned for consistency */}
+                        <div className="border-t-2 border-muted pt-3 mt-3">
+                          {[
+                            { id: 'B1', name: 'Basement 1', color: 'bg-slate-100 border-slate-300 text-slate-700' },
+                            { id: 'B2', name: 'Basement 2', color: 'bg-slate-100 border-slate-300 text-slate-700' }
+                          ].map(level => (
+                            <div key={level.id} className="mb-3">
+                              <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-2">
+                                  <div className="bg-muted text-muted-foreground rounded px-3 py-1 text-sm font-bold min-w-[80px] text-center">
+                                    {level.id}
                                   </div>
-                                )}
-                                <div className="text-[10px] font-medium">{suite.sf} sf</div>
-                                {suite.expiry && (
-                                  <div className="text-[10px] opacity-80">
-                                    Ex: {suite.expiry}
+                                  <div className="text-xs text-muted-foreground">
+                                    Storage & Mechanical
                                   </div>
-                                )}
+                                </div>
                               </div>
-                            ))}
-                          </div>
-                        </div>
-                      );
-                    })}
+                              <div className="bg-muted/10 border border-muted/30 rounded-lg p-2">
+                                <div className={`p-4 rounded border-2 text-center font-semibold text-sm ${level.color} h-16 flex items-center justify-center`}>
+                                  {level.name} - Storage & Utilities
+                                </div>
+                              </div>
+                            </div>
+                          ))}
 
-                    {/* Basement & Parking Levels */}
-                    <div className="border-t pt-2 mt-4">
-                      {['B1', 'B2'].map(level => (
-                        <div key={level} className="flex gap-2 items-center mb-2">
-                          <div className="flex-1 bg-slate-200 p-4 rounded text-center font-semibold text-slate-600 text-sm">
-                            {level} - Basement
-                          </div>
-                          <div className="w-12 text-center">
-                            <div className="bg-muted rounded p-2 text-sm font-bold text-muted-foreground">-</div>
-                          </div>
-                          <div className="w-20"></div>
+                          {[
+                            { id: 'P1', name: 'Parking Level 1', color: 'bg-purple-100 border-purple-300 text-purple-700' },
+                            { id: 'P2', name: 'Parking Level 2', color: 'bg-purple-100 border-purple-300 text-purple-700' },
+                            { id: 'P3', name: 'Parking Level 3', color: 'bg-purple-100 border-purple-300 text-purple-700' }
+                          ].map(level => (
+                            <div key={level.id} className="mb-3">
+                              <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-2">
+                                  <div className="bg-muted text-muted-foreground rounded px-3 py-1 text-sm font-bold min-w-[80px] text-center">
+                                    {level.id}
+                                  </div>
+                                  <div className="text-xs text-muted-foreground">
+                                    Vehicle parking
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="bg-muted/10 border border-muted/30 rounded-lg p-2">
+                                <div className={`p-4 rounded border-2 text-center font-semibold text-sm ${level.color} h-16 flex items-center justify-center`}>
+                                  {level.name} - 50 Parking Spaces
+                                </div>
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                      ))}
 
-                      {['P1', 'P2', 'P3'].map(level => (
-                        <div key={level} className="flex gap-2 items-center mb-2">
-                          <div className="flex-1 bg-purple-200 p-4 rounded text-center font-semibold text-purple-700 text-sm">
-                            {level} - Parking
-                          </div>
-                          <div className="w-12 text-center">
-                            <div className="bg-muted rounded p-2 text-sm font-bold text-muted-foreground">-</div>
-                          </div>
-                          <div className="w-20"></div>
-                        </div>
-                      ))}
+                      </div>
+
                     </div>
-                  </div>
+                  </ScrollArea>
                 </CardContent>
               </Card>
             </div>
