@@ -12,6 +12,7 @@ import AddSuite from "./pages/property/AddSuite";
 import AddTenant from "./pages/property/AddTenant";
 import ImportExport from "./pages/property/ImportExport";
 import TenantListing from "./pages/property/TenantListing";
+import StackingPlan from "./pages/property/StackingPlan";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/properties/add-tenant" element={<AddTenant />} />
           <Route path="/properties/import-export" element={<ImportExport />} />
           <Route path="/properties/tenant-listing" element={<TenantListing />} />
+          <Route path="/stacking" element={<StackingPlan />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
