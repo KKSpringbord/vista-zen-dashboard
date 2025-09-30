@@ -1,49 +1,39 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Sidebar } from '@/components/dashboard/Sidebar';
-import { FileDown, Maximize2, Menu, ZoomIn, ZoomOut, Search, Info } from 'lucide-react';
+import { FileDown, Printer, ZoomIn, ZoomOut } from 'lucide-react';
 
-// Mock data for properties
-const properties = [
-  {
-    id: 1,
-    name: "Sunrise Towers",
-    location: "Astor, Florida",
-    totalSF: 5000,
-    occupiedSF: 2500,
-    vacantSF: 2500,
-    floors: 5,
-    totalIncome: 200000,
-    avgRentPerSF: 9,
-    expirations12Months: 3,
-    image: "/api/placeholder/300/200"
-  }
-];
+// Property data
+const property = {
+  name: "Café Horizon",
+  location: "Astor, Florida",
+  totalSF: 5000,
+  vacantSF: 1250,
+  occupiedSF: 3750,
+  totalIncome: 200000,
+  avgRentPerSF: 9,
+  expirations: 3
+};
 
-// Mock data for suites by year - Extended to test many suites per floor
+// Mock data for suites by year
 const suiteDataByYear = {
   2025: {
+    6: [
+      { id: 'S601', tenant: 'Legal Firm', sf: 900, status: 'occupied', expiry: '12-31-2026', type: 'legal' },
+      { id: 'S602', tenant: '', sf: 400, status: 'vacant', expiry: '', type: 'office' },
+      { id: 'S603', tenant: 'Consulting', sf: 700, status: 'occupied', expiry: '06-30-2027', type: 'consulting' },
+      { id: 'S604', tenant: 'Tech Co', sf: 600, status: 'expiring', expiry: '03-31-2025', type: 'tech' },
+      { id: 'S605', tenant: '', sf: 500, status: 'booked', expiry: '09-15-2025', type: 'office' }
+    ],
     5: [
       { id: 'S501', tenant: 'Systems Inc.', sf: 800, status: 'occupied', expiry: '08-30-2026', type: 'office' },
       { id: 'S502', tenant: '', sf: 300, status: 'vacant', expiry: '', type: 'office' },
       { id: 'S503', tenant: 'Design Co.', sf: 600, status: 'occupied', expiry: '12-31-2025', type: 'creative' },
       { id: 'S504', tenant: '', sf: 400, status: 'vacant', expiry: '', type: 'office' },
       { id: 'S505', tenant: 'Law Firm', sf: 1200, status: 'occupied', expiry: '06-30-2027', type: 'legal' },
-      { id: 'S506', tenant: '', sf: 500, status: 'booked', expiry: '01-15-2026', type: 'office' },
-      { id: 'S507', tenant: 'Tech Co', sf: 450, status: 'occupied', expiry: '03-31-2026', type: 'tech' },
-      { id: 'S508', tenant: '', sf: 350, status: 'vacant', expiry: '', type: 'office' },
-      { id: 'S509', tenant: 'Marketing Firm', sf: 700, status: 'expiring', expiry: '06-30-2025', type: 'marketing' },
-      { id: 'S510', tenant: 'Consulting', sf: 600, status: 'occupied', expiry: '09-30-2026', type: 'consulting' },
-      { id: 'S511', tenant: '', sf: 250, status: 'vacant', expiry: '', type: 'office' },
-      { id: 'S512', tenant: 'Finance Co', sf: 800, status: 'booked', expiry: '12-31-2025', type: 'finance' },
-      { id: 'S513', tenant: 'Health Services', sf: 550, status: 'occupied', expiry: '07-31-2027', type: 'healthcare' },
-      { id: 'S514', tenant: '', sf: 400, status: 'vacant', expiry: '', type: 'office' },
-      { id: 'S515', tenant: 'Engineering', sf: 900, status: 'expiring', expiry: '05-31-2025', type: 'engineering' }
+      { id: 'S506', tenant: '', sf: 500, status: 'booked', expiry: '01-15-2026', type: 'office' }
     ],
     4: [
       { id: 'S401', tenant: 'Medical', sf: 700, status: 'expiring', expiry: '07-31-2025', type: 'medical' },
@@ -79,6 +69,13 @@ const suiteDataByYear = {
     ]
   },
   2026: {
+    6: [
+      { id: 'S601', tenant: 'Legal Firm', sf: 900, status: 'occupied', expiry: '12-31-2028', type: 'legal' },
+      { id: 'S602', tenant: 'New Co', sf: 400, status: 'occupied', expiry: '08-31-2027', type: 'office' },
+      { id: 'S603', tenant: 'Consulting', sf: 700, status: 'occupied', expiry: '06-30-2029', type: 'consulting' },
+      { id: 'S604', tenant: '', sf: 600, status: 'vacant', expiry: '', type: 'tech' },
+      { id: 'S605', tenant: 'Start B', sf: 500, status: 'occupied', expiry: '09-15-2027', type: 'office' }
+    ],
     5: [
       { id: 'S501', tenant: 'Systems Inc.', sf: 800, status: 'occupied', expiry: '08-30-2028', type: 'office' },
       { id: 'S502', tenant: 'New Tenant A', sf: 300, status: 'occupied', expiry: '12-31-2027', type: 'office' },
@@ -122,352 +119,170 @@ const suiteDataByYear = {
   }
 };
 
-const statusColors = {
-  occupied: 'bg-green-200 text-green-800 border-green-300',
-  vacant: 'bg-red-200 text-red-800 border-red-300', 
-  expiring: 'bg-orange-200 text-orange-800 border-orange-300',
-  booked: 'bg-blue-200 text-blue-800 border-blue-300'
+const statusConfig = {
+  occupied: { bg: 'bg-green-500', label: 'Occupied' },
+  vacant: { bg: 'bg-red-500', label: 'Vacant' },
+  expiring: { bg: 'bg-orange-500', label: 'Expiring Soon' },
+  booked: { bg: 'bg-blue-500', label: 'Booked' }
 };
 
 const StackingPlan = () => {
-  const [selectedProperty, setSelectedProperty] = useState(properties[0]);
   const [selectedYear, setSelectedYear] = useState('2025');
-  const [selectedTemplate, setSelectedTemplate] = useState('A');
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState('all');
   const [zoomLevel, setZoomLevel] = useState(100);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedSuite, setSelectedSuite] = useState(null);
 
-  const occupancyPercent = Math.round((selectedProperty.occupiedSF / selectedProperty.totalSF) * 100);
-  const vacantPercent = Math.round((selectedProperty.vacantSF / selectedProperty.totalSF) * 100);
+  const vacantPercent = Math.round((property.vacantSF / property.totalSF) * 100);
+  const occupiedPercent = Math.round((property.occupiedSF / property.totalSF) * 100);
 
-  const getFloorSummary = (floor: number) => {
-    const suites = suiteDataByYear[selectedYear]?.[floor] || [];
-    const totalSF = suites.reduce((sum, suite) => sum + suite.sf, 0);
-    const vacantSF = suites.filter(s => s.status === 'vacant').reduce((sum, suite) => sum + suite.sf, 0);
-    return { totalSF, vacantSF };
-  };
-
-  const getSuiteWidth = (sf: number, maxSf: number = 1200) => {
-    // Base width calculation with minimum 120px and maximum 200px
-    const minWidth = 120;
-    const maxWidth = 200;
-    const calculatedWidth = Math.max(minWidth, Math.min(maxWidth, (sf / maxSf) * maxWidth));
-    return calculatedWidth;
-  };
-
-  const getSuiteOpacity = (suite: any) => {
-    if (selectedStatus === 'all') return 1;
-    return suite.status === selectedStatus ? 1 : 0.3;
-  };
-
-  const getSuiteBlur = (suite: any) => {
-    if (selectedStatus === 'all') return '';
-    return suite.status === selectedStatus ? '' : 'blur-sm';
-  };
-
-  const handleZoomIn = () => setZoomLevel(prev => Math.min(prev + 25, 200));
+  const handleZoomIn = () => setZoomLevel(prev => Math.min(prev + 25, 150));
   const handleZoomOut = () => setZoomLevel(prev => Math.max(prev - 25, 50));
-  
-  const handleSuiteClick = (suite: any) => {
-    setSelectedSuite(selectedSuite?.id === suite.id ? null : suite);
-  };
-
-  const filteredSuites = (suites: any[]) => {
-    if (!searchTerm) return suites;
-    return suites.filter(suite => 
-      suite.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      suite.tenant.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  };
 
   return (
-    <div className="flex min-h-screen w-full bg-background">
-      {/* Fixed Sidebar */}
-      <div className={`fixed left-0 top-0 h-full z-10 transition-transform duration-300 ${
-        sidebarCollapsed ? '-translate-x-full' : 'translate-x-0'
-      }`}>
-        <Sidebar collapsed={false} />
-      </div>
-      
-      {/* Main Content Area */}
-      <div className={`flex-1 transition-all duration-300 ${
-        sidebarCollapsed ? 'ml-0' : 'ml-64'
-      }`}>
-        {/* Enhanced Header with Property Controls */}
-        <header className="h-16 flex items-center justify-between border-b px-4 bg-background sticky top-0 z-20 shadow-sm">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            >
-              <Menu className="h-5 w-5" />
-            </Button>
-            
-            {/* Property Selection */}
-            <Select value={selectedProperty.name} onValueChange={() => {}}>
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="Select Property" />
-              </SelectTrigger>
-              <SelectContent>
-                {properties.map(property => (
-                  <SelectItem key={property.id} value={property.name}>
-                    {property.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            
-            <Button variant="outline" size="sm">
-              Show Plan
-            </Button>
-
-            {/* Templates */}
-            <div className="flex gap-1">
-              {['A', 'B', 'C'].map(template => (
-                <Button
-                  key={template}
-                  variant={selectedTemplate === template ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setSelectedTemplate(template)}
-                  className="w-10"
-                >
-                  {template}
-                </Button>
-              ))}
-            </div>
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="border-b bg-card">
+        {/* Property Info Bar */}
+        <div className="px-6 py-3 border-b">
+          <div className="flex items-center text-sm text-muted-foreground">
+            <span className="font-semibold text-foreground">{property.name}</span>
+            <span className="mx-2">|</span>
+            <span>{property.location}</span>
+            <span className="mx-2">|</span>
+            <span>{property.totalSF.toLocaleString()} SF</span>
+            <span className="mx-2">|</span>
+            <span>{vacantPercent}% Vacant</span>
+            <span className="mx-2">|</span>
+            <span>{occupiedPercent}% Occupied</span>
+            <span className="mx-2">|</span>
+            <span>${(property.totalIncome / 1000).toFixed(0)}K Income</span>
+            <span className="mx-2">|</span>
+            <span>${property.avgRentPerSF}/SF</span>
+            <span className="mx-2">|</span>
+            <span>{property.expirations} Expirations</span>
           </div>
+        </div>
 
-          <div className="flex items-center gap-4">
-            {/* Year Selection */}
-            <div className="flex gap-1">
-              {['2025', '2026', '2027', '2028'].map(year => (
-                <Button
-                  key={year}
-                  variant={selectedYear === year ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setSelectedYear(year)}
-                  className="text-xs"
-                >
-                  {year}
-                </Button>
-              ))}
-            </div>
-
-            {/* Status Filters */}
-            <div className="flex gap-1">
+        {/* Controls Bar */}
+        <div className="px-6 py-4 flex items-center justify-between">
+          {/* Year Filters */}
+          <div className="flex gap-2">
+            {['2025', '2026', '2027', '2028'].map(year => (
               <Button
-                variant={selectedStatus === 'all' ? 'default' : 'outline'}
+                key={year}
+                variant={selectedYear === year ? 'default' : 'outline'}
                 size="sm"
-                className="text-xs"
-                onClick={() => setSelectedStatus('all')}
+                onClick={() => setSelectedYear(year)}
               >
-                All
+                {year}
               </Button>
-              {['occupied', 'vacant', 'expiring', 'booked'].map(status => (
-                <Button
-                  key={status}
-                  variant={selectedStatus === status ? 'default' : 'outline'}
-                  size="sm"
-                  className={`text-xs capitalize ${selectedStatus === status ? '' : statusColors[status]}`}
-                  onClick={() => setSelectedStatus(status)}
-                >
-                  {status}
-                </Button>
-              ))}
-            </div>
-
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search suites..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-8 h-9 w-48"
-              />
-            </div>
-
-            {/* Zoom Controls */}
-            <div className="flex items-center gap-1">
-              <Button variant="outline" size="sm" onClick={handleZoomOut}>
-                <ZoomOut className="h-4 w-4" />
-              </Button>
-              <span className="text-xs font-medium min-w-[45px] text-center">{zoomLevel}%</span>
-              <Button variant="outline" size="sm" onClick={handleZoomIn}>
-                <ZoomIn className="h-4 w-4" />
-              </Button>
-            </div>
-
-            {/* Actions */}
-            <div className="flex gap-1">
-              <Button variant="outline" size="sm">
-                <FileDown className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="sm">
-                <Maximize2 className="h-4 w-4" />
-              </Button>
-            </div>
+            ))}
           </div>
-        </header>
 
-        {/* Main Content - Full Height Stacking Plan */}
-        <main className="p-4 h-[calc(100vh-4rem)]">
-          <div className="h-full">
-            
-            {/* Full Height Stacking Plan Container */}
-            <Card className="h-full">
-              <CardHeader className="pb-3 flex-shrink-0">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <CardTitle className="text-lg">Building Stacking Plan - {selectedYear}</CardTitle>
-                    <div className="text-sm text-muted-foreground">
-                      {selectedProperty.location} • {occupancyPercent}% Occupied • {selectedProperty.floors} Floors
-                    </div>
-                  </div>
-                  {selectedSuite && (
-                    <Badge variant="outline">
-                      <Info className="h-3 w-3 mr-1" />
-                      {selectedSuite.id} - {selectedSuite.tenant || 'Vacant'} ({selectedSuite.sf} sf)
-                    </Badge>
-                  )}
-                </div>
-              </CardHeader>
-              <CardContent className="p-0 flex-1">
-                <ScrollArea className="h-[calc(100vh-12rem)] px-4">
-                  <div 
-                    className="space-y-3 py-4 building-container" 
-                    style={{ 
-                      transform: `scale(${zoomLevel / 100})`,
-                      transformOrigin: 'top left',
-                      width: `${10000 / zoomLevel}%`
-                    }}
-                  >
+          {/* Status Legend */}
+          <div className="flex items-center gap-4">
+            {Object.entries(statusConfig).map(([key, config]) => (
+              <div key={key} className="flex items-center gap-2">
+                <div className={`w-4 h-4 rounded ${config.bg}`} />
+                <span className="text-sm text-muted-foreground">{config.label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Actions */}
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={handleZoomOut}>
+              <ZoomOut className="h-4 w-4" />
+            </Button>
+            <span className="text-sm font-medium min-w-[50px] text-center">{zoomLevel}%</span>
+            <Button variant="outline" size="sm" onClick={handleZoomIn}>
+              <ZoomIn className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="sm">
+              <Printer className="h-4 w-4 mr-2" />
+              Print
+            </Button>
+            <Button variant="outline" size="sm">
+              <FileDown className="h-4 w-4 mr-2" />
+              Export
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <main className="p-6">
+        <Card>
+          <CardContent className="p-6">
+            <ScrollArea className="h-[calc(100vh-280px)]">
+              <div 
+                style={{ 
+                  transform: `scale(${zoomLevel / 100})`,
+                  transformOrigin: 'top left',
+                }}
+                className="inline-block"
+              >
+                {/* Building Container */}
+                <div className="border-2 border-border rounded-lg bg-muted/20 p-4 shadow-lg">
+                  {/* Floors */}
+                  {[6, 5, 4, 3, 2, 1].map(floor => {
+                    const suites = suiteDataByYear[selectedYear]?.[floor] || [];
                     
-                    {/* Building Outline */}
-                    <div className="bg-gradient-to-b from-muted/30 to-muted/10 border-2 border-muted rounded-lg p-3 building-shadow">
-                      
-                      {/* Main Building Floors */}
-                      {[5, 4, 3, 2, 1].map(floor => {
-                        const allSuites = suiteDataByYear[selectedYear]?.[floor] || [];
-                        const suites = filteredSuites(allSuites);
-                        const summary = getFloorSummary(floor);
-                        
-                        return (
-                          <div key={floor} className="mb-3">
-                            {/* Floor Header */}
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center gap-2">
-                                <div className="bg-primary text-primary-foreground rounded px-3 py-1 text-sm font-bold min-w-[80px] text-center">
-                                  Floor {floor}
-                                </div>
-                                <div className="text-xs text-muted-foreground">
-                                  {summary.totalSF.toLocaleString()} sf • {allSuites.length} suites • {summary.vacantSF.toLocaleString()} sf vacant
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Suites Single Row - Flex Layout with Horizontal Scroll */}
-                            <div className="bg-muted/10 border border-muted/30 rounded-lg p-2 min-h-[80px] overflow-x-auto">
-                              <div className="flex gap-1 min-w-fit">
-                                {suites.map((suite) => (
-                                  <div
-                                    key={suite.id}
-                                    className={`
-                                      p-2 rounded border-2 text-xs font-medium cursor-pointer flex-shrink-0
-                                      transition-all duration-300 hover:shadow-lg hover:scale-105 suite-hover-effect
-                                      ${statusColors[suite.status]} ${getSuiteBlur(suite)}
-                                      ${selectedSuite?.id === suite.id ? 'ring-2 ring-primary ring-offset-2' : ''}
-                                    `}
-                                    style={{
-                                      width: `${getSuiteWidth(suite.sf)}px`,
-                                      minWidth: '120px',
-                                      opacity: getSuiteOpacity(suite),
-                                      height: '64px'
-                                    }}
-                                    onClick={() => handleSuiteClick(suite)}
-                                  >
-                                    <div className="font-bold text-xs">{suite.id}</div>
-                                    {suite.tenant && (
-                                      <div className="text-[10px] mt-1 truncate font-medium">
-                                        {suite.tenant}
-                                      </div>
-                                    )}
-                                    <div className="text-[10px] font-medium">{suite.sf} sf</div>
+                    return (
+                      <div key={floor} className="mb-2">
+                        <div className="flex items-center gap-2">
+                          {/* Floor Number */}
+                          <div className="flex-shrink-0 w-12 h-20 bg-card border border-border rounded flex items-center justify-center">
+                            <span className="font-bold text-lg">{floor}</span>
+                          </div>
+                          
+                          {/* Suites Row */}
+                          <div className="flex-1 flex gap-1 h-20">
+                            {suites.map(suite => {
+                              const statusColor = statusConfig[suite.status as keyof typeof statusConfig]?.bg || 'bg-gray-500';
+                              
+                              return (
+                                <div
+                                  key={suite.id}
+                                  className={`${statusColor} border border-border rounded p-2 flex flex-col justify-between text-white min-w-[140px] flex-1`}
+                                  style={{ maxWidth: '200px' }}
+                                >
+                                  <div className="text-xs font-semibold">{suite.id}</div>
+                                  <div className="text-xs truncate">{suite.tenant || 'Vacant'}</div>
+                                  <div className="flex justify-between items-end">
+                                    <span className="text-xs">{suite.sf} SF</span>
                                     {suite.expiry && (
-                                      <div className="text-[9px] opacity-80">
-                                        {suite.expiry}
-                                      </div>
+                                      <span className="text-xs">{suite.expiry}</span>
                                     )}
                                   </div>
-                                ))}
-                              </div>
-                            </div>
+                                </div>
+                              );
+                            })}
                           </div>
-                        );
-                      })}
-
-                      {/* Basement & Parking Levels - Redesigned for consistency */}
-                      <div className="border-t-2 border-muted pt-3 mt-3">
-                        {[
-                          { id: 'B1', name: 'Basement 1', color: 'bg-slate-100 border-slate-300 text-slate-700' },
-                          { id: 'B2', name: 'Basement 2', color: 'bg-slate-100 border-slate-300 text-slate-700' }
-                        ].map(level => (
-                          <div key={level.id} className="mb-3">
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center gap-2">
-                                <div className="bg-muted text-muted-foreground rounded px-3 py-1 text-sm font-bold min-w-[80px] text-center">
-                                  {level.id}
-                                </div>
-                                <div className="text-xs text-muted-foreground">
-                                  Storage & Mechanical
-                                </div>
-                              </div>
-                            </div>
-                            <div className="bg-muted/10 border border-muted/30 rounded-lg p-2">
-                              <div className={`p-4 rounded border-2 text-center font-semibold text-sm ${level.color} h-16 flex items-center justify-center`}>
-                                {level.name} - Storage & Utilities
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-
-                        {[
-                          { id: 'P1', name: 'Parking Level 1', color: 'bg-purple-100 border-purple-300 text-purple-700' },
-                          { id: 'P2', name: 'Parking Level 2', color: 'bg-purple-100 border-purple-300 text-purple-700' },
-                          { id: 'P3', name: 'Parking Level 3', color: 'bg-purple-100 border-purple-300 text-purple-700' }
-                        ].map(level => (
-                          <div key={level.id} className="mb-3">
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center gap-2">
-                                <div className="bg-muted text-muted-foreground rounded px-3 py-1 text-sm font-bold min-w-[80px] text-center">
-                                  {level.id}
-                                </div>
-                                <div className="text-xs text-muted-foreground">
-                                  Vehicle parking
-                                </div>
-                              </div>
-                            </div>
-                            <div className="bg-muted/10 border border-muted/30 rounded-lg p-2">
-                              <div className={`p-4 rounded border-2 text-center font-semibold text-sm ${level.color} h-16 flex items-center justify-center`}>
-                                {level.name} - 50 Parking Spaces
-                              </div>
-                            </div>
-                          </div>
-                        ))}
+                        </div>
                       </div>
+                    );
+                  })}
 
-                    </div>
-
+                  {/* Basement Levels */}
+                  <div className="mt-4 pt-4 border-t-2 border-dashed border-border">
+                    {['B1', 'B2'].map((level, idx) => (
+                      <div key={level} className="mb-2">
+                        <div className="flex items-center gap-2">
+                          <div className="flex-shrink-0 w-12 h-16 bg-card border border-border rounded flex items-center justify-center">
+                            <span className="font-bold text-sm">{level}</span>
+                          </div>
+                          <div className="flex-1 h-16 bg-gray-400 border border-border rounded p-2 flex items-center justify-center text-white text-sm">
+                            {idx === 0 ? 'Parking' : 'Storage'}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                </ScrollArea>
-              </CardContent>
-            </Card>
-          </div>
-        </main>
-      </div>
+                </div>
+              </div>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      </main>
     </div>
   );
 };
