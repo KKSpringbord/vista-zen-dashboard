@@ -225,6 +225,7 @@ const PropertyListing = () => {
                       size="sm" 
                       className="w-8 h-8 p-0 bg-[#d84315] hover:bg-[#bf360c] rounded"
                       title="View Details"
+                      onClick={() => navigate(`/properties/view/${property.id}`)}
                     >
                       <Eye className="w-3.5 h-3.5" />
                     </Button>
