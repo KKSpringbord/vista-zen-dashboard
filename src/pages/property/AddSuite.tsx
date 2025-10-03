@@ -1,35 +1,39 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Save, ArrowLeft, Home } from "lucide-react";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ArrowLeft, ChevronRight, Save } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 const AddSuite = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState("space");
   const [formData, setFormData] = useState({
     propertyId: "",
     floorId: "",
     suiteNumber: "",
-    suiteName: "",
-    suiteType: "",
-    bedrooms: "",
-    bathrooms: "",
-    squareFootage: "",
-    rentAmount: "",
-    securityDeposit: "",
-    description: "",
-    amenities: [] as string[],
-    furnished: false,
-    petFriendly: false,
-    smokingAllowed: false,
+    totalArea: "",
+    spaceType: "",
+    spaceStatus: "",
+    rentableSf: "",
+    parkingAvailability: "",
+    tenantParkingSpaces: "",
+    spaceAvailableFrom: "",
+    leaseStatus: "",
+    signedLeases: "",
+    marketingLinks: "",
+    toursHeld: "",
+    tourToLeasePercent: "",
+    images: [] as File[],
   });
 
-  // Mock data
   const properties = [
     { id: "1", name: "Riverstone Residential" },
     { id: "2", name: "Skyline Business Center" },
@@ -44,24 +48,44 @@ const AddSuite = () => {
     { id: "4", number: "2", propertyId: "2" },
   ];
 
-  const amenityOptions = [
-    "Air Conditioning", "Heating", "Balcony", "In-unit Laundry", 
-    "Dishwasher", "Parking Space", "Storage Unit", "Gym Access"
+  const tabs = [
+    { id: "space", label: "Space Details" },
+    { id: "accessibility", label: "Accessibility & Security" },
+    { id: "parking", label: "Parking & Logistics" },
+    { id: "lease", label: "Lease Details" },
+    { id: "marketing", label: "Marketing Metrics" },
+    { id: "images", label: "Images" },
   ];
 
-  const handleInputChange = (field: string, value: string | boolean | string[]) => {
+  const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleAmenityChange = (amenity: string, checked: boolean) => {
-    const updatedAmenities = checked 
-      ? [...formData.amenities, amenity]
-      : formData.amenities.filter(a => a !== amenity);
-    handleInputChange("amenities", updatedAmenities);
+  const handleFileChange = (files: FileList | null) => {
+    if (!files) return;
+    setFormData(prev => ({ ...prev, images: Array.from(files) }));
+  };
+
+  const handleNextStep = () => {
+    const currentIndex = tabs.findIndex(tab => tab.id === activeTab);
+    if (currentIndex < tabs.length - 1) {
+      setActiveTab(tabs[currentIndex + 1].id);
+    }
+  };
+
+  const handlePreviousStep = () => {
+    const currentIndex = tabs.findIndex(tab => tab.id === activeTab);
+    if (currentIndex > 0) {
+      setActiveTab(tabs[currentIndex - 1].id);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    toast({
+      title: "Suite saved successfully",
+      description: "The suite details have been saved.",
+    });
     console.log("Suite data:", formData);
     navigate("/properties/listing");
   };
@@ -69,261 +93,324 @@ const AddSuite = () => {
   const filteredFloors = floors.filter(floor => floor.propertyId === formData.propertyId);
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center gap-4">
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate("/properties/listing")}
-          className="flex items-center gap-2"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Properties
-        </Button>
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Home className="w-8 h-8" />
-            Add New Suite
-          </h1>
-          <p className="text-muted-foreground">Add a suite to a property floor</p>
+    <div className="min-h-screen bg-background">
+      <div className="border-b bg-card">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+            <span>Property Management</span>
+            <ChevronRight className="w-4 h-4" />
+            <span>Property</span>
+            <ChevronRight className="w-4 h-4" />
+            <span className="text-foreground">Add Suite</span>
+          </div>
+          <h1 className="text-2xl font-bold">Suite Details</h1>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Suite Location</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="propertyId">Select Property</Label>
-                <Select onValueChange={(value) => handleInputChange("propertyId", value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Choose a property" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {properties.map((property) => (
-                      <SelectItem key={property.id} value={property.id}>
-                        {property.name}
-                      </SelectItem>
+      <div className="container mx-auto px-6 py-6">
+        <form onSubmit={handleSubmit}>
+          <div className="flex gap-6">
+            {/* Sidebar Tabs */}
+            <div className="w-64 flex-shrink-0">
+              <Card>
+                <CardContent className="p-0">
+                  <div className="flex flex-col">
+                    {tabs.map((tab) => (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`px-4 py-3 text-left text-sm font-medium transition-colors ${
+                          activeTab === tab.id
+                            ? "bg-primary text-primary-foreground"
+                            : "hover:bg-muted text-muted-foreground"
+                        }`}
+                      >
+                        {tab.label}
+                      </button>
                     ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="floorId">Select Floor</Label>
-                <Select 
-                  onValueChange={(value) => handleInputChange("floorId", value)}
-                  disabled={!formData.propertyId}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Choose a floor" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {filteredFloors.map((floor) => (
-                      <SelectItem key={floor.id} value={floor.id}>
-                        Floor {floor.number}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="suiteNumber">Suite Number</Label>
-                  <Input
-                    id="suiteNumber"
-                    value={formData.suiteNumber}
-                    onChange={(e) => handleInputChange("suiteNumber", e.target.value)}
-                    placeholder="e.g., 101, A1"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="suiteName">Suite Name (Optional)</Label>
-                  <Input
-                    id="suiteName"
-                    value={formData.suiteName}
-                    onChange={(e) => handleInputChange("suiteName", e.target.value)}
-                    placeholder="e.g., Corner Unit"
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Suite Details</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="suiteType">Suite Type</Label>
-                <Select onValueChange={(value) => handleInputChange("suiteType", value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select suite type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="studio">Studio</SelectItem>
-                    <SelectItem value="1br">1 Bedroom</SelectItem>
-                    <SelectItem value="2br">2 Bedroom</SelectItem>
-                    <SelectItem value="3br">3 Bedroom</SelectItem>
-                    <SelectItem value="office">Office Space</SelectItem>
-                    <SelectItem value="retail">Retail Space</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="bedrooms">Bedrooms</Label>
-                  <Input
-                    id="bedrooms"
-                    type="number"
-                    value={formData.bedrooms}
-                    onChange={(e) => handleInputChange("bedrooms", e.target.value)}
-                    placeholder="0"
-                    min="0"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="bathrooms">Bathrooms</Label>
-                  <Input
-                    id="bathrooms"
-                    type="number"
-                    step="0.5"
-                    value={formData.bathrooms}
-                    onChange={(e) => handleInputChange("bathrooms", e.target.value)}
-                    placeholder="1"
-                    min="0"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="squareFootage">Sq Ft</Label>
-                  <Input
-                    id="squareFootage"
-                    type="number"
-                    value={formData.squareFootage}
-                    onChange={(e) => handleInputChange("squareFootage", e.target.value)}
-                    placeholder="0"
-                    min="1"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="rentAmount">Monthly Rent ($)</Label>
-                  <Input
-                    id="rentAmount"
-                    type="number"
-                    value={formData.rentAmount}
-                    onChange={(e) => handleInputChange("rentAmount", e.target.value)}
-                    placeholder="0"
-                    min="0"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="securityDeposit">Security Deposit ($)</Label>
-                  <Input
-                    id="securityDeposit"
-                    type="number"
-                    value={formData.securityDeposit}
-                    onChange={(e) => handleInputChange("securityDeposit", e.target.value)}
-                    placeholder="0"
-                    min="0"
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Amenities & Features</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                {amenityOptions.map((amenity) => (
-                  <div key={amenity} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={amenity}
-                      checked={formData.amenities.includes(amenity)}
-                      onCheckedChange={(checked) => handleAmenityChange(amenity, checked as boolean)}
-                    />
-                    <Label htmlFor={amenity} className="text-sm">
-                      {amenity}
-                    </Label>
                   </div>
-                ))}
-              </div>
+                </CardContent>
+              </Card>
+            </div>
 
-              <div className="flex flex-col gap-3 pt-4 border-t">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="furnished"
-                    checked={formData.furnished}
-                    onCheckedChange={(checked) => handleInputChange("furnished", checked as boolean)}
-                  />
-                  <Label htmlFor="furnished">Furnished</Label>
-                </div>
+            {/* Main Content */}
+            <div className="flex-1">
+              <Card>
+                <CardContent className="p-6">
+                  <Tabs value={activeTab} onValueChange={setActiveTab}>
+                    {/* Space Details Tab */}
+                    <TabsContent value="space" className="mt-0 space-y-6">
+                      <h2 className="text-xl font-semibold mb-4">Space Details</h2>
+                      
+                      <div className="grid grid-cols-3 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="suiteNumber">
+                            Suite # <span className="text-destructive">*</span>
+                          </Label>
+                          <Input
+                            id="suiteNumber"
+                            value={formData.suiteNumber}
+                            onChange={(e) => handleInputChange("suiteNumber", e.target.value)}
+                            placeholder="901"
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="totalArea">
+                            Total Area (SF) <span className="text-destructive">*</span>
+                          </Label>
+                          <Input
+                            id="totalArea"
+                            type="number"
+                            value={formData.totalArea}
+                            onChange={(e) => handleInputChange("totalArea", e.target.value)}
+                            placeholder="200"
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="spaceType">
+                            Space Type <span className="text-destructive">*</span>
+                          </Label>
+                          <Select onValueChange={(value) => handleInputChange("spaceType", value)}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Industrial" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="industrial">Industrial</SelectItem>
+                              <SelectItem value="office">Office</SelectItem>
+                              <SelectItem value="retail">Retail</SelectItem>
+                              <SelectItem value="storage">Storage</SelectItem>
+                              <SelectItem value="medical">Medical</SelectItem>
+                              <SelectItem value="special">Special Purpose</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
 
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="petFriendly"
-                    checked={formData.petFriendly}
-                    onCheckedChange={(checked) => handleInputChange("petFriendly", checked as boolean)}
-                  />
-                  <Label htmlFor="petFriendly">Pet Friendly</Label>
-                </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="spaceStatus">
+                            Space Status <span className="text-destructive">*</span>
+                          </Label>
+                          <Select onValueChange={(value) => handleInputChange("spaceStatus", value)}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Good" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="excellent">Excellent</SelectItem>
+                              <SelectItem value="good">Good</SelectItem>
+                              <SelectItem value="fair">Fair</SelectItem>
+                              <SelectItem value="poor">Poor</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="rentableSf">
+                            Rentable SF <span className="text-destructive">*</span>
+                          </Label>
+                          <Input
+                            id="rentableSf"
+                            type="number"
+                            value={formData.rentableSf}
+                            onChange={(e) => handleInputChange("rentableSf", e.target.value)}
+                            placeholder="200"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </TabsContent>
 
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="smokingAllowed"
-                    checked={formData.smokingAllowed}
-                    onCheckedChange={(checked) => handleInputChange("smokingAllowed", checked as boolean)}
-                  />
-                  <Label htmlFor="smokingAllowed">Smoking Allowed</Label>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+                    {/* Accessibility & Security Tab */}
+                    <TabsContent value="accessibility" className="mt-0 space-y-6">
+                      <h2 className="text-xl font-semibold mb-4">Accessibility & Security</h2>
+                      
+                      <p className="text-sm text-muted-foreground">
+                        Add accessibility and security information for this suite.
+                      </p>
+                    </TabsContent>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Description</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <Label htmlFor="description">Suite Description</Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => handleInputChange("description", e.target.value)}
-                  placeholder="Describe the suite features, location within building, views, etc."
-                  rows={4}
-                />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+                    {/* Parking & Logistics Tab */}
+                    <TabsContent value="parking" className="mt-0 space-y-6">
+                      <h2 className="text-xl font-semibold mb-4">Parking & Logistics</h2>
+                      
+                      <div className="grid grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label>Parking Availability</Label>
+                          <RadioGroup 
+                            value={formData.parkingAvailability} 
+                            onValueChange={(value) => handleInputChange("parkingAvailability", value)}
+                            className="flex gap-4"
+                          >
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="yes" id="parking-yes" />
+                              <Label htmlFor="parking-yes" className="font-normal">Yes</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="no" id="parking-no" />
+                              <Label htmlFor="parking-no" className="font-normal">No</Label>
+                            </div>
+                          </RadioGroup>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="tenantParkingSpaces">Tenant Parking Spaces</Label>
+                          <Input
+                            id="tenantParkingSpaces"
+                            type="number"
+                            value={formData.tenantParkingSpaces}
+                            onChange={(e) => handleInputChange("tenantParkingSpaces", e.target.value)}
+                            placeholder="7"
+                          />
+                        </div>
+                      </div>
+                    </TabsContent>
 
-        <div className="flex justify-end gap-4 mt-6">
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={() => navigate("/properties/listing")}
-          >
-            Cancel
-          </Button>
-          <Button type="submit" className="flex items-center gap-2">
-            <Save className="w-4 h-4" />
-            Save Suite
-          </Button>
-        </div>
-      </form>
+                    {/* Lease Details Tab */}
+                    <TabsContent value="lease" className="mt-0 space-y-6">
+                      <h2 className="text-xl font-semibold mb-4">Lease Details</h2>
+                      
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="spaceAvailableFrom">Space Available From</Label>
+                          <Input
+                            id="spaceAvailableFrom"
+                            type="date"
+                            value={formData.spaceAvailableFrom}
+                            onChange={(e) => handleInputChange("spaceAvailableFrom", e.target.value)}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="leaseStatus">
+                            Lease Status <span className="text-destructive">*</span>
+                          </Label>
+                          <Select onValueChange={(value) => handleInputChange("leaseStatus", value)}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Occupied" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="occupied">Occupied</SelectItem>
+                              <SelectItem value="vacant">Vacant</SelectItem>
+                              <SelectItem value="available">Available</SelectItem>
+                              <SelectItem value="leased">Leased</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="signedLeases">Signed Leases</Label>
+                        <Input
+                          id="signedLeases"
+                          type="number"
+                          value={formData.signedLeases}
+                          onChange={(e) => handleInputChange("signedLeases", e.target.value)}
+                          placeholder="1"
+                        />
+                      </div>
+                    </TabsContent>
+
+                    {/* Marketing Metrics Tab */}
+                    <TabsContent value="marketing" className="mt-0 space-y-6">
+                      <h2 className="text-xl font-semibold mb-4">Marketing Metrics</h2>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="marketingLinks">Marketing Links</Label>
+                        <Textarea
+                          id="marketingLinks"
+                          value={formData.marketingLinks}
+                          onChange={(e) => handleInputChange("marketingLinks", e.target.value)}
+                          placeholder="www.125cremona.com"
+                          rows={2}
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="toursHeld">Tours Held</Label>
+                          <Input
+                            id="toursHeld"
+                            type="number"
+                            value={formData.toursHeld}
+                            onChange={(e) => handleInputChange("toursHeld", e.target.value)}
+                            placeholder="5"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="tourToLeasePercent">Tour-to-Lease %</Label>
+                          <Input
+                            id="tourToLeasePercent"
+                            type="number"
+                            value={formData.tourToLeasePercent}
+                            onChange={(e) => handleInputChange("tourToLeasePercent", e.target.value)}
+                            placeholder="20"
+                          />
+                        </div>
+                      </div>
+                    </TabsContent>
+
+                    {/* Images Tab */}
+                    <TabsContent value="images" className="mt-0 space-y-6">
+                      <h2 className="text-xl font-semibold mb-4">Images</h2>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="images">Upload images here</Label>
+                        <Input
+                          id="images"
+                          type="file"
+                          multiple
+                          onChange={(e) => handleFileChange(e.target.files)}
+                          accept="image/*"
+                          className="cursor-pointer"
+                        />
+                        <p className="text-xs text-muted-foreground">
+                          Upload multiple images of the suite
+                        </p>
+                      </div>
+
+                      {formData.images.length > 0 && (
+                        <div className="mt-4">
+                          <p className="text-sm text-muted-foreground">
+                            {formData.images.length} file(s) selected
+                          </p>
+                        </div>
+                      )}
+                    </TabsContent>
+                  </Tabs>
+
+                  {/* Action Buttons */}
+                  <div className="flex justify-between mt-8 pt-6 border-t">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handlePreviousStep}
+                      disabled={activeTab === tabs[0].id}
+                    >
+                      <ArrowLeft className="w-4 h-4 mr-2" />
+                      Back To Previous
+                    </Button>
+                    <div className="flex gap-2">
+                      {activeTab !== tabs[tabs.length - 1].id && (
+                        <Button
+                          type="button"
+                          onClick={handleNextStep}
+                        >
+                          Next Step
+                          <ChevronRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      )}
+                      <Button type="submit">
+                        <Save className="w-4 h-4 mr-2" />
+                        Save
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
