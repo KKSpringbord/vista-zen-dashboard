@@ -23,13 +23,22 @@ import { useState } from "react";
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Stacking Plan', href: '/stacking', icon: Layers3 },
-  { name: 'Team Management', href: '/team', icon: Users },
   { name: 'Subscription Management', href: '/subscription', icon: CreditCard },
   { name: 'User Log', href: '/user-log', icon: FileText },
   { name: 'Reports', href: '/reports', icon: BarChart3 },
   { name: 'Embed Code', href: '/embed', icon: Code },
   { name: 'Account Settings', href: '/settings', icon: Settings },
 ];
+
+const teamManagement = {
+  name: 'Team Management',
+  icon: Users,
+  subItems: [
+    { name: 'Role Management', href: '/team/roles', icon: Settings },
+    { name: 'User Management', href: '/team/users', icon: UserPlus },
+    { name: 'Assign Property', href: '/team/assign-property', icon: Building },
+  ]
+};
 
 const propertyManagement = {
   name: 'Property Management',
@@ -58,6 +67,7 @@ interface SidebarProps {
 export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
   const [isPropertyOpen, setIsPropertyOpen] = useState(false);
   const [isPropertySubOpen, setIsPropertySubOpen] = useState(false);
+  const [isTeamOpen, setIsTeamOpen] = useState(false);
 
   return (
     <div className={cn(
@@ -204,6 +214,56 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
                     <span className="truncate">{propertyManagement.subItems[1].name}</span>
                   </NavLink>
                 </li>
+              </ul>
+            )}
+          </li>
+
+          {/* Team Management Collapsible Section */}
+          <li>
+            <button
+              onClick={() => setIsTeamOpen(!isTeamOpen)}
+              className={cn(
+                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 w-full",
+                "hover:bg-accent hover:text-accent-foreground text-muted-foreground",
+                collapsed && "justify-center"
+              )}
+            >
+              <teamManagement.icon className={cn("flex-shrink-0", collapsed ? "w-5 h-5" : "w-4 h-4")} />
+              {!collapsed && (
+                <>
+                  <span className="truncate flex-1 text-left">{teamManagement.name}</span>
+                  <ChevronDown 
+                    className={cn(
+                      "w-4 h-4 transition-transform duration-200",
+                      isTeamOpen && "transform rotate-180"
+                    )} 
+                  />
+                </>
+              )}
+            </button>
+
+            {/* Team Management Submenu */}
+            {!collapsed && isTeamOpen && (
+              <ul className="ml-6 mt-2 space-y-1 border-l border-border pl-3">
+                {teamManagement.subItems.map((item) => (
+                  <li key={item.name}>
+                    <NavLink
+                      to={item.href}
+                      className={({ isActive }) =>
+                        cn(
+                          "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                          "hover:bg-accent hover:text-accent-foreground",
+                          isActive 
+                            ? "bg-primary/10 text-primary" 
+                            : "text-muted-foreground"
+                        )
+                      }
+                    >
+                      <item.icon className="w-4 h-4 flex-shrink-0" />
+                      <span className="truncate">{item.name}</span>
+                    </NavLink>
+                  </li>
+                ))}
               </ul>
             )}
           </li>
