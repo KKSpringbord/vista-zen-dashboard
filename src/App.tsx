@@ -17,6 +17,11 @@ import PropertyView from "./pages/property/PropertyView";
 import RoleManagement from "./pages/team/RoleManagement";
 import UserManagement from "./pages/team/UserManagement";
 import AssignProperty from "./pages/team/AssignProperty";
+import MyPlan from "./pages/subscription/MyPlan";
+import Invoices from "./pages/subscription/Invoices";
+import EmbedCode from "./pages/EmbedCode";
+import AccountSettings from "./pages/account/AccountSettings";
+import UserLogs from "./pages/UserLogs";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +45,11 @@ const App = () => (
           <Route path="/team/roles" element={<RoleManagement />} />
           <Route path="/team/users" element={<UserManagement />} />
           <Route path="/team/assign-property" element={<AssignProperty />} />
+          <Route path="/subscription/my-plan" element={<MyPlan />} />
+          <Route path="/subscription/invoices" element={<Invoices />} />
+          <Route path="/embed-code" element={<EmbedCode />} />
+          <Route path="/account/settings" element={<AccountSettings />} />
+          <Route path="/user-logs" element={<UserLogs />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

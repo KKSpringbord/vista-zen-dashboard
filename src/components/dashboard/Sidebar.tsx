@@ -14,7 +14,8 @@ import {
   UserPlus,
   Database,
   ChevronDown,
-  ClipboardList
+  ClipboardList,
+  Receipt
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -23,12 +24,27 @@ import { useState } from "react";
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Stacking Plan', href: '/stacking', icon: Layers3 },
-  { name: 'Subscription Management', href: '/subscription', icon: CreditCard },
-  { name: 'User Log', href: '/user-log', icon: FileText },
+  { name: 'User Log', href: '/user-logs', icon: FileText },
   { name: 'Reports', href: '/reports', icon: BarChart3 },
-  { name: 'Embed Code', href: '/embed', icon: Code },
-  { name: 'Account Settings', href: '/settings', icon: Settings },
+  { name: 'Embed Code', href: '/embed-code', icon: Code },
 ];
+
+const subscriptionManagement = {
+  name: 'Subscription Management',
+  icon: CreditCard,
+  subItems: [
+    { name: 'My Plan', href: '/subscription/my-plan', icon: CreditCard },
+    { name: 'Invoices', href: '/subscription/invoices', icon: Receipt },
+  ]
+};
+
+const accountSettings = {
+  name: 'Account Settings',
+  icon: Settings,
+  subItems: [
+    { name: 'User Profile', href: '/account/settings', icon: Settings },
+  ]
+};
 
 const teamManagement = {
   name: 'Team Management',
@@ -68,6 +84,8 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
   const [isPropertyOpen, setIsPropertyOpen] = useState(false);
   const [isPropertySubOpen, setIsPropertySubOpen] = useState(false);
   const [isTeamOpen, setIsTeamOpen] = useState(false);
+  const [isSubscriptionOpen, setIsSubscriptionOpen] = useState(false);
+  const [isAccountOpen, setIsAccountOpen] = useState(false);
 
   return (
     <div className={cn(
@@ -246,6 +264,104 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
             {!collapsed && isTeamOpen && (
               <ul className="ml-6 mt-2 space-y-1 border-l border-border pl-3">
                 {teamManagement.subItems.map((item) => (
+                  <li key={item.name}>
+                    <NavLink
+                      to={item.href}
+                      className={({ isActive }) =>
+                        cn(
+                          "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                          "hover:bg-accent hover:text-accent-foreground",
+                          isActive 
+                            ? "bg-primary/10 text-primary" 
+                            : "text-muted-foreground"
+                        )
+                      }
+                    >
+                      <item.icon className="w-4 h-4 flex-shrink-0" />
+                      <span className="truncate">{item.name}</span>
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+
+          {/* Subscription Management Collapsible Section */}
+          <li>
+            <button
+              onClick={() => setIsSubscriptionOpen(!isSubscriptionOpen)}
+              className={cn(
+                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 w-full",
+                "hover:bg-accent hover:text-accent-foreground text-muted-foreground",
+                collapsed && "justify-center"
+              )}
+            >
+              <subscriptionManagement.icon className={cn("flex-shrink-0", collapsed ? "w-5 h-5" : "w-4 h-4")} />
+              {!collapsed && (
+                <>
+                  <span className="truncate flex-1 text-left">{subscriptionManagement.name}</span>
+                  <ChevronDown 
+                    className={cn(
+                      "w-4 h-4 transition-transform duration-200",
+                      isSubscriptionOpen && "transform rotate-180"
+                    )} 
+                  />
+                </>
+              )}
+            </button>
+
+            {!collapsed && isSubscriptionOpen && (
+              <ul className="ml-6 mt-2 space-y-1 border-l border-border pl-3">
+                {subscriptionManagement.subItems.map((item) => (
+                  <li key={item.name}>
+                    <NavLink
+                      to={item.href}
+                      className={({ isActive }) =>
+                        cn(
+                          "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                          "hover:bg-accent hover:text-accent-foreground",
+                          isActive 
+                            ? "bg-primary/10 text-primary" 
+                            : "text-muted-foreground"
+                        )
+                      }
+                    >
+                      <item.icon className="w-4 h-4 flex-shrink-0" />
+                      <span className="truncate">{item.name}</span>
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+
+          {/* Account Settings Collapsible Section */}
+          <li>
+            <button
+              onClick={() => setIsAccountOpen(!isAccountOpen)}
+              className={cn(
+                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 w-full",
+                "hover:bg-accent hover:text-accent-foreground text-muted-foreground",
+                collapsed && "justify-center"
+              )}
+            >
+              <accountSettings.icon className={cn("flex-shrink-0", collapsed ? "w-5 h-5" : "w-4 h-4")} />
+              {!collapsed && (
+                <>
+                  <span className="truncate flex-1 text-left">{accountSettings.name}</span>
+                  <ChevronDown 
+                    className={cn(
+                      "w-4 h-4 transition-transform duration-200",
+                      isAccountOpen && "transform rotate-180"
+                    )} 
+                  />
+                </>
+              )}
+            </button>
+
+            {!collapsed && isAccountOpen && (
+              <ul className="ml-6 mt-2 space-y-1 border-l border-border pl-3">
+                {accountSettings.subItems.map((item) => (
                   <li key={item.name}>
                     <NavLink
                       to={item.href}
