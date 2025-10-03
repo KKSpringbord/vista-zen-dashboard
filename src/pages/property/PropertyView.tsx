@@ -6,23 +6,24 @@ import {
   ChevronLeft, 
   ChevronRight, 
   Menu,
-  FileText,
-  Sparkles,
   Layers,
   Building2,
   FileStack,
   MessageCircle,
   MapPin,
   User,
-  ChevronRight as ChevronRightIcon
+  Mail,
+  Phone
 } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 const PropertyView = () => {
   const navigate = useNavigate();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState("description");
+  const [activeTab, setActiveTab] = useState("overview");
 
   // Mock data
   const propertyImages = [
@@ -40,10 +41,9 @@ const PropertyView = () => {
   };
 
   const tabs = [
-    { id: "description", label: "Description", icon: FileText },
-    { id: "highlights", label: "Highlights", icon: Sparkles },
-    { id: "floor-suite", label: "Floor and Suite", icon: Layers },
-    { id: "available-suites", label: "Available Suites", icon: Building2 },
+    { id: "overview", label: "Overview", icon: Building2 },
+    { id: "floor-suite", label: "Floors & Suites", icon: Layers },
+    { id: "available-suites", label: "Available Space", icon: Building2 },
     { id: "brochures", label: "Brochures", icon: FileStack },
     { id: "contact", label: "Contact", icon: MessageCircle },
     { id: "location", label: "Location", icon: MapPin }
@@ -79,177 +79,247 @@ const PropertyView = () => {
 
   const renderContent = () => {
     switch (activeTab) {
-      case "description":
+      case "overview":
         return (
-          <div className="bg-white rounded-lg p-8">
-            <h2 className="text-2xl font-semibold mb-4">Palm Grove Villas</h2>
-            <p className="text-gray-700">Modern tech park in Goleta</p>
-          </div>
-        );
-      
-      case "highlights":
-        return (
-          <div className="bg-white rounded-lg p-8">
-            <h2 className="text-2xl font-semibold mb-4">Highlights</h2>
-            <ul className="space-y-2 text-gray-700">
-              <li>• Modern amenities throughout</li>
-              <li>• Prime location with excellent access</li>
-              <li>• Energy-efficient building systems</li>
-              <li>• Professional property management</li>
-            </ul>
+          <div className="space-y-6">
+            <Card className="border-border">
+              <CardHeader>
+                <CardTitle className="text-card-foreground">Property Description</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground leading-relaxed">
+                  Palm Grove Villas is a modern tech park located in the heart of Goleta, California. 
+                  This premier property offers state-of-the-art facilities and premium amenities designed 
+                  for today's forward-thinking businesses.
+                </p>
+                <div className="pt-4 border-t border-border">
+                  <h3 className="font-semibold text-card-foreground mb-3">Key Highlights</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {[
+                      "Modern amenities throughout",
+                      "Prime location with excellent access",
+                      "Energy-efficient building systems",
+                      "Professional property management",
+                      "High-speed internet infrastructure",
+                      "Ample parking facilities"
+                    ].map((highlight, idx) => (
+                      <div key={idx} className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2" />
+                        <span className="text-sm text-muted-foreground">{highlight}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         );
       
       case "floor-suite":
         return (
-          <div className="bg-white rounded-lg p-8">
-            <h2 className="text-2xl font-semibold mb-6">Floor and Suite</h2>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-16"></TableHead>
-                  <TableHead>Floor</TableHead>
-                  <TableHead>No.of suites</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {floors.map((floor) => (
-                  <TableRow key={floor.floor}>
-                    <TableCell>
-                      <ChevronRightIcon className="h-4 w-4" />
-                    </TableCell>
-                    <TableCell>{floor.floor}</TableCell>
-                    <TableCell>{floor.suites}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+          <div className="space-y-6">
+            <Card className="border-border">
+              <CardHeader>
+                <CardTitle className="text-card-foreground">Building Overview</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                  {floors.map((floor) => (
+                    <Card 
+                      key={floor.floor}
+                      className="hover:shadow-lg transition-all duration-300 border-border cursor-pointer group hover:border-primary/50"
+                    >
+                      <CardContent className="p-6 text-center space-y-2">
+                        <div className="w-12 h-12 mx-auto rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                          <Layers className="h-6 w-6 text-primary" />
+                        </div>
+                        <div className="space-y-1">
+                          <p className="text-2xl font-bold text-card-foreground">
+                            {floor.floor}
+                          </p>
+                          <p className="text-xs text-muted-foreground">Floor</p>
+                        </div>
+                        <Badge variant="secondary" className="text-xs">
+                          {floor.suites} Suites
+                        </Badge>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           </div>
         );
       
       case "available-suites":
         return (
-          <div className="bg-white rounded-lg p-8">
-            <h2 className="text-2xl font-semibold mb-6">Available Suites</h2>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Suite Name</TableHead>
-                  <TableHead>Floor No.</TableHead>
-                  <TableHead>Size</TableHead>
-                  <TableHead>Space Use</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {availableSuites.map((suite) => (
-                  <TableRow key={suite.name}>
-                    <TableCell>{suite.name}</TableCell>
-                    <TableCell>{suite.floor}</TableCell>
-                    <TableCell>{suite.size}</TableCell>
-                    <TableCell>{suite.spaceUse}</TableCell>
+          <Card className="border-border">
+            <CardHeader>
+              <CardTitle className="text-card-foreground">Available Suites</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow className="hover:bg-transparent">
+                    <TableHead className="text-muted-foreground font-semibold">Suite Name</TableHead>
+                    <TableHead className="text-muted-foreground font-semibold">Floor</TableHead>
+                    <TableHead className="text-muted-foreground font-semibold">Size</TableHead>
+                    <TableHead className="text-muted-foreground font-semibold">Space Use</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+                </TableHeader>
+                <TableBody>
+                  {availableSuites.map((suite, idx) => (
+                    <TableRow 
+                      key={suite.name}
+                      className={`${idx % 2 === 0 ? 'bg-muted/30' : 'bg-card'} hover:bg-accent/50 transition-colors cursor-pointer`}
+                    >
+                      <TableCell className="font-medium text-card-foreground">{suite.name}</TableCell>
+                      <TableCell className="text-muted-foreground">{suite.floor}</TableCell>
+                      <TableCell className="text-muted-foreground">{suite.size}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="border-primary/30 text-primary">
+                          {suite.spaceUse}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
         );
       
       case "brochures":
         return (
-          <div className="bg-white rounded-lg p-8">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold">Brochures</h2>
-              <div className="flex gap-2">
-                <Button className="bg-[#E8590C] hover:bg-[#E8590C]/90 text-white">
-                  Select All
-                </Button>
-                <Button className="bg-[#E8590C] hover:bg-[#E8590C]/90 text-white">
-                  Download
-                </Button>
+          <Card className="border-border">
+            <CardHeader>
+              <div className="flex justify-between items-center">
+                <CardTitle className="text-card-foreground">Brochures</CardTitle>
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline">
+                    Select All
+                  </Button>
+                  <Button size="sm" className="bg-primary hover:bg-primary-muted">
+                    Download
+                  </Button>
+                </div>
               </div>
-            </div>
-            <div className="text-center py-12 text-gray-500">
-              No Brouchers Found !
-            </div>
-          </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-16 text-muted-foreground">
+                <FileStack className="h-12 w-12 mx-auto mb-3 opacity-30" />
+                <p>No Brochures Found</p>
+              </div>
+            </CardContent>
+          </Card>
         );
       
       case "contact":
         return (
-          <div className="bg-white rounded-lg p-8">
-            <h2 className="text-2xl font-semibold mb-6">Company Details</h2>
-            
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-lg font-semibold mb-3">Owner Details</h3>
-                <div className="bg-gray-50 rounded-lg p-4 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-gray-300 rounded-full p-3">
-                      <User className="h-6 w-6 text-gray-600" />
+          <div className="space-y-6">
+            <Card className="border-border">
+              <CardHeader>
+                <CardTitle className="text-card-foreground">Owner Details</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-start justify-between gap-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <User className="h-6 w-6 text-primary" />
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500">Owner Company</p>
-                      <p className="font-semibold">GreenLeaf Developers LLP</p>
+                      <p className="text-xs text-muted-foreground mb-1">Owner Company</p>
+                      <p className="font-semibold text-card-foreground">GreenLeaf Developers LLP</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm">john.mathews@orionrealty.com</p>
-                    <p className="text-sm">8967895678</p>
+                  <div className="text-right space-y-1">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Mail className="h-3.5 w-3.5" />
+                      <span>john.mathews@orionrealty.com</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Phone className="h-3.5 w-3.5" />
+                      <span>8967895678</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </CardContent>
+            </Card>
 
-              <div>
-                <h3 className="text-lg font-semibold mb-3">Management Details</h3>
-                <div className="bg-gray-50 rounded-lg p-4 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-gray-300 rounded-full p-3">
-                      <User className="h-6 w-6 text-gray-600" />
+            <Card className="border-border">
+              <CardHeader>
+                <CardTitle className="text-card-foreground">Management Details</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-start justify-between gap-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <User className="h-6 w-6 text-primary" />
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500">Management Company Name</p>
-                      <p className="font-semibold">Crest Management Services Pvt Ltd</p>
+                      <p className="text-xs text-muted-foreground mb-1">Management Company</p>
+                      <p className="font-semibold text-card-foreground">Crest Management Services Pvt Ltd</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm">david.fernandes@vertexpm.com</p>
-                    <p className="text-sm">9849367490</p>
+                  <div className="text-right space-y-1">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Mail className="h-3.5 w-3.5" />
+                      <span>david.fernandes@vertexpm.com</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Phone className="h-3.5 w-3.5" />
+                      <span>9849367490</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </CardContent>
+            </Card>
 
-              <div>
-                <h3 className="text-lg font-semibold mb-3">Broker Details</h3>
-                <div className="bg-gray-50 rounded-lg p-4 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-gray-300 rounded-full p-3">
-                      <User className="h-6 w-6 text-gray-600" />
+            <Card className="border-border">
+              <CardHeader>
+                <CardTitle className="text-card-foreground">Broker Details</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-start justify-between gap-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <User className="h-6 w-6 text-primary" />
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500">Broker Name</p>
-                      <p className="font-semibold">Summit Realty Partners</p>
+                      <p className="text-xs text-muted-foreground mb-1">Broker Name</p>
+                      <p className="font-semibold text-card-foreground">Summit Realty Partners</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm">karthik.desai@crestviewbrokers.com</p>
-                    <p className="text-sm">7890697895</p>
+                  <div className="text-right space-y-1">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Mail className="h-3.5 w-3.5" />
+                      <span>karthik.desai@crestviewbrokers.com</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Phone className="h-3.5 w-3.5" />
+                      <span>7890697895</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
         );
       
       case "location":
         return (
-          <div className="bg-white rounded-lg p-8">
-            <h2 className="text-2xl font-semibold mb-6">Location</h2>
-            <div className="space-y-4">
-              <div>
-                <p className="font-semibold text-lg">United States</p>
-                <a href="#" className="text-blue-600 text-sm hover:underline">View larger map</a>
+          <Card className="border-border">
+            <CardHeader>
+              <div className="flex justify-between items-center">
+                <div>
+                  <CardTitle className="text-card-foreground">Location</CardTitle>
+                  <p className="text-sm text-muted-foreground mt-1">United States</p>
+                </div>
+                <a href="#" className="text-sm text-primary hover:underline">View larger map</a>
               </div>
-              <div className="w-full h-[500px] bg-gray-200 rounded-lg overflow-hidden">
+            </CardHeader>
+            <CardContent>
+              <div className="w-full h-[500px] bg-muted rounded-lg overflow-hidden border border-border">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019429279216!2d-122.41941548468147!3d37.77492977975903!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809c6c8f4459%3A0xb10ed6d9b5050fa5!2sSan%20Francisco%2C%20CA!5e0!3m2!1sen!2sus!4v1234567890123"
                   width="100%"
@@ -260,8 +330,8 @@ const PropertyView = () => {
                   referrerPolicy="no-referrer-when-downgrade"
                 />
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         );
       
       default:
@@ -270,18 +340,18 @@ const PropertyView = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-background-subtle">
       <Sidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
       
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="bg-[#E8590C] text-white px-6 py-4 flex items-center justify-between shadow-md">
+        <header className="bg-primary text-primary-foreground px-6 py-4 flex items-center justify-between shadow-lg">
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-              className="text-white hover:bg-white/10"
+              className="text-primary-foreground hover:bg-primary-foreground/10"
             >
               <Menu className="h-6 w-6" />
             </Button>
@@ -289,7 +359,7 @@ const PropertyView = () => {
           </div>
           <Button
             variant="outline"
-            className="border-white text-white hover:bg-white hover:text-[#E8590C]"
+            className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary"
             onClick={() => navigate("/properties/listing")}
           >
             Logout
@@ -297,134 +367,140 @@ const PropertyView = () => {
         </header>
 
         {/* Breadcrumb */}
-        <div className="bg-[#E8590C] text-white px-6 py-2 text-sm">
+        <div className="bg-primary text-primary-foreground px-6 py-2 text-sm">
           Property Management  &gt;  Property  &gt;  View property
         </div>
 
         <div className="flex-1 overflow-auto">
           <div className="relative">
             {/* Hero Section with Image Carousel */}
-            <div className="relative h-64 bg-[#E8590C] overflow-hidden">
+            <div className="relative h-72 bg-primary overflow-hidden">
               <img
                 src={propertyImages[currentImageIndex]}
                 alt="Property"
-                className="w-full h-full object-cover opacity-50"
+                className="w-full h-full object-cover opacity-40"
               />
               
               {/* Navigation Arrows */}
               <button
                 onClick={prevImage}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-[#E8590C] hover:bg-[#D14F0A] text-white p-3 rounded"
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-primary/80 backdrop-blur-sm hover:bg-primary text-primary-foreground p-3 rounded-lg transition-all shadow-lg"
               >
                 <ChevronLeft className="h-6 w-6" />
               </button>
               <button
                 onClick={nextImage}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-[#E8590C] hover:bg-[#D14F0A] text-white p-3 rounded"
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-primary/80 backdrop-blur-sm hover:bg-primary text-primary-foreground p-3 rounded-lg transition-all shadow-lg"
               >
                 <ChevronRight className="h-6 w-6" />
               </button>
 
               {/* Property Info Overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h1 className="text-4xl font-bold text-white mb-2">Palm Grove Villas</h1>
-                <p className="text-xl text-white">125 Cremona Drive</p>
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-primary/90 to-transparent p-8">
+                <h1 className="text-4xl font-bold text-primary-foreground mb-2">Palm Grove Villas</h1>
+                <p className="text-xl text-primary-foreground/90">125 Cremona Drive</p>
               </div>
 
               {/* Action Buttons */}
               <div className="absolute top-4 right-4 flex gap-2">
-                <Button className="bg-white/90 text-[#E8590C] hover:bg-white border-[#E8590C]">
+                <Button className="bg-primary-foreground/95 backdrop-blur-sm text-primary hover:bg-primary-foreground shadow-lg">
                   Virtual Tour
                 </Button>
-                <Button className="bg-white/90 text-[#E8590C] hover:bg-white border-[#E8590C]">
-                  0 Images
+                <Button className="bg-primary-foreground/95 backdrop-blur-sm text-primary hover:bg-primary-foreground shadow-lg">
+                  {propertyImages.length} Images
                 </Button>
-                <Button className="bg-white/90 text-[#E8590C] hover:bg-white border-[#E8590C]">
+                <Button className="bg-primary-foreground/95 backdrop-blur-sm text-primary hover:bg-primary-foreground shadow-lg">
                   Brochure
                 </Button>
               </div>
             </div>
 
             {/* Metrics Bar */}
-            <div className="bg-white mx-6 -mt-16 relative z-10 rounded-lg shadow-lg p-6 mb-6">
-              <div className="grid grid-cols-4 gap-6">
+            <div className="bg-card mx-6 -mt-16 relative z-10 rounded-xl shadow-xl border border-border p-6 mb-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-1 h-12 bg-[#E8590C] rounded"></div>
+                  <div className="w-1 h-14 bg-primary rounded-full"></div>
                   <div>
-                    <p className="text-sm text-gray-500">Occupancy</p>
-                    <p className="text-xl font-bold">74% | 7,000 sf</p>
+                    <p className="text-sm text-muted-foreground mb-1">Occupancy</p>
+                    <p className="text-xl font-bold text-card-foreground">74% | 7,000 sf</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-1 h-12 bg-[#E8590C] rounded"></div>
+                  <div className="w-1 h-14 bg-primary rounded-full"></div>
                   <div>
-                    <p className="text-sm text-gray-500">Vacant</p>
-                    <p className="text-xl font-bold">26% | 2,400 sf</p>
+                    <p className="text-sm text-muted-foreground mb-1">Vacant</p>
+                    <p className="text-xl font-bold text-card-foreground">26% | 2,400 sf</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-1 h-12 bg-[#E8590C] rounded"></div>
+                  <div className="w-1 h-14 bg-primary rounded-full"></div>
                   <div>
-                    <p className="text-sm text-gray-500">Total Income</p>
-                    <p className="text-xl font-bold">$ 2,956,000</p>
+                    <p className="text-sm text-muted-foreground mb-1">Total Income</p>
+                    <p className="text-xl font-bold text-card-foreground">$ 2,956,000</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-1 h-12 bg-[#E8590C] rounded"></div>
+                  <div className="w-1 h-14 bg-primary rounded-full"></div>
                   <div>
-                    <p className="text-sm text-gray-500">Average Rent per sf</p>
-                    <p className="text-xl font-bold">$ 9</p>
+                    <p className="text-sm text-muted-foreground mb-1">Average Rent per sf</p>
+                    <p className="text-xl font-bold text-card-foreground">$ 9</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Company Cards */}
-            <div className="mx-6 mb-6 grid grid-cols-3 gap-4">
-              <div className="bg-white rounded-lg p-4 flex items-center gap-3 shadow">
-                <div className="bg-gray-300 rounded-full p-3">
-                  <User className="h-6 w-6 text-gray-600" />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">Ownership Signer</p>
-                  <p className="font-semibold">GreenLeaf Developers LLP</p>
-                </div>
-              </div>
-              <div className="bg-white rounded-lg p-4 flex items-center gap-3 shadow">
-                <div className="bg-gray-300 rounded-full p-3">
-                  <User className="h-6 w-6 text-gray-600" />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">Management</p>
-                  <p className="font-semibold">Crest Management Services Pvt Ltd</p>
-                </div>
-              </div>
-              <div className="bg-white rounded-lg p-4 flex items-center gap-3 shadow">
-                <div className="bg-gray-300 rounded-full p-3">
-                  <User className="h-6 w-6 text-gray-600" />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">Broker</p>
-                  <p className="font-semibold">Summit Realty Partners</p>
-                </div>
-              </div>
+            <div className="mx-6 mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card className="border-border hover:shadow-lg transition-shadow">
+                <CardContent className="p-4 flex items-center gap-3">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <User className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Ownership Signer</p>
+                    <p className="font-semibold text-card-foreground">GreenLeaf Developers LLP</p>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="border-border hover:shadow-lg transition-shadow">
+                <CardContent className="p-4 flex items-center gap-3">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <User className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Management</p>
+                    <p className="font-semibold text-card-foreground">Crest Management Services Pvt Ltd</p>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="border-border hover:shadow-lg transition-shadow">
+                <CardContent className="p-4 flex items-center gap-3">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <User className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Broker</p>
+                    <p className="font-semibold text-card-foreground">Summit Realty Partners</p>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
             {/* Main Content Area */}
-            <div className="mx-6 mb-6 flex gap-4">
+            <div className="mx-6 mb-6 flex flex-col lg:flex-row gap-6">
               {/* Left Sidebar with Tabs */}
-              <div className="w-64 bg-white rounded-lg shadow flex-shrink-0">
-                <div className="p-4 space-y-1">
+              <Card className="lg:w-64 border-border flex-shrink-0">
+                <CardContent className="p-4 space-y-1">
                   {tabs.map((tab) => {
                     const Icon = tab.icon;
                     return (
                       <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${
                           activeTab === tab.id
-                            ? "bg-[#E8590C] text-white"
-                            : "text-gray-700 hover:bg-gray-100"
+                            ? "bg-primary text-primary-foreground shadow-md"
+                            : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                         }`}
                       >
                         <Icon className="h-5 w-5" />
@@ -432,11 +508,11 @@ const PropertyView = () => {
                       </button>
                     );
                   })}
-                </div>
-              </div>
+                </CardContent>
+              </Card>
 
               {/* Content Area */}
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 {renderContent()}
               </div>
             </div>
@@ -444,8 +520,8 @@ const PropertyView = () => {
         </div>
 
         {/* Footer */}
-        <footer className="bg-white border-t px-6 py-4 text-center text-sm text-gray-600">
-          Copyright © 2025 <span className="text-blue-600">Springbord</span>
+        <footer className="bg-card border-t border-border px-6 py-4 text-center text-sm text-muted-foreground">
+          Copyright © 2025 <span className="text-primary font-semibold">Springbord</span>
         </footer>
       </div>
     </div>
