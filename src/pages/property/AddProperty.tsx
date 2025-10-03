@@ -1,229 +1,960 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Save, ArrowLeft } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowLeft, FileText, Layers, FileCheck, TrendingUp, HandshakeIcon, Globe, Image, BookOpen, Plus, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const AddProperty = () => {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("info");
   const [formData, setFormData] = useState({
-    name: "",
-    type: "",
+    // Property Information
+    propertyName: "",
+    propId: "",
+    propType: "",
+    portfolioName: "",
     address: "",
-    city: "",
     state: "",
+    city: "",
     zipCode: "",
+    buildingClass: "",
+    builtYear: "",
+    renovatedYear: "",
     description: "",
     totalFloors: "",
-    totalSuites: "",
-    yearBuilt: "",
-    squareFootage: "",
+    parkingLevels: "",
+    basementLevels: "",
+    neighbourhood: "",
+    location: "",
+    landmarks: [{ name: "Landmark 1", quantity: "" }],
+    elevators: "",
+    elevatorCapacity: "",
+    highlights: "",
+    hvac: "Yes",
+    
+    // Space Metrics
+    totalBuildingArea: "",
+    totalRentableSF: "",
+    unitsSold: "",
+    parkingRatio: "",
+    
+    // Lease Data
+    avgSalePrice: "",
+    ner: "",
+    noi: "",
+    
+    // Market Insights
+    competitorName: "",
+    marketRate: "",
+    rentPerSF: "",
+    vacancyRate: "",
+    
+    // Ownership Info
+    ownerCompany: "",
+    ownerContactName: "",
+    ownerEmail: "",
+    ownerCountryCode: "+91",
+    ownerMobile: "",
+    managementCompany: "",
+    managementContactName: "",
+    managementEmail: "",
+    managementCountryCode: "+91",
+    managementMobile: "",
+    brokerageCompany: "",
+    brokerageContactName: "",
+    brokerageEmail: "",
+    brokerageCountryCode: "+91",
+    brokerageMobile: "",
+    
+    // Digital Presence
+    website: "",
+    
+    // Files
+    images: null as File | null,
+    brochure: null as File | null,
+  });
+
+  const [ownershipTypes, setOwnershipTypes] = useState({
+    ownershipCompany: true,
+    managementCompany: false,
+    brokerageCompany: false,
   });
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const handleLandmarkChange = (index: number, field: "name" | "quantity", value: string) => {
+    const newLandmarks = [...formData.landmarks];
+    newLandmarks[index] = { ...newLandmarks[index], [field]: value };
+    setFormData(prev => ({ ...prev, landmarks: newLandmarks }));
+  };
+
+  const addLandmark = () => {
+    setFormData(prev => ({
+      ...prev,
+      landmarks: [...prev.landmarks, { name: `Landmark ${prev.landmarks.length + 1}`, quantity: "" }],
+    }));
+  };
+
+  const removeLandmark = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      landmarks: prev.landmarks.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleFileChange = (field: "images" | "brochure", file: File | null) => {
+    setFormData(prev => ({ ...prev, [field]: file }));
+  };
+
+  const handleNext = () => {
+    const tabs = ["info", "space", "lease", "market", "ownership", "digital", "images", "brochure"];
+    const currentIndex = tabs.indexOf(activeTab);
+    if (currentIndex < tabs.length - 1) {
+      setActiveTab(tabs[currentIndex + 1]);
+    }
+  };
+
+  const handlePrevious = () => {
+    const tabs = ["info", "space", "lease", "market", "ownership", "digital", "images", "brochure"];
+    const currentIndex = tabs.indexOf(activeTab);
+    if (currentIndex > 0) {
+      setActiveTab(tabs[currentIndex - 1]);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
     console.log("Property data:", formData);
-    // Navigate back to property listing after submission
     navigate("/properties/listing");
   };
 
+  const isLastTab = activeTab === "brochure";
+  const isFirstTab = activeTab === "info";
+
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center gap-4">
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate("/properties/listing")}
-          className="flex items-center gap-2"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Properties
-        </Button>
-        <div>
-          <h1 className="text-3xl font-bold">Add New Property</h1>
-          <p className="text-muted-foreground">Create a new property in your portfolio</p>
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="bg-primary px-6 py-4 text-primary-foreground">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate("/properties/listing")}
+              className="flex items-center gap-2 text-primary-foreground hover:bg-primary/90"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+            <h1 className="text-2xl font-bold">Add Property</h1>
+          </div>
+        </div>
+        <div className="text-sm mt-2 text-primary-foreground/80">
+          Property Management &gt; Property &gt; Add Property
         </div>
       </div>
 
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Basic Information</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Property Name</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
-                  placeholder="Enter property name"
-                  required
-                />
+      <div className="p-6">
+        <Card>
+          <CardContent className="p-6">
+            <form onSubmit={handleSubmit}>
+              <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent gap-8">
+                  <TabsTrigger 
+                    value="info" 
+                    className="flex flex-col items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none pb-4"
+                  >
+                    <FileText className="w-5 h-5" />
+                    <span className="text-xs">Property<br/>Information</span>
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="space" 
+                    className="flex flex-col items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none pb-4"
+                  >
+                    <Layers className="w-5 h-5" />
+                    <span className="text-xs">Space Metrics</span>
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="lease" 
+                    className="flex flex-col items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none pb-4"
+                  >
+                    <FileCheck className="w-5 h-5" />
+                    <span className="text-xs">Lease Data</span>
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="market" 
+                    className="flex flex-col items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none pb-4"
+                  >
+                    <TrendingUp className="w-5 h-5" />
+                    <span className="text-xs">Market Insights</span>
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="ownership" 
+                    className="flex flex-col items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none pb-4"
+                  >
+                    <HandshakeIcon className="w-5 h-5" />
+                    <span className="text-xs">Ownership Info</span>
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="digital" 
+                    className="flex flex-col items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none pb-4"
+                  >
+                    <Globe className="w-5 h-5" />
+                    <span className="text-xs">Digital<br/>Presence</span>
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="images" 
+                    className="flex flex-col items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none pb-4"
+                  >
+                    <Image className="w-5 h-5" />
+                    <span className="text-xs">Images</span>
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="brochure" 
+                    className="flex flex-col items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none pb-4"
+                  >
+                    <BookOpen className="w-5 h-5" />
+                    <span className="text-xs">Brochure</span>
+                  </TabsTrigger>
+                </TabsList>
+
+                {/* Property Information Tab */}
+                <TabsContent value="info" className="space-y-6 mt-6">
+                  <div className="grid grid-cols-3 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="propertyName">Property Name <span className="text-destructive">*</span></Label>
+                      <Input
+                        id="propertyName"
+                        value={formData.propertyName}
+                        onChange={(e) => handleInputChange("propertyName", e.target.value)}
+                        placeholder="Grandview Estate"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="propId">Prop ID <span className="text-destructive">*</span></Label>
+                      <Input
+                        id="propId"
+                        value={formData.propId}
+                        onChange={(e) => handleInputChange("propId", e.target.value)}
+                        placeholder="GE01"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="propType">Prop Type <span className="text-destructive">*</span></Label>
+                      <Select value={formData.propType} onValueChange={(value) => handleInputChange("propType", value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Student Housing" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Student Housing">Student Housing</SelectItem>
+                          <SelectItem value="Commercial">Commercial</SelectItem>
+                          <SelectItem value="Residential">Residential</SelectItem>
+                          <SelectItem value="Mixed Use">Mixed Use</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="portfolioName">Portfolio Name</Label>
+                      <Input
+                        id="portfolioName"
+                        value={formData.portfolioName}
+                        onChange={(e) => handleInputChange("portfolioName", e.target.value)}
+                        placeholder="Gandview"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="address">Address <span className="text-destructive">*</span></Label>
+                      <Input
+                        id="address"
+                        value={formData.address}
+                        onChange={(e) => handleInputChange("address", e.target.value)}
+                        placeholder="125 Cremona Drive"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="state">State <span className="text-destructive">*</span></Label>
+                      <Select value={formData.state} onValueChange={(value) => handleInputChange("state", value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Florida" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Florida">Florida</SelectItem>
+                          <SelectItem value="California">California</SelectItem>
+                          <SelectItem value="New York">New York</SelectItem>
+                          <SelectItem value="Texas">Texas</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="city">City <span className="text-destructive">*</span></Label>
+                      <Select value={formData.city} onValueChange={(value) => handleInputChange("city", value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Astor" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Astor">Astor</SelectItem>
+                          <SelectItem value="Miami">Miami</SelectItem>
+                          <SelectItem value="Tampa">Tampa</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="zipCode">Zip Code <span className="text-destructive">*</span></Label>
+                      <Input
+                        id="zipCode"
+                        value={formData.zipCode}
+                        onChange={(e) => handleInputChange("zipCode", e.target.value)}
+                        placeholder="32102"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="buildingClass">Building Class <span className="text-destructive">*</span></Label>
+                      <Select value={formData.buildingClass} onValueChange={(value) => handleInputChange("buildingClass", value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="A" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="A">A</SelectItem>
+                          <SelectItem value="B">B</SelectItem>
+                          <SelectItem value="C">C</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="builtYear">Built Year</Label>
+                      <Input
+                        id="builtYear"
+                        type="number"
+                        value={formData.builtYear}
+                        onChange={(e) => handleInputChange("builtYear", e.target.value)}
+                        placeholder="2018"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="renovatedYear">Renovated year</Label>
+                      <Input
+                        id="renovatedYear"
+                        type="number"
+                        value={formData.renovatedYear}
+                        onChange={(e) => handleInputChange("renovatedYear", e.target.value)}
+                        placeholder="2022"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="description">Description</Label>
+                      <Textarea
+                        id="description"
+                        value={formData.description}
+                        onChange={(e) => handleInputChange("description", e.target.value)}
+                        placeholder="Modern tech park in Goleta"
+                        rows={1}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="totalFloors">Total Floors <span className="text-destructive">*</span></Label>
+                      <Input
+                        id="totalFloors"
+                        type="number"
+                        value={formData.totalFloors}
+                        onChange={(e) => handleInputChange("totalFloors", e.target.value)}
+                        placeholder="5"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="parkingLevels">No of Parking Levels <span className="text-destructive">*</span></Label>
+                      <Input
+                        id="parkingLevels"
+                        type="number"
+                        value={formData.parkingLevels}
+                        onChange={(e) => handleInputChange("parkingLevels", e.target.value)}
+                        placeholder="3"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="basementLevels">No of Basement Levels <span className="text-destructive">*</span></Label>
+                      <Input
+                        id="basementLevels"
+                        type="number"
+                        value={formData.basementLevels}
+                        onChange={(e) => handleInputChange("basementLevels", e.target.value)}
+                        placeholder="2"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="neighbourhood">Neighbourhood</Label>
+                      <Select value={formData.neighbourhood} onValueChange={(value) => handleInputChange("neighbourhood", value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select neighbourhood type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Urban">Urban</SelectItem>
+                          <SelectItem value="Suburban">Suburban</SelectItem>
+                          <SelectItem value="Rural">Rural</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2 flex items-end">
+                      <div className="flex-1">
+                        <Label htmlFor="location">Location</Label>
+                        <div className="flex gap-2">
+                          <Input
+                            id="location"
+                            value={formData.location}
+                            onChange={(e) => handleInputChange("location", e.target.value)}
+                            placeholder="Select on Map"
+                            readOnly
+                          />
+                          <Button type="button" size="icon" variant="default">
+                            <span className="text-lg">📍</span>
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Landmarks Nearby</Label>
+                      <div className="space-y-2">
+                        {formData.landmarks.map((landmark, index) => (
+                          <div key={index} className="flex gap-2">
+                            <Select value={landmark.name} onValueChange={(value) => handleLandmarkChange(index, "name", value)}>
+                              <SelectTrigger className="flex-1">
+                                <SelectValue placeholder="Landmark" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Landmark 1">Landmark 1</SelectItem>
+                                <SelectItem value="Landmark 2">Landmark 2</SelectItem>
+                                <SelectItem value="Landmark 3">Landmark 3</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <Input
+                              type="number"
+                              value={landmark.quantity}
+                              onChange={(e) => handleLandmarkChange(index, "quantity", e.target.value)}
+                              placeholder="3"
+                              className="w-20"
+                            />
+                            {formData.landmarks.length > 1 && (
+                              <Button 
+                                type="button" 
+                                size="icon" 
+                                variant="ghost"
+                                onClick={() => removeLandmark(index)}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            )}
+                            {index === formData.landmarks.length - 1 && (
+                              <Button 
+                                type="button" 
+                                size="icon" 
+                                variant="ghost"
+                                onClick={addLandmark}
+                              >
+                                <Plus className="w-4 h-4" />
+                              </Button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="elevators">Elevators</Label>
+                      <Input
+                        id="elevators"
+                        type="number"
+                        value={formData.elevators}
+                        onChange={(e) => handleInputChange("elevators", e.target.value)}
+                        placeholder="2"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="elevatorCapacity">Elevator Capacity</Label>
+                      <Input
+                        id="elevatorCapacity"
+                        type="number"
+                        value={formData.elevatorCapacity}
+                        onChange={(e) => handleInputChange("elevatorCapacity", e.target.value)}
+                        placeholder="15"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="highlights">Highlights</Label>
+                    <Textarea
+                      id="highlights"
+                      value={formData.highlights}
+                      onChange={(e) => handleInputChange("highlights", e.target.value)}
+                      placeholder="Write Something..."
+                      rows={4}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>HVAC</Label>
+                    <div className="flex gap-4">
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="hvac"
+                          value="Yes"
+                          checked={formData.hvac === "Yes"}
+                          onChange={(e) => handleInputChange("hvac", e.target.value)}
+                          className="w-4 h-4"
+                        />
+                        <span>Yes</span>
+                      </label>
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="hvac"
+                          value="No"
+                          checked={formData.hvac === "No"}
+                          onChange={(e) => handleInputChange("hvac", e.target.value)}
+                          className="w-4 h-4"
+                        />
+                        <span>No</span>
+                      </label>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Space Metrics Tab */}
+                <TabsContent value="space" className="space-y-6 mt-6">
+                  <div className="grid grid-cols-3 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="totalBuildingArea">Total Building Area (SF)</Label>
+                      <Input
+                        id="totalBuildingArea"
+                        type="number"
+                        value={formData.totalBuildingArea}
+                        onChange={(e) => handleInputChange("totalBuildingArea", e.target.value)}
+                        placeholder="6000"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="totalRentableSF">Total Rentable SF</Label>
+                      <Input
+                        id="totalRentableSF"
+                        type="number"
+                        value={formData.totalRentableSF}
+                        onChange={(e) => handleInputChange("totalRentableSF", e.target.value)}
+                        placeholder="1000"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="unitsSold">Units Sold</Label>
+                      <Input
+                        id="unitsSold"
+                        type="number"
+                        value={formData.unitsSold}
+                        onChange={(e) => handleInputChange("unitsSold", e.target.value)}
+                        placeholder="4"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="parkingRatio">Parking Ratio</Label>
+                      <Input
+                        id="parkingRatio"
+                        type="number"
+                        value={formData.parkingRatio}
+                        onChange={(e) => handleInputChange("parkingRatio", e.target.value)}
+                        placeholder="5"
+                      />
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Lease Data Tab */}
+                <TabsContent value="lease" className="space-y-6 mt-6">
+                  <div className="grid grid-cols-3 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="avgSalePrice">Avg Sale Price (SF) <span className="text-destructive">*</span></Label>
+                      <Input
+                        id="avgSalePrice"
+                        type="number"
+                        value={formData.avgSalePrice}
+                        onChange={(e) => handleInputChange("avgSalePrice", e.target.value)}
+                        placeholder="10"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="ner">NER (SF) <span className="text-destructive">*</span></Label>
+                      <Input
+                        id="ner"
+                        type="number"
+                        value={formData.ner}
+                        onChange={(e) => handleInputChange("ner", e.target.value)}
+                        placeholder="3000"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="noi">NOI <span className="text-destructive">*</span></Label>
+                      <Input
+                        id="noi"
+                        type="number"
+                        value={formData.noi}
+                        onChange={(e) => handleInputChange("noi", e.target.value)}
+                        placeholder="42000"
+                      />
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Market Insights Tab */}
+                <TabsContent value="market" className="space-y-6 mt-6">
+                  <div className="grid grid-cols-4 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="competitorName">Competitor Property Name</Label>
+                      <Input
+                        id="competitorName"
+                        value={formData.competitorName}
+                        onChange={(e) => handleInputChange("competitorName", e.target.value)}
+                        placeholder="Cedar Heights"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="marketRate">Market Rate per SF</Label>
+                      <Input
+                        id="marketRate"
+                        type="number"
+                        value={formData.marketRate}
+                        onChange={(e) => handleInputChange("marketRate", e.target.value)}
+                        placeholder="16"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="rentPerSF">Rent per SF</Label>
+                      <Input
+                        id="rentPerSF"
+                        type="number"
+                        value={formData.rentPerSF}
+                        onChange={(e) => handleInputChange("rentPerSF", e.target.value)}
+                        placeholder="20"
+                      />
+                    </div>
+                    <div className="space-y-2 flex items-end">
+                      <div className="flex-1 flex gap-2">
+                        <Input
+                          id="vacancyRate"
+                          type="number"
+                          value={formData.vacancyRate}
+                          onChange={(e) => handleInputChange("vacancyRate", e.target.value)}
+                          placeholder="40"
+                        />
+                        <Button type="button" size="icon" variant="destructive">
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Ownership Info Tab */}
+                <TabsContent value="ownership" className="space-y-6 mt-6">
+                  <div className="flex gap-6 mb-4">
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={ownershipTypes.ownershipCompany}
+                        onChange={(e) => setOwnershipTypes(prev => ({ ...prev, ownershipCompany: e.target.checked }))}
+                        className="w-4 h-4"
+                      />
+                      <span>Ownership Company</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={ownershipTypes.managementCompany}
+                        onChange={(e) => setOwnershipTypes(prev => ({ ...prev, managementCompany: e.target.checked }))}
+                        className="w-4 h-4"
+                      />
+                      <span>Management Company</span>
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={ownershipTypes.brokerageCompany}
+                        onChange={(e) => setOwnershipTypes(prev => ({ ...prev, brokerageCompany: e.target.checked }))}
+                        className="w-4 h-4"
+                      />
+                      <span>Brokerage Company</span>
+                    </label>
+                  </div>
+
+                  {ownershipTypes.ownershipCompany && (
+                    <div className="space-y-4 border-t pt-4">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-semibold">Owner</h3>
+                        <Button type="button" size="icon" variant="ghost">
+                          <Plus className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <div className="space-y-2">
+                        <Input
+                          value={formData.ownerCompany}
+                          onChange={(e) => handleInputChange("ownerCompany", e.target.value)}
+                          placeholder="GreenLeaf Developers LLP"
+                        />
+                      </div>
+                      <div className="grid grid-cols-4 gap-4">
+                        <div className="space-y-2">
+                          <Label>Contact Person Name</Label>
+                          <Input
+                            value={formData.ownerContactName}
+                            onChange={(e) => handleInputChange("ownerContactName", e.target.value)}
+                            placeholder="John Mathews"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Email Id</Label>
+                          <Input
+                            type="email"
+                            value={formData.ownerEmail}
+                            onChange={(e) => handleInputChange("ownerEmail", e.target.value)}
+                            placeholder="john.mathews@orionrealty.com"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Country Code</Label>
+                          <Input
+                            value={formData.ownerCountryCode}
+                            onChange={(e) => handleInputChange("ownerCountryCode", e.target.value)}
+                            placeholder="+91"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Mobile</Label>
+                          <Input
+                            value={formData.ownerMobile}
+                            onChange={(e) => handleInputChange("ownerMobile", e.target.value)}
+                            placeholder="8967895678"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {ownershipTypes.managementCompany && (
+                    <div className="space-y-4 border-t pt-4">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-semibold">Management company</h3>
+                        <Button type="button" size="icon" variant="ghost">
+                          <Plus className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <div className="space-y-2">
+                        <Input
+                          value={formData.managementCompany}
+                          onChange={(e) => handleInputChange("managementCompany", e.target.value)}
+                          placeholder="Crest Management Services Pvt Ltd"
+                        />
+                      </div>
+                      <div className="grid grid-cols-4 gap-4">
+                        <div className="space-y-2">
+                          <Label>Contact Person Name</Label>
+                          <Input
+                            value={formData.managementContactName}
+                            onChange={(e) => handleInputChange("managementContactName", e.target.value)}
+                            placeholder="David Fernandes"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Email Id</Label>
+                          <Input
+                            type="email"
+                            value={formData.managementEmail}
+                            onChange={(e) => handleInputChange("managementEmail", e.target.value)}
+                            placeholder="david.fernandes@vertexpm.com"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Country Code</Label>
+                          <Input
+                            value={formData.managementCountryCode}
+                            onChange={(e) => handleInputChange("managementCountryCode", e.target.value)}
+                            placeholder="+91"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Mobile</Label>
+                          <Input
+                            value={formData.managementMobile}
+                            onChange={(e) => handleInputChange("managementMobile", e.target.value)}
+                            placeholder="9849367490"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {ownershipTypes.brokerageCompany && (
+                    <div className="space-y-4 border-t pt-4">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-semibold">Brokerage Company</h3>
+                        <Button type="button" size="icon" variant="ghost">
+                          <Plus className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <div className="space-y-2">
+                        <Input
+                          value={formData.brokerageCompany}
+                          onChange={(e) => handleInputChange("brokerageCompany", e.target.value)}
+                          placeholder="Summit Realty Partners"
+                        />
+                      </div>
+                      <div className="grid grid-cols-4 gap-4">
+                        <div className="space-y-2">
+                          <Label>Contact Person Name</Label>
+                          <Input
+                            value={formData.brokerageContactName}
+                            onChange={(e) => handleInputChange("brokerageContactName", e.target.value)}
+                            placeholder="Karthik Desai"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Email Id</Label>
+                          <Input
+                            type="email"
+                            value={formData.brokerageEmail}
+                            onChange={(e) => handleInputChange("brokerageEmail", e.target.value)}
+                            placeholder="karthik.desai@crestviewbrokers.com"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Country Code</Label>
+                          <Input
+                            value={formData.brokerageCountryCode}
+                            onChange={(e) => handleInputChange("brokerageCountryCode", e.target.value)}
+                            placeholder="+91"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Mobile</Label>
+                          <Input
+                            value={formData.brokerageMobile}
+                            onChange={(e) => handleInputChange("brokerageMobile", e.target.value)}
+                            placeholder="7890697895"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </TabsContent>
+
+                {/* Digital Presence Tab */}
+                <TabsContent value="digital" className="space-y-6 mt-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="website">Website <span className="text-destructive">*</span></Label>
+                    <Input
+                      id="website"
+                      type="url"
+                      value={formData.website}
+                      onChange={(e) => handleInputChange("website", e.target.value)}
+                      placeholder="www.metrolineproperties.com"
+                    />
+                  </div>
+                </TabsContent>
+
+                {/* Images Tab */}
+                <TabsContent value="images" className="space-y-6 mt-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="images">Images</Label>
+                    <div className="border-2 border-dashed rounded-lg p-8 text-center">
+                      <input
+                        id="images"
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={(e) => handleFileChange("images", e.target.files?.[0] || null)}
+                        className="hidden"
+                      />
+                      <label htmlFor="images" className="cursor-pointer">
+                        <div className="flex flex-col items-center gap-2">
+                          <Plus className="w-8 h-8 text-muted-foreground" />
+                          <span className="text-sm text-muted-foreground">
+                            {formData.images ? formData.images.name : "Choose File - No file chosen"}
+                          </span>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Brochure Tab */}
+                <TabsContent value="brochure" className="space-y-6 mt-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="brochure">Brochure</Label>
+                    <div className="border-2 border-dashed rounded-lg p-8 text-center">
+                      <input
+                        id="brochure"
+                        type="file"
+                        accept=".pdf,.doc,.docx"
+                        onChange={(e) => handleFileChange("brochure", e.target.files?.[0] || null)}
+                        className="hidden"
+                      />
+                      <label htmlFor="brochure" className="cursor-pointer">
+                        <div className="flex flex-col items-center gap-2">
+                          <Plus className="w-8 h-8 text-muted-foreground" />
+                          <span className="text-sm text-muted-foreground">
+                            {formData.brochure ? formData.brochure.name : "Choose File - No file chosen"}
+                          </span>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
+
+              {/* Action Buttons */}
+              <div className="flex justify-end gap-4 mt-6 pt-6 border-t">
+                {!isFirstTab && (
+                  <Button type="button" variant="outline" onClick={handlePrevious}>
+                    Previous
+                  </Button>
+                )}
+                {!isLastTab && (
+                  <Button type="button" onClick={handleNext}>
+                    Next
+                  </Button>
+                )}
+                <Button type="submit" variant="default">
+                  {isLastTab ? "Save Property" : "Save"}
+                </Button>
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="type">Property Type</Label>
-                <Select onValueChange={(value) => handleInputChange("type", value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select property type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="residential">Residential</SelectItem>
-                    <SelectItem value="commercial">Commercial</SelectItem>
-                    <SelectItem value="mixed-use">Mixed Use</SelectItem>
-                    <SelectItem value="industrial">Industrial</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => handleInputChange("description", e.target.value)}
-                  placeholder="Enter property description"
-                  rows={4}
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Location Details</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="address">Street Address</Label>
-                <Input
-                  id="address"
-                  value={formData.address}
-                  onChange={(e) => handleInputChange("address", e.target.value)}
-                  placeholder="Enter street address"
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="city">City</Label>
-                  <Input
-                    id="city"
-                    value={formData.city}
-                    onChange={(e) => handleInputChange("city", e.target.value)}
-                    placeholder="Enter city"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="state">State</Label>
-                  <Input
-                    id="state"
-                    value={formData.state}
-                    onChange={(e) => handleInputChange("state", e.target.value)}
-                    placeholder="Enter state"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="zipCode">ZIP Code</Label>
-                <Input
-                  id="zipCode"
-                  value={formData.zipCode}
-                  onChange={(e) => handleInputChange("zipCode", e.target.value)}
-                  placeholder="Enter ZIP code"
-                  required
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="lg:col-span-2">
-            <CardHeader>
-              <CardTitle>Property Specifications</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="totalFloors">Total Floors</Label>
-                  <Input
-                    id="totalFloors"
-                    type="number"
-                    value={formData.totalFloors}
-                    onChange={(e) => handleInputChange("totalFloors", e.target.value)}
-                    placeholder="0"
-                    min="1"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="totalSuites">Total Suites</Label>
-                  <Input
-                    id="totalSuites"
-                    type="number"
-                    value={formData.totalSuites}
-                    onChange={(e) => handleInputChange("totalSuites", e.target.value)}
-                    placeholder="0"
-                    min="1"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="yearBuilt">Year Built</Label>
-                  <Input
-                    id="yearBuilt"
-                    type="number"
-                    value={formData.yearBuilt}
-                    onChange={(e) => handleInputChange("yearBuilt", e.target.value)}
-                    placeholder="2024"
-                    min="1800"
-                    max="2030"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="squareFootage">Square Footage</Label>
-                  <Input
-                    id="squareFootage"
-                    type="number"
-                    value={formData.squareFootage}
-                    onChange={(e) => handleInputChange("squareFootage", e.target.value)}
-                    placeholder="0"
-                    min="1"
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="flex justify-end gap-4 mt-6">
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={() => navigate("/properties/listing")}
-          >
-            Cancel
-          </Button>
-          <Button type="submit" className="flex items-center gap-2">
-            <Save className="w-4 h-4" />
-            Save Property
-          </Button>
-        </div>
-      </form>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
