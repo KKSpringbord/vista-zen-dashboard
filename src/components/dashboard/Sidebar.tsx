@@ -52,9 +52,10 @@ const propertyManagement = {
 
 interface SidebarProps {
   collapsed?: boolean;
+  onToggle?: () => void;
 }
 
-export function Sidebar({ collapsed = false }: SidebarProps) {
+export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
   const [isPropertyOpen, setIsPropertyOpen] = useState(false);
   const [isPropertySubOpen, setIsPropertySubOpen] = useState(false);
 
