@@ -13,17 +13,24 @@ import {
   MapPin,
   User,
   Mail,
-  Phone
+  Phone,
+  ChevronDown,
+  ChevronUp,
+  X
 } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 const PropertyView = () => {
   const navigate = useNavigate();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("overview");
+  const [expandedFloors, setExpandedFloors] = useState<number[]>([]);
+  const [selectedSuite, setSelectedSuite] = useState<any>(null);
+  const [isSuiteSheetOpen, setIsSuiteSheetOpen] = useState(false);
 
   // Mock data
   const propertyImages = [
@@ -50,16 +57,36 @@ const PropertyView = () => {
   ];
 
   const floors = [
-    { floor: 1, suites: 5 },
-    { floor: 2, suites: 5 },
-    { floor: 3, suites: 5 },
-    { floor: 4, suites: 3 },
-    { floor: 5, suites: 6 },
-    { floor: 6, suites: 5 },
-    { floor: 7, suites: 5 },
-    { floor: 8, suites: 2 },
-    { floor: 9, suites: 5 },
-    { floor: 10, suites: 6 }
+    { 
+      floor: 1, 
+      suites: [
+        { id: 101, name: "Suite 101", tenantName: "Apex Logistics Pvt Ltd", ownershipSigner: "Apex Logistics Holdings Pvt Ltd", occupiedDate: "02-01-2024", vacatingDate: "01-01-2026", agreementPeriod: "1 years 11 Month", totalSf: 200 },
+        { id: 102, name: "Suite 102", tenantName: "Tech Solutions Inc", ownershipSigner: "Tech Holdings Ltd", occupiedDate: "03-15-2024", vacatingDate: "03-15-2026", agreementPeriod: "2 years", totalSf: 250 },
+        { id: 103, name: "Suite 103", tenantName: "Vacant", ownershipSigner: "-", occupiedDate: "-", vacatingDate: "-", agreementPeriod: "-", totalSf: 200 },
+        { id: 104, name: "Suite 104", tenantName: "Global Exports Ltd", ownershipSigner: "Global Group", occupiedDate: "01-10-2024", vacatingDate: "01-10-2025", agreementPeriod: "1 year", totalSf: 300 },
+        { id: 105, name: "Suite 105", tenantName: "Creative Studios", ownershipSigner: "Creative Holdings", occupiedDate: "06-01-2024", vacatingDate: "06-01-2027", agreementPeriod: "3 years", totalSf: 180 }
+      ]
+    },
+    { 
+      floor: 2, 
+      suites: [
+        { id: 201, name: "Suite 201", tenantName: "Manufacturing Co", ownershipSigner: "Manufacturing Holdings", occupiedDate: "04-20-2024", vacatingDate: "04-20-2025", agreementPeriod: "1 year", totalSf: 220 },
+        { id: 202, name: "Suite 202", tenantName: "Retail Partners", ownershipSigner: "Retail Group Ltd", occupiedDate: "05-10-2024", vacatingDate: "05-10-2026", agreementPeriod: "2 years", totalSf: 200 },
+        { id: 203, name: "Suite 203", tenantName: "Vacant", ownershipSigner: "-", occupiedDate: "-", vacatingDate: "-", agreementPeriod: "-", totalSf: 200 },
+        { id: 204, name: "Suite 204", tenantName: "Finance Corp", ownershipSigner: "Finance Holdings", occupiedDate: "02-15-2024", vacatingDate: "02-15-2027", agreementPeriod: "3 years", totalSf: 280 },
+        { id: 205, name: "Suite 205", tenantName: "Media Group", ownershipSigner: "Media Enterprises", occupiedDate: "07-01-2024", vacatingDate: "07-01-2025", agreementPeriod: "1 year", totalSf: 190 }
+      ]
+    },
+    { 
+      floor: 3, 
+      suites: [
+        { id: 301, name: "Suite 301", tenantName: "Healthcare Inc", ownershipSigner: "Healthcare Group", occupiedDate: "03-01-2024", vacatingDate: "03-01-2026", agreementPeriod: "2 years", totalSf: 240 },
+        { id: 302, name: "Suite 302", tenantName: "Legal Services", ownershipSigner: "Legal Holdings", occupiedDate: "04-15-2024", vacatingDate: "04-15-2025", agreementPeriod: "1 year", totalSf: 200 },
+        { id: 303, name: "Suite 303", tenantName: "Vacant", ownershipSigner: "-", occupiedDate: "-", vacatingDate: "-", agreementPeriod: "-", totalSf: 200 },
+        { id: 304, name: "Suite 304", tenantName: "Consulting Firm", ownershipSigner: "Consulting Group", occupiedDate: "01-20-2024", vacatingDate: "01-20-2027", agreementPeriod: "3 years", totalSf: 260 },
+        { id: 305, name: "Suite 305", tenantName: "Education Center", ownershipSigner: "Education Trust", occupiedDate: "08-01-2024", vacatingDate: "08-01-2025", agreementPeriod: "1 year", totalSf: 210 }
+      ]
+    }
   ];
 
   const availableSuites = [
@@ -117,35 +144,73 @@ const PropertyView = () => {
       
       case "floor-suite":
         return (
-          <div className="space-y-6">
+          <div className="space-y-4">
             <Card className="border-border">
               <CardHeader>
-                <CardTitle className="text-card-foreground">Building Overview</CardTitle>
+                <CardTitle className="text-card-foreground">Floor and Suite</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                  {floors.map((floor) => (
-                    <Card 
-                      key={floor.floor}
-                      className="hover:shadow-lg transition-all duration-300 border-border cursor-pointer group hover:border-primary/50"
-                    >
-                      <CardContent className="p-6 text-center space-y-2">
-                        <div className="w-12 h-12 mx-auto rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                          <Layers className="h-6 w-6 text-primary" />
-                        </div>
-                        <div className="space-y-1">
-                          <p className="text-2xl font-bold text-card-foreground">
-                            {floor.floor}
-                          </p>
-                          <p className="text-xs text-muted-foreground">Floor</p>
-                        </div>
-                        <Badge variant="secondary" className="text-xs">
-                          {floor.suites} Suites
-                        </Badge>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                <Table>
+                  <TableHeader>
+                    <TableRow className="hover:bg-transparent border-border">
+                      <TableHead className="w-16"></TableHead>
+                      <TableHead className="text-muted-foreground font-semibold">Floor</TableHead>
+                      <TableHead className="text-muted-foreground font-semibold">No.of suites</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {floors.map((floor) => {
+                      const isExpanded = expandedFloors.includes(floor.floor);
+                      return (
+                        <>
+                          <TableRow 
+                            key={floor.floor}
+                            className="hover:bg-accent/50 transition-colors cursor-pointer border-border"
+                            onClick={() => {
+                              setExpandedFloors(prev => 
+                                isExpanded 
+                                  ? prev.filter(f => f !== floor.floor)
+                                  : [...prev, floor.floor]
+                              );
+                            }}
+                          >
+                            <TableCell>
+                              {isExpanded ? (
+                                <ChevronUp className="h-4 w-4 text-muted-foreground" />
+                              ) : (
+                                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                              )}
+                            </TableCell>
+                            <TableCell className="font-medium text-card-foreground">{floor.floor}</TableCell>
+                            <TableCell className="text-muted-foreground">{floor.suites.length}</TableCell>
+                          </TableRow>
+                          {isExpanded && (
+                            <TableRow className="border-border">
+                              <TableCell colSpan={3} className="bg-muted/30 p-4">
+                                <div className="flex flex-wrap gap-2">
+                                  {floor.suites.map((suite) => (
+                                    <Button
+                                      key={suite.id}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setSelectedSuite(suite);
+                                        setIsSuiteSheetOpen(true);
+                                      }}
+                                      className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                                      size="sm"
+                                    >
+                                      {suite.name}
+                                    </Button>
+                                  ))}
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          )}
+                        </>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
               </CardContent>
             </Card>
           </div>
@@ -374,7 +439,7 @@ const PropertyView = () => {
         <div className="flex-1 overflow-auto">
           <div className="relative">
             {/* Hero Section with Image Carousel */}
-            <div className="relative h-72 bg-primary overflow-hidden">
+            <div className="relative h-48 bg-primary overflow-hidden">
               <img
                 src={propertyImages[currentImageIndex]}
                 alt="Property"
@@ -396,9 +461,9 @@ const PropertyView = () => {
               </button>
 
               {/* Property Info Overlay */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-primary/90 to-transparent p-8">
-                <h1 className="text-4xl font-bold text-primary-foreground mb-2">Palm Grove Villas</h1>
-                <p className="text-xl text-primary-foreground/90">125 Cremona Drive</p>
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-primary/90 to-transparent p-4">
+                <h1 className="text-2xl font-bold text-primary-foreground mb-1">Café Horizon</h1>
+                <p className="text-base text-primary-foreground/90">125 Cremona Drive</p>
               </div>
 
               {/* Action Buttons */}
@@ -416,7 +481,7 @@ const PropertyView = () => {
             </div>
 
             {/* Metrics Bar */}
-            <div className="bg-card mx-6 -mt-16 relative z-10 rounded-xl shadow-xl border border-border p-6 mb-6">
+            <div className="bg-card mx-6 -mt-10 relative z-10 rounded-xl shadow-xl border border-border p-4 mb-6">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div className="flex items-center gap-3">
                   <div className="w-1 h-14 bg-primary rounded-full"></div>
@@ -524,6 +589,131 @@ const PropertyView = () => {
           Copyright © 2025 <span className="text-primary font-semibold">Springbord</span>
         </footer>
       </div>
+
+      {/* Suite Details Sheet */}
+      <Sheet open={isSuiteSheetOpen} onOpenChange={setIsSuiteSheetOpen}>
+        <SheetContent className="w-full sm:max-w-2xl overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle className="text-2xl font-bold text-card-foreground">
+              {selectedSuite?.name}
+            </SheetTitle>
+          </SheetHeader>
+          
+          {selectedSuite && (
+            <div className="mt-6 space-y-6">
+              {/* Suite Details Grid */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-1 h-12 bg-primary rounded-full"></div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Suite No.</p>
+                      <p className="text-lg font-semibold text-card-foreground">
+                        {selectedSuite.name.split(' ')[1]}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-1 h-12 bg-primary rounded-full"></div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Floor No.</p>
+                      <p className="text-lg font-semibold text-card-foreground">
+                        {selectedSuite.name.split(' ')[1][0]}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-1 h-12 bg-primary rounded-full"></div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Total sf</p>
+                      <p className="text-lg font-semibold text-card-foreground">
+                        {selectedSuite.totalSf}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-1 h-12 bg-primary rounded-full"></div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Tenant Name</p>
+                      <p className="text-lg font-semibold text-card-foreground">
+                        {selectedSuite.tenantName}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-1 h-12 bg-primary rounded-full"></div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Ownership Signer</p>
+                      <p className="text-lg font-semibold text-card-foreground">
+                        {selectedSuite.ownershipSigner}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-1 h-12 bg-primary rounded-full"></div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Occupied Date</p>
+                      <p className="text-lg font-semibold text-card-foreground">
+                        {selectedSuite.occupiedDate}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-1 h-12 bg-primary rounded-full"></div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Vacating Date</p>
+                      <p className="text-lg font-semibold text-card-foreground">
+                        {selectedSuite.vacatingDate}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-1 h-12 bg-primary rounded-full"></div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Agreement Period</p>
+                      <p className="text-lg font-semibold text-card-foreground">
+                        {selectedSuite.agreementPeriod}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Images Section */}
+              <div>
+                <div className="flex items-start gap-3 mb-3">
+                  <div className="w-1 h-8 bg-primary rounded-full"></div>
+                  <h3 className="text-lg font-semibold text-card-foreground">Images</h3>
+                </div>
+                <div className="text-center py-8 text-muted-foreground bg-muted/30 rounded-lg border border-border">
+                  <p>No images available</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };
