@@ -104,12 +104,12 @@ const AddFloor = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-6">
+      <div className="container mx-auto px-6 py-6 max-w-6xl">
         <form onSubmit={handleSubmit}>
           <div className="flex gap-6">
             {/* Sidebar Tabs */}
             <div className="w-64 flex-shrink-0">
-              <Card>
+              <Card className="sticky top-6">
                 <CardContent className="p-0">
                   <div className="flex flex-col">
                     {tabs.map((tab) => (
@@ -117,10 +117,10 @@ const AddFloor = () => {
                         key={tab.id}
                         type="button"
                         onClick={() => setActiveTab(tab.id)}
-                        className={`px-4 py-3 text-left text-sm font-medium transition-colors ${
+                        className={`px-4 py-3 text-left text-sm font-medium transition-colors border-l-2 ${
                           activeTab === tab.id
-                            ? "bg-primary text-primary-foreground"
-                            : "hover:bg-muted text-muted-foreground"
+                            ? "bg-primary/5 text-primary border-primary font-semibold"
+                            : "hover:bg-muted/50 text-muted-foreground border-transparent"
                         }`}
                       >
                         {tab.label}
@@ -138,9 +138,12 @@ const AddFloor = () => {
                   <Tabs value={activeTab} onValueChange={setActiveTab}>
                     {/* Space Details Tab */}
                     <TabsContent value="space" className="mt-0 space-y-6">
-                      <h2 className="text-xl font-semibold mb-4">Space Details</h2>
+                      <div className="border-b pb-4">
+                        <h2 className="text-xl font-semibold">Space Details</h2>
+                        <p className="text-sm text-muted-foreground mt-1">Define floor space and capacity</p>
+                      </div>
                       
-                      <div className="grid grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="floorNumber">
                             Floor # <span className="text-destructive">*</span>
@@ -228,9 +231,12 @@ const AddFloor = () => {
 
                     {/* Structural Details Tab */}
                     <TabsContent value="structural" className="mt-0 space-y-6">
-                      <h2 className="text-xl font-semibold mb-4">Structural Details</h2>
+                      <div className="border-b pb-4">
+                        <h2 className="text-xl font-semibold">Structural Details</h2>
+                        <p className="text-sm text-muted-foreground mt-1">Physical structure and features</p>
+                      </div>
                       
-                      <div className="grid grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="ceilingType">Ceiling Type</Label>
                           <Input
@@ -305,9 +311,12 @@ const AddFloor = () => {
 
                     {/* Accessibility & Security Tab */}
                     <TabsContent value="accessibility" className="mt-0 space-y-6">
-                      <h2 className="text-xl font-semibold mb-4">Accessibility & Security</h2>
+                      <div className="border-b pb-4">
+                        <h2 className="text-xl font-semibold">Accessibility & Security</h2>
+                        <p className="text-sm text-muted-foreground mt-1">Access and security features</p>
+                      </div>
                       
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="accessType">Access Type</Label>
                           <Input
@@ -331,7 +340,10 @@ const AddFloor = () => {
 
                     {/* Marketing Metrics Tab */}
                     <TabsContent value="marketing" className="mt-0 space-y-6">
-                      <h2 className="text-xl font-semibold mb-4">Marketing Metrics</h2>
+                      <div className="border-b pb-4">
+                        <h2 className="text-xl font-semibold">Marketing Metrics</h2>
+                        <p className="text-sm text-muted-foreground mt-1">Marketing materials and links</p>
+                      </div>
                       
                       <div className="space-y-2">
                         <Label htmlFor="marketingLinks">Marketing Links</Label>
@@ -363,7 +375,10 @@ const AddFloor = () => {
 
                     {/* Images Tab */}
                     <TabsContent value="images" className="mt-0 space-y-6">
-                      <h2 className="text-xl font-semibold mb-4">Images</h2>
+                      <div className="border-b pb-4">
+                        <h2 className="text-xl font-semibold">Images</h2>
+                        <p className="text-sm text-muted-foreground mt-1">Upload floor images and tours</p>
+                      </div>
                       
                       <div className="space-y-2">
                         <Label htmlFor="images">Upload images or tours</Label>

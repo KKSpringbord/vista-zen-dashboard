@@ -58,27 +58,28 @@ const AddTenant = () => {
   const filteredSuites = suites.filter(suite => suite.propertyId === formData.propertyId);
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center gap-4">
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate("/properties/tenant-listing")}
-          className="flex items-center gap-2"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Tenants
-        </Button>
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Users className="w-8 h-8" />
-            Add New Tenant
-          </h1>
-          <p className="text-muted-foreground">Add a new tenant to a property suite</p>
+    <div className="min-h-screen bg-background">
+      <div className="bg-primary px-6 py-4 text-primary-foreground">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate("/properties/tenant-listing")}
+              className="flex items-center gap-2 text-primary-foreground hover:bg-primary/90"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+            <h1 className="text-2xl font-bold">Add New Tenant</h1>
+          </div>
+        </div>
+        <div className="text-sm mt-2 text-primary-foreground/80">
+          Property Management &gt; Tenants &gt; Add Tenant
         </div>
       </div>
 
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="p-6 max-w-6xl mx-auto">
+        <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
               <CardTitle>Personal Information</CardTitle>
@@ -311,20 +312,21 @@ const AddTenant = () => {
           </Card>
         </div>
 
-        <div className="flex justify-end gap-4 mt-6">
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={() => navigate("/properties/tenant-listing")}
-          >
-            Cancel
-          </Button>
-          <Button type="submit" className="flex items-center gap-2">
-            <Save className="w-4 h-4" />
-            Save Tenant
-          </Button>
-        </div>
-      </form>
+          <div className="flex justify-end gap-4 mt-6">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={() => navigate("/properties/tenant-listing")}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" className="flex items-center gap-2">
+              <Save className="w-4 h-4" />
+              Save Tenant
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

@@ -107,12 +107,12 @@ const AddSuite = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-6">
+      <div className="container mx-auto px-6 py-6 max-w-6xl">
         <form onSubmit={handleSubmit}>
           <div className="flex gap-6">
             {/* Sidebar Tabs */}
             <div className="w-64 flex-shrink-0">
-              <Card>
+              <Card className="sticky top-6">
                 <CardContent className="p-0">
                   <div className="flex flex-col">
                     {tabs.map((tab) => (
@@ -120,10 +120,10 @@ const AddSuite = () => {
                         key={tab.id}
                         type="button"
                         onClick={() => setActiveTab(tab.id)}
-                        className={`px-4 py-3 text-left text-sm font-medium transition-colors ${
+                        className={`px-4 py-3 text-left text-sm font-medium transition-colors border-l-2 ${
                           activeTab === tab.id
-                            ? "bg-primary text-primary-foreground"
-                            : "hover:bg-muted text-muted-foreground"
+                            ? "bg-primary/5 text-primary border-primary font-semibold"
+                            : "hover:bg-muted/50 text-muted-foreground border-transparent"
                         }`}
                       >
                         {tab.label}
@@ -141,9 +141,12 @@ const AddSuite = () => {
                   <Tabs value={activeTab} onValueChange={setActiveTab}>
                     {/* Space Details Tab */}
                     <TabsContent value="space" className="mt-0 space-y-6">
-                      <h2 className="text-xl font-semibold mb-4">Space Details</h2>
+                      <div className="border-b pb-4">
+                        <h2 className="text-xl font-semibold">Space Details</h2>
+                        <p className="text-sm text-muted-foreground mt-1">Define suite space and type</p>
+                      </div>
                       
-                      <div className="grid grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="suiteNumber">
                             Suite # <span className="text-destructive">*</span>
@@ -224,7 +227,10 @@ const AddSuite = () => {
 
                     {/* Accessibility & Security Tab */}
                     <TabsContent value="accessibility" className="mt-0 space-y-6">
-                      <h2 className="text-xl font-semibold mb-4">Accessibility & Security</h2>
+                      <div className="border-b pb-4">
+                        <h2 className="text-xl font-semibold">Accessibility & Security</h2>
+                        <p className="text-sm text-muted-foreground mt-1">Access and security features</p>
+                      </div>
                       
                       <p className="text-sm text-muted-foreground">
                         Add accessibility and security information for this suite.
@@ -233,9 +239,12 @@ const AddSuite = () => {
 
                     {/* Parking & Logistics Tab */}
                     <TabsContent value="parking" className="mt-0 space-y-6">
-                      <h2 className="text-xl font-semibold mb-4">Parking & Logistics</h2>
+                      <div className="border-b pb-4">
+                        <h2 className="text-xl font-semibold">Parking & Logistics</h2>
+                        <p className="text-sm text-muted-foreground mt-1">Parking availability and details</p>
+                      </div>
                       
-                      <div className="grid grid-cols-2 gap-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <Label>Parking Availability</Label>
                           <RadioGroup 
@@ -268,9 +277,12 @@ const AddSuite = () => {
 
                     {/* Lease Details Tab */}
                     <TabsContent value="lease" className="mt-0 space-y-6">
-                      <h2 className="text-xl font-semibold mb-4">Lease Details</h2>
+                      <div className="border-b pb-4">
+                        <h2 className="text-xl font-semibold">Lease Details</h2>
+                        <p className="text-sm text-muted-foreground mt-1">Lease status and availability</p>
+                      </div>
                       
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="spaceAvailableFrom">Space Available From</Label>
                           <Input
@@ -312,7 +324,10 @@ const AddSuite = () => {
 
                     {/* Marketing Metrics Tab */}
                     <TabsContent value="marketing" className="mt-0 space-y-6">
-                      <h2 className="text-xl font-semibold mb-4">Marketing Metrics</h2>
+                      <div className="border-b pb-4">
+                        <h2 className="text-xl font-semibold">Marketing Metrics</h2>
+                        <p className="text-sm text-muted-foreground mt-1">Marketing links and tour data</p>
+                      </div>
                       
                       <div className="space-y-2">
                         <Label htmlFor="marketingLinks">Marketing Links</Label>
@@ -351,7 +366,10 @@ const AddSuite = () => {
 
                     {/* Images Tab */}
                     <TabsContent value="images" className="mt-0 space-y-6">
-                      <h2 className="text-xl font-semibold mb-4">Images</h2>
+                      <div className="border-b pb-4">
+                        <h2 className="text-xl font-semibold">Images</h2>
+                        <p className="text-sm text-muted-foreground mt-1">Upload suite images</p>
+                      </div>
                       
                       <div className="space-y-2">
                         <Label htmlFor="images">Upload images here</Label>

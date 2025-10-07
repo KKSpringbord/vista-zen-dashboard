@@ -5,13 +5,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, FileText, Layers, FileCheck, TrendingUp, HandshakeIcon, Globe, Image, BookOpen, Plus, Trash2 } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { ArrowLeft, FileText, Layers, FileCheck, TrendingUp, HandshakeIcon, Globe, Image, BookOpen, Plus, Trash2, ChevronDown, Save } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const AddProperty = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("info");
+  const [openSections, setOpenSections] = useState({
+    info: true,
+    space: false,
+    lease: false,
+    market: false,
+    ownership: false,
+    digital: false,
+    images: false,
+    brochure: false,
+  });
+  
   const [formData, setFormData] = useState({
     // Property Information
     propertyName: "",
@@ -85,6 +95,10 @@ const AddProperty = () => {
     brokerageCompany: false,
   });
 
+  const toggleSection = (section: keyof typeof openSections) => {
+    setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
+  };
+
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -113,30 +127,11 @@ const AddProperty = () => {
     setFormData(prev => ({ ...prev, [field]: file }));
   };
 
-  const handleNext = () => {
-    const tabs = ["info", "space", "lease", "market", "ownership", "digital", "images", "brochure"];
-    const currentIndex = tabs.indexOf(activeTab);
-    if (currentIndex < tabs.length - 1) {
-      setActiveTab(tabs[currentIndex + 1]);
-    }
-  };
-
-  const handlePrevious = () => {
-    const tabs = ["info", "space", "lease", "market", "ownership", "digital", "images", "brochure"];
-    const currentIndex = tabs.indexOf(activeTab);
-    if (currentIndex > 0) {
-      setActiveTab(tabs[currentIndex - 1]);
-    }
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Property data:", formData);
     navigate("/properties/listing");
   };
-
-  const isLastTab = activeTab === "brochure";
-  const isFirstTab = activeTab === "info";
 
   return (
     <div className="min-h-screen bg-background">
@@ -159,73 +154,30 @@ const AddProperty = () => {
         </div>
       </div>
 
-      <div className="p-6">
-        <Card>
-          <CardContent className="p-6">
-            <form onSubmit={handleSubmit}>
-              <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent gap-8">
-                  <TabsTrigger 
-                    value="info" 
-                    className="flex flex-col items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none pb-4"
-                  >
-                    <FileText className="w-5 h-5" />
-                    <span className="text-xs">Property<br/>Information</span>
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="space" 
-                    className="flex flex-col items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none pb-4"
-                  >
-                    <Layers className="w-5 h-5" />
-                    <span className="text-xs">Space Metrics</span>
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="lease" 
-                    className="flex flex-col items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none pb-4"
-                  >
-                    <FileCheck className="w-5 h-5" />
-                    <span className="text-xs">Lease Data</span>
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="market" 
-                    className="flex flex-col items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none pb-4"
-                  >
-                    <TrendingUp className="w-5 h-5" />
-                    <span className="text-xs">Market Insights</span>
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="ownership" 
-                    className="flex flex-col items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none pb-4"
-                  >
-                    <HandshakeIcon className="w-5 h-5" />
-                    <span className="text-xs">Ownership Info</span>
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="digital" 
-                    className="flex flex-col items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none pb-4"
-                  >
-                    <Globe className="w-5 h-5" />
-                    <span className="text-xs">Digital<br/>Presence</span>
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="images" 
-                    className="flex flex-col items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none pb-4"
-                  >
-                    <Image className="w-5 h-5" />
-                    <span className="text-xs">Images</span>
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="brochure" 
-                    className="flex flex-col items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none pb-4"
-                  >
-                    <BookOpen className="w-5 h-5" />
-                    <span className="text-xs">Brochure</span>
-                  </TabsTrigger>
-                </TabsList>
-
-                {/* Property Information Tab */}
-                <TabsContent value="info" className="space-y-6 mt-6">
-                  <div className="grid grid-cols-3 gap-6">
+      <div className="p-6 max-w-5xl mx-auto">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Property Information Section */}
+          <Collapsible open={openSections.info} onOpenChange={() => toggleSection("info")}>
+            <Card>
+              <CollapsibleTrigger className="w-full">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-primary/10">
+                        <FileText className="w-5 h-5 text-primary" />
+                      </div>
+                      <div className="text-left">
+                        <h2 className="text-lg font-semibold">Property Information</h2>
+                        <p className="text-sm text-muted-foreground">Basic property details and location</p>
+                      </div>
+                    </div>
+                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openSections.info ? 'transform rotate-180' : ''}`} />
+                  </div>
+                </CardContent>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="px-6 pb-6 pt-0 space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="propertyName">Property Name <span className="text-destructive">*</span></Label>
                       <Input
@@ -246,6 +198,9 @@ const AddProperty = () => {
                         required
                       />
                     </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="propType">Prop Type <span className="text-destructive">*</span></Label>
                       <Select value={formData.propType} onValueChange={(value) => handleInputChange("propType", value)}>
@@ -260,9 +215,6 @@ const AddProperty = () => {
                         </SelectContent>
                       </Select>
                     </div>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="portfolioName">Portfolio Name</Label>
                       <Input
@@ -272,16 +224,20 @@ const AddProperty = () => {
                         placeholder="Gandview"
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="address">Address <span className="text-destructive">*</span></Label>
-                      <Input
-                        id="address"
-                        value={formData.address}
-                        onChange={(e) => handleInputChange("address", e.target.value)}
-                        placeholder="125 Cremona Drive"
-                        required
-                      />
-                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="address">Address <span className="text-destructive">*</span></Label>
+                    <Input
+                      id="address"
+                      value={formData.address}
+                      onChange={(e) => handleInputChange("address", e.target.value)}
+                      placeholder="125 Cremona Drive"
+                      required
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="state">State <span className="text-destructive">*</span></Label>
                       <Select value={formData.state} onValueChange={(value) => handleInputChange("state", value)}>
@@ -296,9 +252,6 @@ const AddProperty = () => {
                         </SelectContent>
                       </Select>
                     </div>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="city">City <span className="text-destructive">*</span></Label>
                       <Select value={formData.city} onValueChange={(value) => handleInputChange("city", value)}>
@@ -322,6 +275,9 @@ const AddProperty = () => {
                         required
                       />
                     </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="buildingClass">Building Class <span className="text-destructive">*</span></Label>
                       <Select value={formData.buildingClass} onValueChange={(value) => handleInputChange("buildingClass", value)}>
@@ -335,9 +291,6 @@ const AddProperty = () => {
                         </SelectContent>
                       </Select>
                     </div>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="builtYear">Built Year</Label>
                       <Input
@@ -358,19 +311,20 @@ const AddProperty = () => {
                         placeholder="2022"
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="description">Description</Label>
-                      <Textarea
-                        id="description"
-                        value={formData.description}
-                        onChange={(e) => handleInputChange("description", e.target.value)}
-                        placeholder="Modern tech park in Goleta"
-                        rows={1}
-                      />
-                    </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="description">Description</Label>
+                    <Textarea
+                      id="description"
+                      value={formData.description}
+                      onChange={(e) => handleInputChange("description", e.target.value)}
+                      placeholder="Modern tech park in Goleta"
+                      rows={3}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="totalFloors">Total Floors <span className="text-destructive">*</span></Label>
                       <Input
@@ -403,7 +357,7 @@ const AddProperty = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="neighbourhood">Neighbourhood</Label>
                       <Select value={formData.neighbourhood} onValueChange={(value) => handleInputChange("neighbourhood", value)}>
@@ -417,72 +371,71 @@ const AddProperty = () => {
                         </SelectContent>
                       </Select>
                     </div>
-                    <div className="space-y-2 flex items-end">
-                      <div className="flex-1">
-                        <Label htmlFor="location">Location</Label>
-                        <div className="flex gap-2">
-                          <Input
-                            id="location"
-                            value={formData.location}
-                            onChange={(e) => handleInputChange("location", e.target.value)}
-                            placeholder="Select on Map"
-                            readOnly
-                          />
-                          <Button type="button" size="icon" variant="default">
-                            <span className="text-lg">📍</span>
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
                     <div className="space-y-2">
-                      <Label>Landmarks Nearby</Label>
-                      <div className="space-y-2">
-                        {formData.landmarks.map((landmark, index) => (
-                          <div key={index} className="flex gap-2">
-                            <Select value={landmark.name} onValueChange={(value) => handleLandmarkChange(index, "name", value)}>
-                              <SelectTrigger className="flex-1">
-                                <SelectValue placeholder="Landmark" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="Landmark 1">Landmark 1</SelectItem>
-                                <SelectItem value="Landmark 2">Landmark 2</SelectItem>
-                                <SelectItem value="Landmark 3">Landmark 3</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <Input
-                              type="number"
-                              value={landmark.quantity}
-                              onChange={(e) => handleLandmarkChange(index, "quantity", e.target.value)}
-                              placeholder="3"
-                              className="w-20"
-                            />
-                            {formData.landmarks.length > 1 && (
-                              <Button 
-                                type="button" 
-                                size="icon" 
-                                variant="ghost"
-                                onClick={() => removeLandmark(index)}
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            )}
-                            {index === formData.landmarks.length - 1 && (
-                              <Button 
-                                type="button" 
-                                size="icon" 
-                                variant="ghost"
-                                onClick={addLandmark}
-                              >
-                                <Plus className="w-4 h-4" />
-                              </Button>
-                            )}
-                          </div>
-                        ))}
+                      <Label htmlFor="location">Location</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          id="location"
+                          value={formData.location}
+                          onChange={(e) => handleInputChange("location", e.target.value)}
+                          placeholder="Select on Map"
+                          readOnly
+                        />
+                        <Button type="button" size="icon" variant="default">
+                          <span className="text-lg">📍</span>
+                        </Button>
                       </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-6">
+                  <div className="space-y-2">
+                    <Label>Landmarks Nearby</Label>
+                    <div className="space-y-2">
+                      {formData.landmarks.map((landmark, index) => (
+                        <div key={index} className="flex gap-2">
+                          <Select value={landmark.name} onValueChange={(value) => handleLandmarkChange(index, "name", value)}>
+                            <SelectTrigger className="flex-1">
+                              <SelectValue placeholder="Landmark" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Landmark 1">Landmark 1</SelectItem>
+                              <SelectItem value="Landmark 2">Landmark 2</SelectItem>
+                              <SelectItem value="Landmark 3">Landmark 3</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <Input
+                            type="number"
+                            value={landmark.quantity}
+                            onChange={(e) => handleLandmarkChange(index, "quantity", e.target.value)}
+                            placeholder="Distance"
+                            className="w-32"
+                          />
+                          {formData.landmarks.length > 1 && (
+                            <Button 
+                              type="button" 
+                              size="icon" 
+                              variant="ghost"
+                              onClick={() => removeLandmark(index)}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          )}
+                          {index === formData.landmarks.length - 1 && (
+                            <Button 
+                              type="button" 
+                              size="icon" 
+                              variant="ghost"
+                              onClick={addLandmark}
+                            >
+                              <Plus className="w-4 h-4" />
+                            </Button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="elevators">Elevators</Label>
                       <Input
@@ -543,11 +496,33 @@ const AddProperty = () => {
                       </label>
                     </div>
                   </div>
-                </TabsContent>
+                </CardContent>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
 
-                {/* Space Metrics Tab */}
-                <TabsContent value="space" className="space-y-6 mt-6">
-                  <div className="grid grid-cols-3 gap-6">
+          {/* Space Metrics Section */}
+          <Collapsible open={openSections.space} onOpenChange={() => toggleSection("space")}>
+            <Card>
+              <CollapsibleTrigger className="w-full">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-primary/10">
+                        <Layers className="w-5 h-5 text-primary" />
+                      </div>
+                      <div className="text-left">
+                        <h2 className="text-lg font-semibold">Space Metrics</h2>
+                        <p className="text-sm text-muted-foreground">Area and capacity details</p>
+                      </div>
+                    </div>
+                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openSections.space ? 'transform rotate-180' : ''}`} />
+                  </div>
+                </CardContent>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="px-6 pb-6 pt-0 space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="totalBuildingArea">Total Building Area (SF)</Label>
                       <Input
@@ -568,6 +543,9 @@ const AddProperty = () => {
                         placeholder="1000"
                       />
                     </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="unitsSold">Units Sold</Label>
                       <Input
@@ -578,9 +556,6 @@ const AddProperty = () => {
                         placeholder="4"
                       />
                     </div>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="parkingRatio">Parking Ratio</Label>
                       <Input
@@ -592,11 +567,33 @@ const AddProperty = () => {
                       />
                     </div>
                   </div>
-                </TabsContent>
+                </CardContent>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
 
-                {/* Lease Data Tab */}
-                <TabsContent value="lease" className="space-y-6 mt-6">
-                  <div className="grid grid-cols-3 gap-6">
+          {/* Lease Data Section */}
+          <Collapsible open={openSections.lease} onOpenChange={() => toggleSection("lease")}>
+            <Card>
+              <CollapsibleTrigger className="w-full">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-primary/10">
+                        <FileCheck className="w-5 h-5 text-primary" />
+                      </div>
+                      <div className="text-left">
+                        <h2 className="text-lg font-semibold">Lease Data</h2>
+                        <p className="text-sm text-muted-foreground">Financial and lease information</p>
+                      </div>
+                    </div>
+                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openSections.lease ? 'transform rotate-180' : ''}`} />
+                  </div>
+                </CardContent>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="px-6 pb-6 pt-0 space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="avgSalePrice">Avg Sale Price (SF) <span className="text-destructive">*</span></Label>
                       <Input
@@ -628,11 +625,33 @@ const AddProperty = () => {
                       />
                     </div>
                   </div>
-                </TabsContent>
+                </CardContent>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
 
-                {/* Market Insights Tab */}
-                <TabsContent value="market" className="space-y-6 mt-6">
-                  <div className="grid grid-cols-4 gap-6">
+          {/* Market Insights Section */}
+          <Collapsible open={openSections.market} onOpenChange={() => toggleSection("market")}>
+            <Card>
+              <CollapsibleTrigger className="w-full">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-primary/10">
+                        <TrendingUp className="w-5 h-5 text-primary" />
+                      </div>
+                      <div className="text-left">
+                        <h2 className="text-lg font-semibold">Market Insights</h2>
+                        <p className="text-sm text-muted-foreground">Competitive market analysis</p>
+                      </div>
+                    </div>
+                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openSections.market ? 'transform rotate-180' : ''}`} />
+                  </div>
+                </CardContent>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="px-6 pb-6 pt-0 space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="competitorName">Competitor Property Name</Label>
                       <Input
@@ -652,6 +671,9 @@ const AddProperty = () => {
                         placeholder="16"
                       />
                     </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="rentPerSF">Rent per SF</Label>
                       <Input
@@ -662,26 +684,44 @@ const AddProperty = () => {
                         placeholder="20"
                       />
                     </div>
-                    <div className="space-y-2 flex items-end">
-                      <div className="flex-1 flex gap-2">
-                        <Input
-                          id="vacancyRate"
-                          type="number"
-                          value={formData.vacancyRate}
-                          onChange={(e) => handleInputChange("vacancyRate", e.target.value)}
-                          placeholder="40"
-                        />
-                        <Button type="button" size="icon" variant="destructive">
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="vacancyRate">Vacancy Rate (%)</Label>
+                      <Input
+                        id="vacancyRate"
+                        type="number"
+                        value={formData.vacancyRate}
+                        onChange={(e) => handleInputChange("vacancyRate", e.target.value)}
+                        placeholder="40"
+                      />
                     </div>
                   </div>
-                </TabsContent>
+                </CardContent>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
 
-                {/* Ownership Info Tab */}
-                <TabsContent value="ownership" className="space-y-6 mt-6">
-                  <div className="flex gap-6 mb-4">
+          {/* Ownership Info Section */}
+          <Collapsible open={openSections.ownership} onOpenChange={() => toggleSection("ownership")}>
+            <Card>
+              <CollapsibleTrigger className="w-full">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-primary/10">
+                        <HandshakeIcon className="w-5 h-5 text-primary" />
+                      </div>
+                      <div className="text-left">
+                        <h2 className="text-lg font-semibold">Ownership Info</h2>
+                        <p className="text-sm text-muted-foreground">Owner and management contacts</p>
+                      </div>
+                    </div>
+                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openSections.ownership ? 'transform rotate-180' : ''}`} />
+                  </div>
+                </CardContent>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="px-6 pb-6 pt-0 space-y-6">
+                  <div className="flex gap-6">
                     <label className="flex items-center gap-2">
                       <input
                         type="checkbox"
@@ -689,7 +729,7 @@ const AddProperty = () => {
                         onChange={(e) => setOwnershipTypes(prev => ({ ...prev, ownershipCompany: e.target.checked }))}
                         className="w-4 h-4"
                       />
-                      <span>Ownership Company</span>
+                      <span className="text-sm">Ownership Company</span>
                     </label>
                     <label className="flex items-center gap-2">
                       <input
@@ -698,7 +738,7 @@ const AddProperty = () => {
                         onChange={(e) => setOwnershipTypes(prev => ({ ...prev, managementCompany: e.target.checked }))}
                         className="w-4 h-4"
                       />
-                      <span>Management Company</span>
+                      <span className="text-sm">Management Company</span>
                     </label>
                     <label className="flex items-center gap-2">
                       <input
@@ -707,7 +747,7 @@ const AddProperty = () => {
                         onChange={(e) => setOwnershipTypes(prev => ({ ...prev, brokerageCompany: e.target.checked }))}
                         className="w-4 h-4"
                       />
-                      <span>Brokerage Company</span>
+                      <span className="text-sm">Brokerage Company</span>
                     </label>
                   </div>
 
@@ -719,14 +759,12 @@ const AddProperty = () => {
                           <Plus className="w-4 h-4" />
                         </Button>
                       </div>
-                      <div className="space-y-2">
-                        <Input
-                          value={formData.ownerCompany}
-                          onChange={(e) => handleInputChange("ownerCompany", e.target.value)}
-                          placeholder="GreenLeaf Developers LLP"
-                        />
-                      </div>
-                      <div className="grid grid-cols-4 gap-4">
+                      <Input
+                        value={formData.ownerCompany}
+                        onChange={(e) => handleInputChange("ownerCompany", e.target.value)}
+                        placeholder="GreenLeaf Developers LLP"
+                      />
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label>Contact Person Name</Label>
                           <Input
@@ -744,6 +782,8 @@ const AddProperty = () => {
                             placeholder="john.mathews@orionrealty.com"
                           />
                         </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label>Country Code</Label>
                           <Input
@@ -772,14 +812,12 @@ const AddProperty = () => {
                           <Plus className="w-4 h-4" />
                         </Button>
                       </div>
-                      <div className="space-y-2">
-                        <Input
-                          value={formData.managementCompany}
-                          onChange={(e) => handleInputChange("managementCompany", e.target.value)}
-                          placeholder="Crest Management Services Pvt Ltd"
-                        />
-                      </div>
-                      <div className="grid grid-cols-4 gap-4">
+                      <Input
+                        value={formData.managementCompany}
+                        onChange={(e) => handleInputChange("managementCompany", e.target.value)}
+                        placeholder="Crest Management Services Pvt Ltd"
+                      />
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label>Contact Person Name</Label>
                           <Input
@@ -797,6 +835,8 @@ const AddProperty = () => {
                             placeholder="david.fernandes@vertexpm.com"
                           />
                         </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label>Country Code</Label>
                           <Input
@@ -825,14 +865,12 @@ const AddProperty = () => {
                           <Plus className="w-4 h-4" />
                         </Button>
                       </div>
-                      <div className="space-y-2">
-                        <Input
-                          value={formData.brokerageCompany}
-                          onChange={(e) => handleInputChange("brokerageCompany", e.target.value)}
-                          placeholder="Summit Realty Partners"
-                        />
-                      </div>
-                      <div className="grid grid-cols-4 gap-4">
+                      <Input
+                        value={formData.brokerageCompany}
+                        onChange={(e) => handleInputChange("brokerageCompany", e.target.value)}
+                        placeholder="Summit Realty Partners"
+                      />
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label>Contact Person Name</Label>
                           <Input
@@ -850,6 +888,8 @@ const AddProperty = () => {
                             placeholder="karthik.desai@crestviewbrokers.com"
                           />
                         </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label>Country Code</Label>
                           <Input
@@ -869,10 +909,32 @@ const AddProperty = () => {
                       </div>
                     </div>
                   )}
-                </TabsContent>
+                </CardContent>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
 
-                {/* Digital Presence Tab */}
-                <TabsContent value="digital" className="space-y-6 mt-6">
+          {/* Digital Presence Section */}
+          <Collapsible open={openSections.digital} onOpenChange={() => toggleSection("digital")}>
+            <Card>
+              <CollapsibleTrigger className="w-full">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-primary/10">
+                        <Globe className="w-5 h-5 text-primary" />
+                      </div>
+                      <div className="text-left">
+                        <h2 className="text-lg font-semibold">Digital Presence</h2>
+                        <p className="text-sm text-muted-foreground">Website and online presence</p>
+                      </div>
+                    </div>
+                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openSections.digital ? 'transform rotate-180' : ''}`} />
+                  </div>
+                </CardContent>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="px-6 pb-6 pt-0">
                   <div className="space-y-2">
                     <Label htmlFor="website">Website <span className="text-destructive">*</span></Label>
                     <Input
@@ -883,10 +945,32 @@ const AddProperty = () => {
                       placeholder="www.metrolineproperties.com"
                     />
                   </div>
-                </TabsContent>
+                </CardContent>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
 
-                {/* Images Tab */}
-                <TabsContent value="images" className="space-y-6 mt-6">
+          {/* Images Section */}
+          <Collapsible open={openSections.images} onOpenChange={() => toggleSection("images")}>
+            <Card>
+              <CollapsibleTrigger className="w-full">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-primary/10">
+                        <Image className="w-5 h-5 text-primary" />
+                      </div>
+                      <div className="text-left">
+                        <h2 className="text-lg font-semibold">Images</h2>
+                        <p className="text-sm text-muted-foreground">Upload property images</p>
+                      </div>
+                    </div>
+                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openSections.images ? 'transform rotate-180' : ''}`} />
+                  </div>
+                </CardContent>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="px-6 pb-6 pt-0">
                   <div className="space-y-2">
                     <Label htmlFor="images">Images</Label>
                     <div className="border-2 border-dashed rounded-lg p-8 text-center">
@@ -908,10 +992,32 @@ const AddProperty = () => {
                       </label>
                     </div>
                   </div>
-                </TabsContent>
+                </CardContent>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
 
-                {/* Brochure Tab */}
-                <TabsContent value="brochure" className="space-y-6 mt-6">
+          {/* Brochure Section */}
+          <Collapsible open={openSections.brochure} onOpenChange={() => toggleSection("brochure")}>
+            <Card>
+              <CollapsibleTrigger className="w-full">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-primary/10">
+                        <BookOpen className="w-5 h-5 text-primary" />
+                      </div>
+                      <div className="text-left">
+                        <h2 className="text-lg font-semibold">Brochure</h2>
+                        <p className="text-sm text-muted-foreground">Upload property brochure</p>
+                      </div>
+                    </div>
+                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openSections.brochure ? 'transform rotate-180' : ''}`} />
+                  </div>
+                </CardContent>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="px-6 pb-6 pt-0">
                   <div className="space-y-2">
                     <Label htmlFor="brochure">Brochure</Label>
                     <div className="border-2 border-dashed rounded-lg p-8 text-center">
@@ -932,28 +1038,19 @@ const AddProperty = () => {
                       </label>
                     </div>
                   </div>
-                </TabsContent>
-              </Tabs>
+                </CardContent>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
 
-              {/* Action Buttons */}
-              <div className="flex justify-end gap-4 mt-6 pt-6 border-t">
-                {!isFirstTab && (
-                  <Button type="button" variant="outline" onClick={handlePrevious}>
-                    Previous
-                  </Button>
-                )}
-                {!isLastTab && (
-                  <Button type="button" onClick={handleNext}>
-                    Next
-                  </Button>
-                )}
-                <Button type="submit" variant="default">
-                  {isLastTab ? "Save Property" : "Save"}
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+          {/* Submit Button */}
+          <div className="flex justify-end pt-4">
+            <Button type="submit" size="lg" className="gap-2">
+              <Save className="w-4 h-4" />
+              Save Property
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );
