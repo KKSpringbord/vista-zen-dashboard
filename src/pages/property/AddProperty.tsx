@@ -5,22 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ArrowLeft, FileText, Layers, FileCheck, TrendingUp, HandshakeIcon, Globe, Image, BookOpen, Plus, Trash2, ChevronDown, Save } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowLeft, FileText, Layers, FileCheck, TrendingUp, HandshakeIcon, Globe, Image, BookOpen, Plus, Trash2, Save } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const AddProperty = () => {
   const navigate = useNavigate();
-  const [openSections, setOpenSections] = useState({
-    info: true,
-    space: false,
-    lease: false,
-    market: false,
-    ownership: false,
-    digital: false,
-    images: false,
-    brochure: false,
-  });
   
   const [formData, setFormData] = useState({
     // Property Information
@@ -95,10 +85,6 @@ const AddProperty = () => {
     brokerageCompany: false,
   });
 
-  const toggleSection = (section: keyof typeof openSections) => {
-    setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
-  };
-
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -154,29 +140,53 @@ const AddProperty = () => {
         </div>
       </div>
 
-      <div className="p-6 max-w-5xl mx-auto">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Property Information Section */}
-          <Collapsible open={openSections.info} onOpenChange={() => toggleSection("info")}>
-            <Card>
-              <CollapsibleTrigger className="w-full">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-primary/10">
-                        <FileText className="w-5 h-5 text-primary" />
-                      </div>
-                      <div className="text-left">
-                        <h2 className="text-lg font-semibold">Property Information</h2>
-                        <p className="text-sm text-muted-foreground">Basic property details and location</p>
-                      </div>
-                    </div>
-                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openSections.info ? 'transform rotate-180' : ''}`} />
+      <div className="p-6 max-w-6xl mx-auto">
+        <form onSubmit={handleSubmit}>
+          <Tabs defaultValue="info" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-8 h-auto">
+              <TabsTrigger value="info" className="flex flex-col items-center gap-1 py-3">
+                <FileText className="w-4 h-4" />
+                <span className="text-xs">Info</span>
+              </TabsTrigger>
+              <TabsTrigger value="space" className="flex flex-col items-center gap-1 py-3">
+                <Layers className="w-4 h-4" />
+                <span className="text-xs">Space</span>
+              </TabsTrigger>
+              <TabsTrigger value="lease" className="flex flex-col items-center gap-1 py-3">
+                <FileCheck className="w-4 h-4" />
+                <span className="text-xs">Lease</span>
+              </TabsTrigger>
+              <TabsTrigger value="market" className="flex flex-col items-center gap-1 py-3">
+                <TrendingUp className="w-4 h-4" />
+                <span className="text-xs">Market</span>
+              </TabsTrigger>
+              <TabsTrigger value="ownership" className="flex flex-col items-center gap-1 py-3">
+                <HandshakeIcon className="w-4 h-4" />
+                <span className="text-xs">Ownership</span>
+              </TabsTrigger>
+              <TabsTrigger value="digital" className="flex flex-col items-center gap-1 py-3">
+                <Globe className="w-4 h-4" />
+                <span className="text-xs">Digital</span>
+              </TabsTrigger>
+              <TabsTrigger value="images" className="flex flex-col items-center gap-1 py-3">
+                <Image className="w-4 h-4" />
+                <span className="text-xs">Images</span>
+              </TabsTrigger>
+              <TabsTrigger value="brochure" className="flex flex-col items-center gap-1 py-3">
+                <BookOpen className="w-4 h-4" />
+                <span className="text-xs">Brochure</span>
+              </TabsTrigger>
+            </TabsList>
+
+            {/* Property Information Tab */}
+            <TabsContent value="info">
+              <Card>
+                <CardContent className="p-6 space-y-4">
+                  <div>
+                    <h2 className="text-lg font-semibold mb-1">Property Information</h2>
+                    <p className="text-sm text-muted-foreground">Basic property details and location</p>
                   </div>
-                </CardContent>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <CardContent className="px-6 pb-6 pt-0 space-y-4">
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="propertyName">Property Name <span className="text-destructive">*</span></Label>
@@ -497,31 +507,18 @@ const AddProperty = () => {
                     </div>
                   </div>
                 </CardContent>
-              </CollapsibleContent>
-            </Card>
-          </Collapsible>
+              </Card>
+            </TabsContent>
 
-          {/* Space Metrics Section */}
-          <Collapsible open={openSections.space} onOpenChange={() => toggleSection("space")}>
-            <Card>
-              <CollapsibleTrigger className="w-full">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-primary/10">
-                        <Layers className="w-5 h-5 text-primary" />
-                      </div>
-                      <div className="text-left">
-                        <h2 className="text-lg font-semibold">Space Metrics</h2>
-                        <p className="text-sm text-muted-foreground">Area and capacity details</p>
-                      </div>
-                    </div>
-                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openSections.space ? 'transform rotate-180' : ''}`} />
+            {/* Space Metrics Tab */}
+            <TabsContent value="space">
+              <Card>
+                <CardContent className="p-6 space-y-4">
+                  <div>
+                    <h2 className="text-lg font-semibold mb-1">Space Metrics</h2>
+                    <p className="text-sm text-muted-foreground">Area and capacity details</p>
                   </div>
-                </CardContent>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <CardContent className="px-6 pb-6 pt-0 space-y-4">
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="totalBuildingArea">Total Building Area (SF)</Label>
@@ -568,31 +565,18 @@ const AddProperty = () => {
                     </div>
                   </div>
                 </CardContent>
-              </CollapsibleContent>
-            </Card>
-          </Collapsible>
+              </Card>
+            </TabsContent>
 
-          {/* Lease Data Section */}
-          <Collapsible open={openSections.lease} onOpenChange={() => toggleSection("lease")}>
-            <Card>
-              <CollapsibleTrigger className="w-full">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-primary/10">
-                        <FileCheck className="w-5 h-5 text-primary" />
-                      </div>
-                      <div className="text-left">
-                        <h2 className="text-lg font-semibold">Lease Data</h2>
-                        <p className="text-sm text-muted-foreground">Financial and lease information</p>
-                      </div>
-                    </div>
-                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openSections.lease ? 'transform rotate-180' : ''}`} />
+            {/* Lease Data Tab */}
+            <TabsContent value="lease">
+              <Card>
+                <CardContent className="p-6 space-y-4">
+                  <div>
+                    <h2 className="text-lg font-semibold mb-1">Lease Data</h2>
+                    <p className="text-sm text-muted-foreground">Financial and lease information</p>
                   </div>
-                </CardContent>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <CardContent className="px-6 pb-6 pt-0 space-y-4">
+
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="avgSalePrice">Avg Sale Price (SF) <span className="text-destructive">*</span></Label>
@@ -626,31 +610,18 @@ const AddProperty = () => {
                     </div>
                   </div>
                 </CardContent>
-              </CollapsibleContent>
-            </Card>
-          </Collapsible>
+              </Card>
+            </TabsContent>
 
-          {/* Market Insights Section */}
-          <Collapsible open={openSections.market} onOpenChange={() => toggleSection("market")}>
-            <Card>
-              <CollapsibleTrigger className="w-full">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-primary/10">
-                        <TrendingUp className="w-5 h-5 text-primary" />
-                      </div>
-                      <div className="text-left">
-                        <h2 className="text-lg font-semibold">Market Insights</h2>
-                        <p className="text-sm text-muted-foreground">Competitive market analysis</p>
-                      </div>
-                    </div>
-                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openSections.market ? 'transform rotate-180' : ''}`} />
+            {/* Market Insights Tab */}
+            <TabsContent value="market">
+              <Card>
+                <CardContent className="p-6 space-y-4">
+                  <div>
+                    <h2 className="text-lg font-semibold mb-1">Market Insights</h2>
+                    <p className="text-sm text-muted-foreground">Competitive market analysis</p>
                   </div>
-                </CardContent>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <CardContent className="px-6 pb-6 pt-0 space-y-4">
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="competitorName">Competitor Property Name</Label>
@@ -696,31 +667,18 @@ const AddProperty = () => {
                     </div>
                   </div>
                 </CardContent>
-              </CollapsibleContent>
-            </Card>
-          </Collapsible>
+              </Card>
+            </TabsContent>
 
-          {/* Ownership Info Section */}
-          <Collapsible open={openSections.ownership} onOpenChange={() => toggleSection("ownership")}>
-            <Card>
-              <CollapsibleTrigger className="w-full">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-primary/10">
-                        <HandshakeIcon className="w-5 h-5 text-primary" />
-                      </div>
-                      <div className="text-left">
-                        <h2 className="text-lg font-semibold">Ownership Info</h2>
-                        <p className="text-sm text-muted-foreground">Owner and management contacts</p>
-                      </div>
-                    </div>
-                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openSections.ownership ? 'transform rotate-180' : ''}`} />
+            {/* Ownership Info Tab */}
+            <TabsContent value="ownership">
+              <Card>
+                <CardContent className="p-6 space-y-6">
+                  <div>
+                    <h2 className="text-lg font-semibold mb-1">Ownership Info</h2>
+                    <p className="text-sm text-muted-foreground">Owner and management contacts</p>
                   </div>
-                </CardContent>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <CardContent className="px-6 pb-6 pt-0 space-y-6">
+
                   <div className="flex gap-6">
                     <label className="flex items-center gap-2">
                       <input
@@ -910,31 +868,18 @@ const AddProperty = () => {
                     </div>
                   )}
                 </CardContent>
-              </CollapsibleContent>
-            </Card>
-          </Collapsible>
+              </Card>
+            </TabsContent>
 
-          {/* Digital Presence Section */}
-          <Collapsible open={openSections.digital} onOpenChange={() => toggleSection("digital")}>
-            <Card>
-              <CollapsibleTrigger className="w-full">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-primary/10">
-                        <Globe className="w-5 h-5 text-primary" />
-                      </div>
-                      <div className="text-left">
-                        <h2 className="text-lg font-semibold">Digital Presence</h2>
-                        <p className="text-sm text-muted-foreground">Website and online presence</p>
-                      </div>
-                    </div>
-                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openSections.digital ? 'transform rotate-180' : ''}`} />
+            {/* Digital Presence Tab */}
+            <TabsContent value="digital">
+              <Card>
+                <CardContent className="p-6 space-y-4">
+                  <div>
+                    <h2 className="text-lg font-semibold mb-1">Digital Presence</h2>
+                    <p className="text-sm text-muted-foreground">Website and online presence</p>
                   </div>
-                </CardContent>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <CardContent className="px-6 pb-6 pt-0">
+
                   <div className="space-y-2">
                     <Label htmlFor="website">Website <span className="text-destructive">*</span></Label>
                     <Input
@@ -946,31 +891,18 @@ const AddProperty = () => {
                     />
                   </div>
                 </CardContent>
-              </CollapsibleContent>
-            </Card>
-          </Collapsible>
+              </Card>
+            </TabsContent>
 
-          {/* Images Section */}
-          <Collapsible open={openSections.images} onOpenChange={() => toggleSection("images")}>
-            <Card>
-              <CollapsibleTrigger className="w-full">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-primary/10">
-                        <Image className="w-5 h-5 text-primary" />
-                      </div>
-                      <div className="text-left">
-                        <h2 className="text-lg font-semibold">Images</h2>
-                        <p className="text-sm text-muted-foreground">Upload property images</p>
-                      </div>
-                    </div>
-                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openSections.images ? 'transform rotate-180' : ''}`} />
+            {/* Images Tab */}
+            <TabsContent value="images">
+              <Card>
+                <CardContent className="p-6 space-y-4">
+                  <div>
+                    <h2 className="text-lg font-semibold mb-1">Images</h2>
+                    <p className="text-sm text-muted-foreground">Upload property images</p>
                   </div>
-                </CardContent>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <CardContent className="px-6 pb-6 pt-0">
+
                   <div className="space-y-2">
                     <Label htmlFor="images">Images</Label>
                     <div className="border-2 border-dashed rounded-lg p-8 text-center">
@@ -993,31 +925,18 @@ const AddProperty = () => {
                     </div>
                   </div>
                 </CardContent>
-              </CollapsibleContent>
-            </Card>
-          </Collapsible>
+              </Card>
+            </TabsContent>
 
-          {/* Brochure Section */}
-          <Collapsible open={openSections.brochure} onOpenChange={() => toggleSection("brochure")}>
-            <Card>
-              <CollapsibleTrigger className="w-full">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-primary/10">
-                        <BookOpen className="w-5 h-5 text-primary" />
-                      </div>
-                      <div className="text-left">
-                        <h2 className="text-lg font-semibold">Brochure</h2>
-                        <p className="text-sm text-muted-foreground">Upload property brochure</p>
-                      </div>
-                    </div>
-                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openSections.brochure ? 'transform rotate-180' : ''}`} />
+            {/* Brochure Tab */}
+            <TabsContent value="brochure">
+              <Card>
+                <CardContent className="p-6 space-y-4">
+                  <div>
+                    <h2 className="text-lg font-semibold mb-1">Brochure</h2>
+                    <p className="text-sm text-muted-foreground">Upload property brochure</p>
                   </div>
-                </CardContent>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <CardContent className="px-6 pb-6 pt-0">
+
                   <div className="space-y-2">
                     <Label htmlFor="brochure">Brochure</Label>
                     <div className="border-2 border-dashed rounded-lg p-8 text-center">
@@ -1039,9 +958,9 @@ const AddProperty = () => {
                     </div>
                   </div>
                 </CardContent>
-              </CollapsibleContent>
-            </Card>
-          </Collapsible>
+              </Card>
+            </TabsContent>
+          </Tabs>
 
           {/* Submit Button */}
           <div className="flex justify-end pt-4">
