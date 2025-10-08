@@ -386,44 +386,36 @@ const StackingPlan = () => {
 
             <div className="p-4">
 
-              <div className="flex gap-4">
-                <div className="flex-1 space-y-1">
-                  {[5, 4, 3, 2, 1].map(floor => {
-                    const suites = suiteDataByYear[selectedYear as keyof typeof suiteDataByYear]?.[floor] || [];
+              <div className="space-y-1">
+                {[5, 4, 3, 2, 1].map(floor => {
+                  const suites = suiteDataByYear[selectedYear as keyof typeof suiteDataByYear]?.[floor] || [];
+                  const stats = calculateFloorStats(floor);
+                  const vacantCount = suites.filter(s => s.status === 'vacant').length;
 
-                    return (
-                      <div key={floor} className="flex items-center gap-2">
-                        <div className="flex-1 grid grid-cols-5 gap-1">
-                          {suites.map(suite => {
-                            const statusStyle = statusConfig[suite.status as keyof typeof statusConfig];
+                  return (
+                    <div key={floor} className="flex items-stretch gap-2">
+                      <div className="flex-1 grid grid-cols-5 gap-1">
+                        {suites.map(suite => {
+                          const statusStyle = statusConfig[suite.status as keyof typeof statusConfig];
 
-                            return (
-                              <div
-                                key={suite.id}
-                                className={`${statusStyle.bg} border rounded p-3 min-h-[100px] flex flex-col justify-between hover:shadow-md transition-shadow cursor-pointer`}
-                              >
-                                <div className="font-semibold text-sm">{suite.id}</div>
-                                <div className="text-xs truncate">{suite.tenant || 'Vacant'}</div>
-                                <div className="text-xs">{suite.sf} sf</div>
-                                {suite.expiry && (
-                                  <div className="text-xs">Ex on: {suite.expiry}</div>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
+                          return (
+                            <div
+                              key={suite.id}
+                              className={`${statusStyle.bg} border rounded p-3 min-h-[100px] flex flex-col justify-between hover:shadow-md transition-shadow cursor-pointer`}
+                            >
+                              <div className="font-semibold text-sm">{suite.id}</div>
+                              <div className="text-xs truncate">{suite.tenant || 'Vacant'}</div>
+                              <div className="text-xs">{suite.sf} sf</div>
+                              {suite.expiry && (
+                                <div className="text-xs">Ex on: {suite.expiry}</div>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
-                    );
-                  })}
-                </div>
 
-                <div className="w-32 space-y-1">
-                  {[5, 4, 3, 2, 1].map(floor => {
-                    const stats = calculateFloorStats(floor);
-                    const vacantCount = suiteDataByYear[selectedYear as keyof typeof suiteDataByYear]?.[floor]?.filter(s => s.status === 'vacant').length || 0;
-                    return (
-                      <div key={floor} className="relative min-h-[100px] flex items-center">
-                        <div className="bg-muted border rounded px-4 py-3 flex flex-col justify-center items-center min-w-[120px]">
+                      <div className="relative flex items-center">
+                        <div className="bg-muted border rounded px-4 py-3 flex flex-col justify-center items-center min-w-[120px] h-full">
                           <div className="text-2xl font-bold mb-1">{floor}</div>
                           <div className="text-xs text-muted-foreground text-center">
                             {stats.totalSF.toLocaleString()} sf
@@ -434,9 +426,9 @@ const StackingPlan = () => {
                         </div>
                         <div className="absolute left-full w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[12px] border-l-muted"></div>
                       </div>
-                    );
-                  })}
-                </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
