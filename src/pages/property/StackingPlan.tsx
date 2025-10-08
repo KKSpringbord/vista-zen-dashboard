@@ -223,122 +223,112 @@ const StackingPlan = () => {
   return (
     <MainLayout title="Stacking Plan" breadcrumbs={breadcrumbs}>
       <div className="bg-background min-h-screen">
-        <div className="bg-card border-b px-6 py-6">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-start gap-6">
+        <div className="relative bg-card border-b overflow-hidden">
+          <div
+            className="absolute inset-0 bg-cover bg-center opacity-20"
+            style={{
+              backgroundImage: `url('https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600')`,
+            }}
+          />
+
+          <div className="relative px-6 py-6">
+            <div className="flex items-start justify-between mb-4">
               <div>
-                <h1 className="text-2xl font-semibold mb-3">{property.name}</h1>
-                <div className="w-48 h-32 bg-muted border-2 border-dashed rounded flex items-center justify-center text-sm text-muted-foreground">
-                  Property Image
+                <h1 className="text-3xl font-bold text-foreground">{property.name}</h1>
+              </div>
+
+              <div className="flex items-center gap-3 bg-background/95 backdrop-blur-sm px-4 py-2 rounded-lg">
+                <span className="text-sm text-muted-foreground">Select Property</span>
+                <div className="w-64">
+                  <Select value={selectedProperty} onValueChange={setSelectedProperty}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Property" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {properties.map(prop => (
+                        <SelectItem key={prop.id} value={prop.id}>
+                          {prop.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
+
+                <Button>Show Plan</Button>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-muted-foreground">Select Property</span>
-              <div className="w-64">
-                <Select value={selectedProperty} onValueChange={setSelectedProperty}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Property" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {properties.map(prop => (
-                      <SelectItem key={prop.id} value={prop.id}>
-                        {prop.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <Button>Show Plan</Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant={selectedTemplate === 'A' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setSelectedTemplate('A')}
+              >
+                Template A
+              </Button>
+              <Button
+                variant={selectedTemplate === 'B' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setSelectedTemplate('B')}
+              >
+                Template B
+              </Button>
+              <Button
+                variant={selectedTemplate === 'C' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setSelectedTemplate('C')}
+              >
+                Template C
+              </Button>
             </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button
-              variant={selectedTemplate === 'A' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setSelectedTemplate('A')}
-            >
-              Template A
-            </Button>
-            <Button
-              variant={selectedTemplate === 'B' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setSelectedTemplate('B')}
-            >
-              Template B
-            </Button>
-            <Button
-              variant={selectedTemplate === 'C' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setSelectedTemplate('C')}
-            >
-              Template C
-            </Button>
           </div>
         </div>
 
         <div className="p-6">
-          <div className="grid grid-cols-4 gap-4 mb-6">
-            <Card>
-              <CardContent className="p-4">
+          <div className="bg-card rounded-lg p-6 mb-6">
+            <div className="grid grid-cols-4 gap-6">
+              <div className="border-l-4 border-orange-500 pl-4">
                 <div className="text-sm text-muted-foreground mb-1">Location</div>
                 <div className="text-lg font-semibold">{property.location}</div>
-              </CardContent>
-            </Card>
+              </div>
 
-            <Card>
-              <CardContent className="p-4">
+              <div className="border-l-4 border-orange-500 pl-4">
                 <div className="text-sm text-muted-foreground mb-1">Total SF</div>
                 <div className="text-lg font-semibold">{property.totalSF.toLocaleString()} sf</div>
-              </CardContent>
-            </Card>
+              </div>
 
-            <Card>
-              <CardContent className="p-4">
+              <div className="border-l-4 border-orange-500 pl-4">
                 <div className="text-sm text-muted-foreground mb-1">Vacant SF</div>
                 <div className="text-lg font-semibold">{property.vacantPercent}% | {property.vacantSF.toLocaleString()} sf</div>
-              </CardContent>
-            </Card>
+              </div>
 
-            <Card>
-              <CardContent className="p-4">
+              <div className="border-l-4 border-orange-500 pl-4">
                 <div className="text-sm text-muted-foreground mb-1">Occupied SF</div>
                 <div className="text-lg font-semibold">{property.occupiedPercent}% | {property.occupiedSF.toLocaleString()} sf</div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </div>
 
-          <div className="grid grid-cols-4 gap-4 mb-6">
-            <Card>
-              <CardContent className="p-4">
+            <div className="grid grid-cols-4 gap-6 mt-6">
+              <div className="border-l-4 border-orange-500 pl-4">
                 <div className="text-sm text-muted-foreground mb-1">Floors</div>
                 <div className="text-lg font-semibold">{property.floors}</div>
-              </CardContent>
-            </Card>
+              </div>
 
-            <Card>
-              <CardContent className="p-4">
+              <div className="border-l-4 border-orange-500 pl-4">
                 <div className="text-sm text-muted-foreground mb-1">Total Income</div>
                 <div className="text-lg font-semibold">$ {property.totalIncome.toLocaleString()}</div>
-              </CardContent>
-            </Card>
+              </div>
 
-            <Card>
-              <CardContent className="p-4">
+              <div className="border-l-4 border-orange-500 pl-4">
                 <div className="text-sm text-muted-foreground mb-1">Average Rent per SF</div>
                 <div className="text-lg font-semibold">$ {property.avgRentPerSF}</div>
-              </CardContent>
-            </Card>
+              </div>
 
-            <Card>
-              <CardContent className="p-4">
+              <div className="border-l-4 border-orange-500 pl-4">
                 <div className="text-sm text-muted-foreground mb-1">Expirations &lt; 12 Months</div>
                 <div className="text-lg font-semibold">{property.expirations}</div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
 
           <div className="bg-card border rounded-lg">
