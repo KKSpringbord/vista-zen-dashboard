@@ -4,10 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Upload, Download, FileSpreadsheet, Database, CheckCircle, AlertCircle } from "lucide-react";
+import { Upload, Download, FileSpreadsheet, CheckCircle, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
 
@@ -16,14 +16,22 @@ const ImportExport = () => {
   const [importProgress, setImportProgress] = useState(0);
   const [isImporting, setIsImporting] = useState(false);
   const [importStatus, setImportStatus] = useState<"idle" | "success" | "error">("idle");
+  const [isAddMode, setIsAddMode] = useState(true);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedProperty, setSelectedProperty] = useState("");
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+  const handleUpload = () => {
+    if (selectedFile) {
       setIsImporting(true);
       setImportProgress(0);
-      
-      // Simulate import progress
+
       const interval = setInterval(() => {
         setImportProgress((prev) => {
           if (prev >= 100) {
@@ -38,10 +46,14 @@ const ImportExport = () => {
     }
   };
 
-  const handleExport = (type: string) => {
-    // Simulate export process
-    console.log(`Exporting ${type}...`);
-    // In a real app, this would trigger a download
+  const handleTemplateDownload = () => {
+    console.log("Downloading template...");
+  };
+
+  const handlePropertyTemplateDownload = () => {
+    if (selectedProperty) {
+      console.log(`Downloading template for property: ${selectedProperty}`);
+    }
   };
 
   const breadcrumbs = [
@@ -51,278 +63,175 @@ const ImportExport = () => {
   ];
 
   return (
-    <MainLayout title="Import / Export Data" breadcrumbs={breadcrumbs}>
-      <div className="p-6 space-y-6">
-
-      <Tabs defaultValue="import" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="import" className="flex items-center gap-2">
-            <Upload className="w-4 h-4" />
-            Import Data
-          </TabsTrigger>
-          <TabsTrigger value="export" className="flex items-center gap-2">
-            <Download className="w-4 h-4" />
-            Export Data
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="import" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Upload className="w-5 h-5" />
-                  Import Properties
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="import-type">Import Type</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select import type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="properties">Properties Only</SelectItem>
-                      <SelectItem value="properties-floors">Properties & Floors</SelectItem>
-                      <SelectItem value="full">Full Property Data</SelectItem>
-                      <SelectItem value="tenants">Tenants Only</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="file-upload">Select File</Label>
-                  <Input
-                    id="file-upload"
-                    type="file"
-                    accept=".csv,.xlsx,.xls"
-                    onChange={handleFileUpload}
-                    disabled={isImporting}
-                  />
-                  <p className="text-sm text-muted-foreground">
-                    Supported formats: CSV, Excel (.xlsx, .xls)
+    <MainLayout title="Import Property" breadcrumbs={breadcrumbs}>
+      <div
+        className="min-h-screen bg-cover bg-center"
+        style={{
+          backgroundImage: "url('https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1260')",
+        }}
+      >
+        <div className="bg-gradient-to-b from-black/40 to-black/20 min-h-screen p-6">
+          <div className="max-w-7xl mx-auto space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+                  <CardTitle className="flex items-center gap-2">
+                    <Download className="w-5 h-5" />
+                    Download Template
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <p className="text-sm text-muted-foreground mb-6">
+                    Click the button below to download the template
                   </p>
-                </div>
+                  <Button
+                    onClick={handleTemplateDownload}
+                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white"
+                    size="lg"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Download
+                  </Button>
+                </CardContent>
+              </Card>
 
-                {isImporting && (
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm">Importing...</span>
-                      <span className="text-sm">{importProgress}%</span>
+              <Card>
+                <CardHeader className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+                  <CardTitle className="flex items-center gap-2">
+                    <Upload className="w-5 h-5" />
+                    Upload Excel File
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Select and upload the excel file below to add the data to stackplanner
+                  </p>
+
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="add-mode"
+                        checked={isAddMode}
+                        onCheckedChange={(checked) => setIsAddMode(checked as boolean)}
+                      />
+                      <label
+                        htmlFor="add-mode"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        Add
+                      </label>
                     </div>
-                    <Progress value={importProgress} />
-                  </div>
-                )}
-
-                {importStatus === "success" && (
-                  <Alert>
-                    <CheckCircle className="h-4 w-4" />
-                    <AlertDescription>
-                      Import completed successfully! Data has been added to your portfolio.
-                    </AlertDescription>
-                  </Alert>
-                )}
-
-                {importStatus === "error" && (
-                  <Alert variant="destructive">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>
-                      Import failed. Please check your file format and try again.
-                    </AlertDescription>
-                  </Alert>
-                )}
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Import Guidelines</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <div>
-                    <h4 className="font-medium">Required Columns for Properties:</h4>
-                    <ul className="text-sm text-muted-foreground list-disc list-inside space-y-1">
-                      <li>Property Name</li>
-                      <li>Property Type</li>
-                      <li>Address</li>
-                      <li>Total Floors</li>
-                      <li>Total Suites</li>
-                    </ul>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="update-mode"
+                        checked={!isAddMode}
+                        onCheckedChange={(checked) => setIsAddMode(!checked)}
+                      />
+                      <label
+                        htmlFor="update-mode"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        Update
+                      </label>
+                    </div>
                   </div>
 
-                  <div>
-                    <h4 className="font-medium">Optional Columns:</h4>
-                    <ul className="text-sm text-muted-foreground list-disc list-inside space-y-1">
-                      <li>Description</li>
-                      <li>Year Built</li>
-                      <li>Square Footage</li>
-                      <li>Status</li>
-                    </ul>
-                  </div>
-
-                  <div className="pt-2">
-                    <Button variant="outline" className="flex items-center gap-2">
-                      <FileSpreadsheet className="w-4 h-4" />
-                      Download Template
+                  <div className="flex gap-3 mb-4">
+                    <div className="flex-1">
+                      <Input
+                        type="file"
+                        accept=".csv,.xlsx,.xls"
+                        onChange={handleFileSelect}
+                        disabled={isImporting}
+                        className="cursor-pointer"
+                      />
+                    </div>
+                    <Button
+                      onClick={handleUpload}
+                      disabled={!selectedFile || isImporting}
+                      className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white"
+                    >
+                      <Upload className="w-4 h-4 mr-2" />
+                      Add
                     </Button>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+
+                  {isImporting && (
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm">Uploading...</span>
+                        <span className="text-sm font-semibold">{importProgress}%</span>
+                      </div>
+                      <Progress value={importProgress} />
+                    </div>
+                  )}
+
+                  {importStatus === "success" && (
+                    <Alert className="border-green-200 bg-green-50">
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <AlertDescription className="text-green-800">
+                        Import completed successfully! Data has been added to your portfolio.
+                      </AlertDescription>
+                    </Alert>
+                  )}
+
+                  {importStatus === "error" && (
+                    <Alert variant="destructive">
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>
+                        Import failed. Please check your file format and try again.
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="bg-muted/80 backdrop-blur-sm rounded-lg p-8">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">
+                Want to edit a current Property ?
+              </h2>
+
+              <Card>
+                <CardHeader className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+                  <CardTitle className="flex items-center gap-2">
+                    <Download className="w-5 h-5" />
+                    Download Updated Template
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <p className="text-sm text-muted-foreground mb-6">
+                    To edit the current properties, select the updated template from the list below.
+                  </p>
+
+                  <div className="flex gap-3">
+                    <div className="flex-1">
+                      <Select value={selectedProperty} onValueChange={setSelectedProperty}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Properties" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="horizon-plaza">Horizon Plaza</SelectItem>
+                          <SelectItem value="cafe-horizon">Café Horizon</SelectItem>
+                          <SelectItem value="sunset-towers">Sunset Towers</SelectItem>
+                          <SelectItem value="ocean-view">Ocean View Complex</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Button
+                      onClick={handlePropertyTemplateDownload}
+                      disabled={!selectedProperty}
+                      className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Download
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
-        </TabsContent>
-
-        <TabsContent value="export" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileSpreadsheet className="w-5 h-5" />
-                  Properties Export
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Export all property information including basic details, floors, and specifications.
-                </p>
-                <Button 
-                  onClick={() => handleExport("properties")}
-                  className="w-full flex items-center gap-2"
-                >
-                  <Download className="w-4 h-4" />
-                  Export Properties
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileSpreadsheet className="w-5 h-5" />
-                  Suites Export
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Export all suite information including details, amenities, and rental rates.
-                </p>
-                <Button 
-                  onClick={() => handleExport("suites")}
-                  className="w-full flex items-center gap-2"
-                >
-                  <Download className="w-4 h-4" />
-                  Export Suites
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileSpreadsheet className="w-5 h-5" />
-                  Tenants Export
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Export tenant information including contact details, lease information, and rental history.
-                </p>
-                <Button 
-                  onClick={() => handleExport("tenants")}
-                  className="w-full flex items-center gap-2"
-                >
-                  <Download className="w-4 h-4" />
-                  Export Tenants
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileSpreadsheet className="w-5 h-5" />
-                  Financial Report
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Export financial data including rent collection, occupancy rates, and revenue reports.
-                </p>
-                <Button 
-                  onClick={() => handleExport("financial")}
-                  className="w-full flex items-center gap-2"
-                >
-                  <Download className="w-4 h-4" />
-                  Export Financial
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Database className="w-5 h-5" />
-                  Complete Backup
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Export complete database backup including all properties, suites, tenants, and financial data.
-                </p>
-                <Button 
-                  onClick={() => handleExport("backup")}
-                  variant="outline"
-                  className="w-full flex items-center gap-2"
-                >
-                  <Download className="w-4 h-4" />
-                  Full Backup
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Export Options</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="export-format">Export Format</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select format" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="csv">CSV</SelectItem>
-                      <SelectItem value="xlsx">Excel (.xlsx)</SelectItem>
-                      <SelectItem value="pdf">PDF Report</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="date-range">Date Range</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select range" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Time</SelectItem>
-                      <SelectItem value="ytd">Year to Date</SelectItem>
-                      <SelectItem value="last-month">Last Month</SelectItem>
-                      <SelectItem value="last-quarter">Last Quarter</SelectItem>
-                      <SelectItem value="custom">Custom Range</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+        </div>
       </div>
     </MainLayout>
   );
