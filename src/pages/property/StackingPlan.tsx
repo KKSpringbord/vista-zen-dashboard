@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { FileDown, Printer, ZoomIn, ZoomOut } from 'lucide-react';
+import { MainLayout } from "@/components/layout/MainLayout";
 
 // Property data
 const property = {
@@ -136,33 +137,37 @@ const StackingPlan = () => {
   const handleZoomIn = () => setZoomLevel(prev => Math.min(prev + 25, 150));
   const handleZoomOut = () => setZoomLevel(prev => Math.max(prev - 25, 50));
 
-  return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b bg-card">
-        {/* Property Info Bar */}
-        <div className="px-6 py-3 border-b">
-          <div className="flex items-center text-sm text-muted-foreground">
-            <span className="font-semibold text-foreground">{property.name}</span>
-            <span className="mx-2">|</span>
-            <span>{property.location}</span>
-            <span className="mx-2">|</span>
-            <span>{property.totalSF.toLocaleString()} SF</span>
-            <span className="mx-2">|</span>
-            <span>{vacantPercent}% Vacant</span>
-            <span className="mx-2">|</span>
-            <span>{occupiedPercent}% Occupied</span>
-            <span className="mx-2">|</span>
-            <span>${(property.totalIncome / 1000).toFixed(0)}K Income</span>
-            <span className="mx-2">|</span>
-            <span>${property.avgRentPerSF}/SF</span>
-            <span className="mx-2">|</span>
-            <span>{property.expirations} Expirations</span>
-          </div>
-        </div>
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "Properties", href: "/properties/listing" },
+    { label: "Stacking Plan" },
+  ];
 
-        {/* Controls Bar */}
-        <div className="px-6 py-4 flex items-center justify-between">
+  return (
+    <MainLayout title="Stacking Plan" breadcrumbs={breadcrumbs}>
+      {/* Property Info Bar */}
+      <div className="px-6 py-3 border-b bg-card">
+        <div className="flex items-center text-sm text-muted-foreground">
+          <span className="font-semibold text-foreground">{property.name}</span>
+          <span className="mx-2">|</span>
+          <span>{property.location}</span>
+          <span className="mx-2">|</span>
+          <span>{property.totalSF.toLocaleString()} SF</span>
+          <span className="mx-2">|</span>
+          <span>{vacantPercent}% Vacant</span>
+          <span className="mx-2">|</span>
+          <span>{occupiedPercent}% Occupied</span>
+          <span className="mx-2">|</span>
+          <span>${(property.totalIncome / 1000).toFixed(0)}K Income</span>
+          <span className="mx-2">|</span>
+          <span>${property.avgRentPerSF}/SF</span>
+          <span className="mx-2">|</span>
+          <span>{property.expirations} Expirations</span>
+        </div>
+      </div>
+
+      {/* Controls Bar */}
+      <div className="px-6 py-4 flex items-center justify-between border-b bg-card">
           {/* Year Filters */}
           <div className="flex gap-2">
             {['2025', '2026', '2027', '2028'].map(year => (
@@ -206,7 +211,6 @@ const StackingPlan = () => {
             </Button>
           </div>
         </div>
-      </div>
 
       {/* Main Content */}
       <main className="p-6">
@@ -283,7 +287,7 @@ const StackingPlan = () => {
           </CardContent>
         </Card>
       </main>
-    </div>
+    </MainLayout>
   );
 };
 

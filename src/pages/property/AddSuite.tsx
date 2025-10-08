@@ -7,9 +7,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { ArrowLeft, ChevronRight, Save } from "lucide-react";
+import { ChevronRight, Save, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { MainLayout } from "@/components/layout/MainLayout";
 
 const AddSuite = () => {
   const navigate = useNavigate();
@@ -92,21 +93,14 @@ const AddSuite = () => {
 
   const filteredFloors = floors.filter(floor => floor.propertyId === formData.propertyId);
 
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="border-b bg-card">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-            <span>Property Management</span>
-            <ChevronRight className="w-4 h-4" />
-            <span>Property</span>
-            <ChevronRight className="w-4 h-4" />
-            <span className="text-foreground">Add Suite</span>
-          </div>
-          <h1 className="text-2xl font-bold">Suite Details</h1>
-        </div>
-      </div>
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "Properties", href: "/properties/listing" },
+    { label: "Add Suite" },
+  ];
 
+  return (
+    <MainLayout title="Add Suite" breadcrumbs={breadcrumbs}>
       <div className="container mx-auto px-6 py-6 max-w-6xl">
         <form onSubmit={handleSubmit}>
           <div className="flex gap-6">
@@ -429,7 +423,7 @@ const AddSuite = () => {
           </div>
         </form>
       </div>
-    </div>
+    </MainLayout>
   );
 };
 

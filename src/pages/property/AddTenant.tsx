@@ -8,9 +8,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
-import { Save, ArrowLeft, Users, CalendarIcon } from "lucide-react";
+import { Save, Users, CalendarIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { MainLayout } from "@/components/layout/MainLayout";
 
 const AddTenant = () => {
   const navigate = useNavigate();
@@ -57,26 +58,14 @@ const AddTenant = () => {
 
   const filteredSuites = suites.filter(suite => suite.propertyId === formData.propertyId);
 
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="bg-primary px-6 py-4 text-primary-foreground">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate("/properties/tenant-listing")}
-              className="flex items-center gap-2 text-primary-foreground hover:bg-primary/90"
-            >
-              <ArrowLeft className="w-4 h-4" />
-            </Button>
-            <h1 className="text-2xl font-bold">Add New Tenant</h1>
-          </div>
-        </div>
-        <div className="text-sm mt-2 text-primary-foreground/80">
-          Property Management &gt; Tenants &gt; Add Tenant
-        </div>
-      </div>
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "Tenants", href: "/properties/tenant-listing" },
+    { label: "Add Tenant" },
+  ];
 
+  return (
+    <MainLayout title="Add New Tenant" breadcrumbs={breadcrumbs}>
       <div className="p-6 max-w-6xl mx-auto">
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -327,7 +316,7 @@ const AddTenant = () => {
           </div>
         </form>
       </div>
-    </div>
+    </MainLayout>
   );
 };
 

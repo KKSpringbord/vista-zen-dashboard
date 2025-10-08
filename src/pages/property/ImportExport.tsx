@@ -7,8 +7,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { ArrowLeft, Upload, Download, FileSpreadsheet, Database, CheckCircle, AlertCircle } from "lucide-react";
+import { Upload, Download, FileSpreadsheet, Database, CheckCircle, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { MainLayout } from "@/components/layout/MainLayout";
 
 const ImportExport = () => {
   const navigate = useNavigate();
@@ -43,25 +44,15 @@ const ImportExport = () => {
     // In a real app, this would trigger a download
   };
 
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "Properties", href: "/properties/listing" },
+    { label: "Import / Export" },
+  ];
+
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center gap-4">
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate("/properties/listing")}
-          className="flex items-center gap-2"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Properties
-        </Button>
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Database className="w-8 h-8" />
-            Import / Export Data
-          </h1>
-          <p className="text-muted-foreground">Import property data or export existing information</p>
-        </div>
-      </div>
+    <MainLayout title="Import / Export Data" breadcrumbs={breadcrumbs}>
+      <div className="p-6 space-y-6">
 
       <Tabs defaultValue="import" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
@@ -332,7 +323,8 @@ const ImportExport = () => {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+    </MainLayout>
   );
 };
 

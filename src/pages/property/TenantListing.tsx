@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Search, Filter, Plus, Eye, Edit, Trash2, Phone, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { MainLayout } from "@/components/layout/MainLayout";
 
 const TenantListing = () => {
   const navigate = useNavigate();
@@ -95,8 +96,14 @@ const TenantListing = () => {
     return `${firstName.charAt(0)}${lastName.charAt(0)}`;
   };
 
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "Tenants" },
+  ];
+
   return (
-    <div className="p-6 space-y-6">
+    <MainLayout title="Tenant Listing" breadcrumbs={breadcrumbs}>
+      <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Tenant Listing</h1>
@@ -217,7 +224,8 @@ const TenantListing = () => {
           </Table>
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </MainLayout>
   );
 };
 
