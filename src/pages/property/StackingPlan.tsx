@@ -233,8 +233,15 @@ const StackingPlan = () => {
 
           <div className="relative px-6 py-6">
             <div className="flex items-start justify-between mb-4">
-              <div>
+              <div className="flex flex-col gap-3">
                 <h1 className="text-3xl font-bold text-foreground">{property.name}</h1>
+                <div className="w-80 h-48 bg-background/40 backdrop-blur-sm border-4 border-foreground/80 rounded overflow-hidden">
+                  <img
+                    src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt={property.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </div>
 
               <div className="flex items-center gap-3 bg-background/95 backdrop-blur-sm px-4 py-2 rounded-lg">
