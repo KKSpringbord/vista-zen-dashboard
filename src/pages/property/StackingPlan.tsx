@@ -223,19 +223,12 @@ const StackingPlan = () => {
   return (
     <MainLayout title="Stacking Plan" breadcrumbs={breadcrumbs}>
       <div className="bg-background min-h-screen">
-        <div className="relative bg-card border-b overflow-hidden">
-          <div
-            className="absolute inset-0 bg-cover bg-center opacity-20"
-            style={{
-              backgroundImage: `url('https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600')`,
-            }}
-          />
-
-          <div className="relative px-6 py-6">
-            <div className="flex items-start justify-between mb-4">
+        <div className="bg-card border-b">
+          <div className="px-6 py-6">
+            <div className="flex items-start gap-6">
               <div className="flex flex-col gap-3">
                 <h1 className="text-3xl font-bold text-foreground">{property.name}</h1>
-                <div className="w-80 h-48 bg-background/40 backdrop-blur-sm border-4 border-foreground/80 rounded overflow-hidden">
+                <div className="w-80 h-48 border-4 border-foreground/80 rounded overflow-hidden">
                   <img
                     src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600"
                     alt={property.name}
@@ -244,99 +237,101 @@ const StackingPlan = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 bg-background/95 backdrop-blur-sm px-4 py-2 rounded-lg">
-                <span className="text-sm text-muted-foreground">Select Property</span>
-                <div className="w-64">
-                  <Select value={selectedProperty} onValueChange={setSelectedProperty}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Property" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {properties.map(prop => (
-                        <SelectItem key={prop.id} value={prop.id}>
-                          {prop.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+              <div className="flex-1 flex flex-col gap-4">
+                <div className="flex items-center justify-end gap-3">
+                  <span className="text-sm text-muted-foreground">Select Property</span>
+                  <div className="w-64">
+                    <Select value={selectedProperty} onValueChange={setSelectedProperty}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Property" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {properties.map(prop => (
+                          <SelectItem key={prop.id} value={prop.id}>
+                            {prop.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Button>Show Plan</Button>
                 </div>
 
-                <Button>Show Plan</Button>
-              </div>
-            </div>
+                <div className="flex items-center justify-end gap-2">
+                  <Button
+                    variant={selectedTemplate === 'A' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setSelectedTemplate('A')}
+                  >
+                    Template A
+                  </Button>
+                  <Button
+                    variant={selectedTemplate === 'B' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setSelectedTemplate('B')}
+                  >
+                    Template B
+                  </Button>
+                  <Button
+                    variant={selectedTemplate === 'C' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setSelectedTemplate('C')}
+                  >
+                    Template C
+                  </Button>
+                </div>
 
-            <div className="flex items-center gap-2">
-              <Button
-                variant={selectedTemplate === 'A' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setSelectedTemplate('A')}
-              >
-                Template A
-              </Button>
-              <Button
-                variant={selectedTemplate === 'B' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setSelectedTemplate('B')}
-              >
-                Template B
-              </Button>
-              <Button
-                variant={selectedTemplate === 'C' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setSelectedTemplate('C')}
-              >
-                Template C
-              </Button>
+                <div className="bg-background rounded-lg p-6">
+                  <div className="grid grid-cols-4 gap-6">
+                    <div className="border-l-4 border-orange-500 pl-4">
+                      <div className="text-sm text-muted-foreground mb-1">Location</div>
+                      <div className="text-lg font-semibold">{property.location}</div>
+                    </div>
+
+                    <div className="border-l-4 border-orange-500 pl-4">
+                      <div className="text-sm text-muted-foreground mb-1">Total SF</div>
+                      <div className="text-lg font-semibold">{property.totalSF.toLocaleString()} sf</div>
+                    </div>
+
+                    <div className="border-l-4 border-orange-500 pl-4">
+                      <div className="text-sm text-muted-foreground mb-1">Vacant SF</div>
+                      <div className="text-lg font-semibold">{property.vacantPercent}% | {property.vacantSF.toLocaleString()} sf</div>
+                    </div>
+
+                    <div className="border-l-4 border-orange-500 pl-4">
+                      <div className="text-sm text-muted-foreground mb-1">Occupied SF</div>
+                      <div className="text-lg font-semibold">{property.occupiedPercent}% | {property.occupiedSF.toLocaleString()} sf</div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-4 gap-6 mt-6">
+                    <div className="border-l-4 border-orange-500 pl-4">
+                      <div className="text-sm text-muted-foreground mb-1">Floors</div>
+                      <div className="text-lg font-semibold">{property.floors}</div>
+                    </div>
+
+                    <div className="border-l-4 border-orange-500 pl-4">
+                      <div className="text-sm text-muted-foreground mb-1">Total Income</div>
+                      <div className="text-lg font-semibold">$ {property.totalIncome.toLocaleString()}</div>
+                    </div>
+
+                    <div className="border-l-4 border-orange-500 pl-4">
+                      <div className="text-sm text-muted-foreground mb-1">Average Rent per SF</div>
+                      <div className="text-lg font-semibold">$ {property.avgRentPerSF}</div>
+                    </div>
+
+                    <div className="border-l-4 border-orange-500 pl-4">
+                      <div className="text-sm text-muted-foreground mb-1">Expirations &lt; 12 Months</div>
+                      <div className="text-lg font-semibold">{property.expirations}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         <div className="p-6">
-          <div className="bg-card rounded-lg p-6 mb-6">
-            <div className="grid grid-cols-4 gap-6">
-              <div className="border-l-4 border-orange-500 pl-4">
-                <div className="text-sm text-muted-foreground mb-1">Location</div>
-                <div className="text-lg font-semibold">{property.location}</div>
-              </div>
-
-              <div className="border-l-4 border-orange-500 pl-4">
-                <div className="text-sm text-muted-foreground mb-1">Total SF</div>
-                <div className="text-lg font-semibold">{property.totalSF.toLocaleString()} sf</div>
-              </div>
-
-              <div className="border-l-4 border-orange-500 pl-4">
-                <div className="text-sm text-muted-foreground mb-1">Vacant SF</div>
-                <div className="text-lg font-semibold">{property.vacantPercent}% | {property.vacantSF.toLocaleString()} sf</div>
-              </div>
-
-              <div className="border-l-4 border-orange-500 pl-4">
-                <div className="text-sm text-muted-foreground mb-1">Occupied SF</div>
-                <div className="text-lg font-semibold">{property.occupiedPercent}% | {property.occupiedSF.toLocaleString()} sf</div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-4 gap-6 mt-6">
-              <div className="border-l-4 border-orange-500 pl-4">
-                <div className="text-sm text-muted-foreground mb-1">Floors</div>
-                <div className="text-lg font-semibold">{property.floors}</div>
-              </div>
-
-              <div className="border-l-4 border-orange-500 pl-4">
-                <div className="text-sm text-muted-foreground mb-1">Total Income</div>
-                <div className="text-lg font-semibold">$ {property.totalIncome.toLocaleString()}</div>
-              </div>
-
-              <div className="border-l-4 border-orange-500 pl-4">
-                <div className="text-sm text-muted-foreground mb-1">Average Rent per SF</div>
-                <div className="text-lg font-semibold">$ {property.avgRentPerSF}</div>
-              </div>
-
-              <div className="border-l-4 border-orange-500 pl-4">
-                <div className="text-sm text-muted-foreground mb-1">Expirations &lt; 12 Months</div>
-                <div className="text-lg font-semibold">{property.expirations}</div>
-              </div>
-            </div>
-          </div>
 
           <div className="bg-card border rounded-lg">
             <div className="border-b p-4 flex items-center justify-between">
