@@ -225,10 +225,58 @@ const StackingPlan = () => {
       <div className="bg-background min-h-screen">
         <div className="bg-card border-b">
           <div className="px-6 py-6">
-            <h1 className="text-3xl font-bold text-foreground mb-4">{property.name}</h1>
+            <div className="flex items-center justify-between mb-6">
+              <h1 className="text-3xl font-bold text-foreground">{property.name}</h1>
 
-            <div className="flex items-start gap-6">
-              <div className="w-80 h-48 border-4 border-foreground/80 rounded overflow-hidden flex-shrink-0">
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-muted-foreground">Select Property</span>
+                <div className="w-64">
+                  <Select value={selectedProperty} onValueChange={setSelectedProperty}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Property" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {properties.map(prop => (
+                        <SelectItem key={prop.id} value={prop.id}>
+                          {prop.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button className="bg-orange-500 hover:bg-orange-600">Show Plan</Button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 mb-4">
+              <Button
+                variant={selectedTemplate === 'A' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setSelectedTemplate('A')}
+                className={selectedTemplate === 'A' ? 'bg-orange-500 hover:bg-orange-600' : ''}
+              >
+                Template A
+              </Button>
+              <Button
+                variant={selectedTemplate === 'B' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setSelectedTemplate('B')}
+                className={selectedTemplate === 'B' ? 'bg-orange-500 hover:bg-orange-600' : ''}
+              >
+                Template B
+              </Button>
+              <Button
+                variant={selectedTemplate === 'C' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setSelectedTemplate('C')}
+                className={selectedTemplate === 'C' ? 'bg-orange-500 hover:bg-orange-600' : ''}
+              >
+                Template C
+              </Button>
+            </div>
+
+            <div className="flex items-stretch gap-0">
+              <div className="w-80 h-64 border-4 border-foreground/80 rounded-l overflow-hidden flex-shrink-0">
                 <img
                   src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600"
                   alt={property.name}
@@ -236,93 +284,46 @@ const StackingPlan = () => {
                 />
               </div>
 
-              <div className="flex-1 flex flex-col gap-4">
-                <div className="flex items-center justify-end gap-3">
-                  <span className="text-sm text-muted-foreground">Select Property</span>
-                  <div className="w-64">
-                    <Select value={selectedProperty} onValueChange={setSelectedProperty}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Property" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {properties.map(prop => (
-                          <SelectItem key={prop.id} value={prop.id}>
-                            {prop.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <Button>Show Plan</Button>
-                </div>
-
-                <div className="flex items-center justify-end gap-2">
-                  <Button
-                    variant={selectedTemplate === 'A' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setSelectedTemplate('A')}
-                  >
-                    Template A
-                  </Button>
-                  <Button
-                    variant={selectedTemplate === 'B' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setSelectedTemplate('B')}
-                  >
-                    Template B
-                  </Button>
-                  <Button
-                    variant={selectedTemplate === 'C' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setSelectedTemplate('C')}
-                  >
-                    Template C
-                  </Button>
-                </div>
-
-                <div className="bg-background rounded-lg p-6">
-                  <div className="grid grid-cols-4 gap-6">
-                    <div className="border-l-4 border-orange-500 pl-4">
-                      <div className="text-sm text-muted-foreground mb-1">Location</div>
-                      <div className="text-lg font-semibold">{property.location}</div>
-                    </div>
-
-                    <div className="border-l-4 border-orange-500 pl-4">
-                      <div className="text-sm text-muted-foreground mb-1">Total SF</div>
-                      <div className="text-lg font-semibold">{property.totalSF.toLocaleString()} sf</div>
-                    </div>
-
-                    <div className="border-l-4 border-orange-500 pl-4">
-                      <div className="text-sm text-muted-foreground mb-1">Vacant SF</div>
-                      <div className="text-lg font-semibold">{property.vacantPercent}% | {property.vacantSF.toLocaleString()} sf</div>
-                    </div>
-
-                    <div className="border-l-4 border-orange-500 pl-4">
-                      <div className="text-sm text-muted-foreground mb-1">Occupied SF</div>
-                      <div className="text-lg font-semibold">{property.occupiedPercent}% | {property.occupiedSF.toLocaleString()} sf</div>
-                    </div>
+              <div className="flex-1 border-4 border-l-0 border-foreground/80 rounded-r bg-background p-6">
+                <div className="grid grid-cols-4 gap-x-6 gap-y-4 h-full content-center">
+                  <div className="border-l-4 border-orange-500 pl-4">
+                    <div className="text-sm text-muted-foreground mb-1">Location</div>
+                    <div className="text-base font-semibold">{property.location}</div>
                   </div>
 
-                  <div className="grid grid-cols-4 gap-6 mt-6">
-                    <div className="border-l-4 border-orange-500 pl-4">
-                      <div className="text-sm text-muted-foreground mb-1">Floors</div>
-                      <div className="text-lg font-semibold">{property.floors}</div>
-                    </div>
+                  <div className="border-l-4 border-orange-500 pl-4">
+                    <div className="text-sm text-muted-foreground mb-1">Total SF</div>
+                    <div className="text-base font-semibold">{property.totalSF.toLocaleString()} sf</div>
+                  </div>
 
-                    <div className="border-l-4 border-orange-500 pl-4">
-                      <div className="text-sm text-muted-foreground mb-1">Total Income</div>
-                      <div className="text-lg font-semibold">$ {property.totalIncome.toLocaleString()}</div>
-                    </div>
+                  <div className="border-l-4 border-orange-500 pl-4">
+                    <div className="text-sm text-muted-foreground mb-1">Vacant SF</div>
+                    <div className="text-base font-semibold">{property.vacantPercent}% | {property.vacantSF.toLocaleString()} sf</div>
+                  </div>
 
-                    <div className="border-l-4 border-orange-500 pl-4">
-                      <div className="text-sm text-muted-foreground mb-1">Average Rent per SF</div>
-                      <div className="text-lg font-semibold">$ {property.avgRentPerSF}</div>
-                    </div>
+                  <div className="border-l-4 border-orange-500 pl-4">
+                    <div className="text-sm text-muted-foreground mb-1">Occupied SF</div>
+                    <div className="text-base font-semibold">{property.occupiedPercent}% | {property.occupiedSF.toLocaleString()} sf</div>
+                  </div>
 
-                    <div className="border-l-4 border-orange-500 pl-4">
-                      <div className="text-sm text-muted-foreground mb-1">Expirations &lt; 12 Months</div>
-                      <div className="text-lg font-semibold">{property.expirations}</div>
-                    </div>
+                  <div className="border-l-4 border-orange-500 pl-4">
+                    <div className="text-sm text-muted-foreground mb-1">Floors</div>
+                    <div className="text-base font-semibold">{property.floors}</div>
+                  </div>
+
+                  <div className="border-l-4 border-orange-500 pl-4">
+                    <div className="text-sm text-muted-foreground mb-1">Total Income</div>
+                    <div className="text-base font-semibold">$ {property.totalIncome.toLocaleString()}</div>
+                  </div>
+
+                  <div className="border-l-4 border-orange-500 pl-4">
+                    <div className="text-sm text-muted-foreground mb-1">Average Rent per SF</div>
+                    <div className="text-base font-semibold">$ {property.avgRentPerSF}</div>
+                  </div>
+
+                  <div className="border-l-4 border-orange-500 pl-4">
+                    <div className="text-sm text-muted-foreground mb-1">Expirations &lt; 12 Months</div>
+                    <div className="text-base font-semibold">{property.expirations}</div>
                   </div>
                 </div>
               </div>
