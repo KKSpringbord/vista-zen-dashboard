@@ -223,15 +223,19 @@ const StackingPlan = () => {
   return (
     <MainLayout title="Stacking Plan" breadcrumbs={breadcrumbs}>
       <div className="bg-background min-h-screen">
-        <div className="bg-card border-b px-6 py-4">
-          <div className="flex items-center gap-4">
-            <h1 className="text-xl font-semibold">{property.name}</h1>
-
-            <div className="ml-6 w-48 h-32 bg-muted border-2 border-dashed rounded flex items-center justify-center text-sm text-muted-foreground">
-              Property Image
+        <div className="bg-card border-b px-6 py-6">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex items-start gap-6">
+              <div>
+                <h1 className="text-2xl font-semibold mb-3">{property.name}</h1>
+                <div className="w-48 h-32 bg-muted border-2 border-dashed rounded flex items-center justify-center text-sm text-muted-foreground">
+                  Property Image
+                </div>
+              </div>
             </div>
 
-            <div className="flex items-center gap-3 ml-auto">
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-muted-foreground">Select Property</span>
               <div className="w-64">
                 <Select value={selectedProperty} onValueChange={setSelectedProperty}>
                   <SelectTrigger>
@@ -251,7 +255,7 @@ const StackingPlan = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 mt-4">
+          <div className="flex items-center gap-2">
             <Button
               variant={selectedTemplate === 'A' ? 'default' : 'outline'}
               size="sm"
