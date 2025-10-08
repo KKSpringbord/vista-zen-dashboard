@@ -225,16 +225,15 @@ const StackingPlan = () => {
       <div className="bg-background min-h-screen">
         <div className="bg-card border-b">
           <div className="px-6 py-6">
+            <h1 className="text-3xl font-bold text-foreground mb-4">{property.name}</h1>
+
             <div className="flex items-start gap-6">
-              <div className="flex flex-col gap-3">
-                <h1 className="text-3xl font-bold text-foreground">{property.name}</h1>
-                <div className="w-80 h-48 border-4 border-foreground/80 rounded overflow-hidden">
-                  <img
-                    src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    alt={property.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+              <div className="w-80 h-48 border-4 border-foreground/80 rounded overflow-hidden flex-shrink-0">
+                <img
+                  src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600"
+                  alt={property.name}
+                  className="w-full h-full object-cover"
+                />
               </div>
 
               <div className="flex-1 flex flex-col gap-4">
