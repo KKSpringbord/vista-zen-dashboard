@@ -1,5 +1,5 @@
 import { Download, FileText } from "lucide-react";
-import { Sidebar } from "@/components/dashboard/Sidebar";
+import { MainLayout } from "@/components/layout/MainLayout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,24 +37,15 @@ const invoices = [
 ];
 
 export default function Invoices() {
-  return (
-    <div className="flex min-h-screen w-full bg-background-subtle">
-      <Sidebar />
-      
-      <main className="flex-1 overflow-y-auto">
-        {/* Header */}
-        <header className="bg-card border-b border-border sticky top-0 z-10 shadow-sm">
-          <div className="px-8 py-6">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-              <span>Subscription Management</span>
-              <span>/</span>
-              <span className="text-foreground">Invoice</span>
-            </div>
-            <h1 className="text-3xl font-bold text-foreground">Invoice List</h1>
-          </div>
-        </header>
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "Subscription Management" },
+    { label: "Invoices" },
+  ];
 
-        <div className="p-8">
+  return (
+    <MainLayout title="Invoice List" breadcrumbs={breadcrumbs}>
+      <div className="p-8">
           <Card>
             <div className="overflow-x-auto">
               <Table>
@@ -104,7 +95,6 @@ export default function Invoices() {
             </div>
           </Card>
         </div>
-      </main>
-    </div>
+    </MainLayout>
   );
 }

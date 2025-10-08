@@ -17,14 +17,46 @@ import {
   ClipboardList,
   Receipt
 } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
+// Navigation order: Dashboard, Stacking Plan, Property Management, Team Management, Reports, Embed Code, Subscription Management, Account Settings
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Stacking Plan', href: '/stacking', icon: Layers3 },
-  { name: 'User Log', href: '/user-logs', icon: FileText },
+];
+
+const propertyManagement = {
+  name: 'Property Management',
+  icon: Building2,
+  subItems: [
+    {
+      name: 'Property',
+      items: [
+        { name: 'Property Listing', href: '/properties/listing', icon: Building },
+        { name: 'Add Property', href: '/properties/add-property', icon: Plus },
+        { name: 'Add Floor', href: '/properties/add-floor', icon: Layers3 },
+        { name: 'Add Suite', href: '/properties/add-suite', icon: Home },
+        { name: 'Add Tenant', href: '/properties/add-tenant', icon: UserPlus },
+        { name: 'Import / Export', href: '/properties/import-export', icon: Database },
+      ]
+    },
+    { name: 'Tenant Listing', href: '/properties/tenant-listing', icon: ClipboardList }
+  ]
+};
+
+const teamManagement = {
+  name: 'Team Management',
+  icon: Users,
+  subItems: [
+    { name: 'Role Management', href: '/team/roles', icon: Settings },
+    { name: 'User Management', href: '/team/users', icon: UserPlus },
+    { name: 'Assign Property', href: '/team/assign-property', icon: Building },
+  ]
+};
+
+const bottomNavigation = [
   { name: 'Reports', href: '/reports', icon: BarChart3 },
   { name: 'Embed Code', href: '/embed-code', icon: Code },
 ];
@@ -46,54 +78,53 @@ const accountSettings = {
   ]
 };
 
-const teamManagement = {
-  name: 'Team Management',
-  icon: Users,
-  subItems: [
-    { name: 'Role Management', href: '/team/roles', icon: Settings },
-    { name: 'User Management', href: '/team/users', icon: UserPlus },
-    { name: 'Assign Property', href: '/team/assign-property', icon: Building },
-  ]
-};
-
-const propertyManagement = {
-  name: 'Property Management',
-  icon: Building2,
-  subItems: [
-    {
-      name: 'Property',
-      items: [
-        { name: 'Property Listing', href: '/properties/listing', icon: Building },
-        { name: 'Add Property', href: '/properties/add-property', icon: Plus },
-        { name: 'Add Floor', href: '/properties/add-floor', icon: Layers3 },
-        { name: 'Add Suite', href: '/properties/add-suite', icon: Home },
-        { name: 'Add Tenant', href: '/properties/add-tenant', icon: UserPlus },
-        { name: 'Import / Export', href: '/properties/import-export', icon: Database },
-      ]
-    },
-    { name: 'Tenant Listing', href: '/properties/tenant-listing', icon: ClipboardList }
-  ]
-};
-
 interface SidebarProps {
   collapsed?: boolean;
   onToggle?: () => void;
 }
 
 export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
-  const [isPropertyOpen, setIsPropertyOpen] = useState(false);
-  const [isPropertySubOpen, setIsPropertySubOpen] = useState(false);
-  const [isTeamOpen, setIsTeamOpen] = useState(false);
-  const [isSubscriptionOpen, setIsSubscriptionOpen] = useState(false);
-  const [isAccountOpen, setIsAccountOpen] = useState(false);
+  const location = useLocation();
+  const currentPath = location.pathname;
+  
+  // Check if any sub-route is active to keep parent menu open
+  const isPropertyRouteActive = propertyManagement.subItems.some(item => {
+    if ('items' in item) {
+      return item.items.some(subItem => currentPath === subItem.href);
+    }
+    return currentPath === item.href;
+  });
+
+  const isTeamRouteActive = teamManagement.subItems.some(item => currentPath === item.href);
+  
+  const isSubscriptionRouteActive = subscriptionManagement.subItems.some(item => currentPath === item.href);
+  
+  const isAccountRouteActive = accountSettings.subItems.some(item => currentPath === item.href);
+
+  const [isPropertyOpen, setIsPropertyOpen] = useState(isPropertyRouteActive);
+  const [isPropertySubOpen, setIsPropertySubOpen] = useState(isPropertyRouteActive);
+  const [isTeamOpen, setIsTeamOpen] = useState(isTeamRouteActive);
+  const [isSubscriptionOpen, setIsSubscriptionOpen] = useState(isSubscriptionRouteActive);
+  const [isAccountOpen, setIsAccountOpen] = useState(isAccountRouteActive);
+
+  // Update state when route changes
+  useEffect(() => {
+    if (isPropertyRouteActive) {
+      setIsPropertyOpen(true);
+      setIsPropertySubOpen(true);
+    }
+    if (isTeamRouteActive) setIsTeamOpen(true);
+    if (isSubscriptionRouteActive) setIsSubscriptionOpen(true);
+    if (isAccountRouteActive) setIsAccountOpen(true);
+  }, [currentPath, isPropertyRouteActive, isTeamRouteActive, isSubscriptionRouteActive, isAccountRouteActive]);
 
   return (
     <div className={cn(
-      "h-screen bg-card/95 backdrop-blur-sm border-r border-border/50 flex flex-col transition-all duration-300 shadow-xl",
+      "h-screen bg-card/95 backdrop-blur-sm border-r border-border/50 flex flex-col transition-all duration-300 shadow-xl fixed left-0 top-0 z-20 overflow-y-auto",
       collapsed ? "w-16" : "w-64"
     )}>
       {/* Logo */}
-      <div className="p-6 border-b border-border">
+      <div className="p-6 border-b border-border flex-shrink-0">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary-muted flex items-center justify-center">
             <Building2 className="w-5 h-5 text-primary-foreground" />
@@ -109,7 +140,7 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
 
       {/* User Profile */}
       {!collapsed && (
-        <div className="p-4 border-b border-border">
+        <div className="p-4 border-b border-border flex-shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-primary-subtle flex items-center justify-center">
               <span className="text-sm font-medium text-primary">KC</span>
@@ -286,6 +317,28 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
             )}
           </li>
 
+          {/* Bottom Navigation (Reports, Embed Code) */}
+          {bottomNavigation.map((item) => (
+            <li key={item.name}>
+              <NavLink
+                to={item.href}
+                className={({ isActive }) =>
+                  cn(
+                    "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
+                    "hover:bg-accent hover:text-accent-foreground",
+                    isActive 
+                      ? "bg-primary text-primary-foreground shadow-sm" 
+                      : "text-muted-foreground",
+                    collapsed && "justify-center"
+                  )
+                }
+              >
+                <item.icon className={cn("flex-shrink-0", collapsed ? "w-5 h-5" : "w-4 h-4")} />
+                {!collapsed && <span className="truncate">{item.name}</span>}
+              </NavLink>
+            </li>
+          ))}
+
           {/* Subscription Management Collapsible Section */}
           <li>
             <button
@@ -387,7 +440,7 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-border">
+      <div className="p-4 border-t border-border flex-shrink-0">
         <button className={cn(
           "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground",
           "hover:bg-destructive hover:text-destructive-foreground transition-all duration-200",

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Search, Calendar } from "lucide-react";
-import { Sidebar } from "@/components/dashboard/Sidebar";
+import { Search, Calendar, ChevronUp, ChevronDown } from "lucide-react";
+import { MainLayout } from "@/components/layout/MainLayout";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -41,6 +41,26 @@ export default function UserLogs() {
   const [search, setSearch] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState("10");
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortField, setSortField] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>(null);
+
+  const handleSort = (field: string) => {
+    if (sortField === field) {
+      if (sortDirection === 'asc') setSortDirection('desc');
+      else if (sortDirection === 'desc') {
+        setSortField(null);
+        setSortDirection(null);
+      }
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const getSortIcon = (field: string) => {
+    if (sortField !== field) return null;
+    return sortDirection === 'asc' ? <ChevronUp className="w-4 h-4 inline ml-1" /> : <ChevronDown className="w-4 h-4 inline ml-1" />;
+  };
 
   const filteredLogs = logs.filter((log) =>
     Object.values(log).some((value) =>
@@ -48,10 +68,19 @@ export default function UserLogs() {
     )
   );
 
-  const totalPages = Math.ceil(filteredLogs.length / parseInt(entriesPerPage));
+  const sortedLogs = sortField && sortDirection 
+    ? [...filteredLogs].sort((a, b) => {
+        const aValue = a[sortField as keyof typeof a];
+        const bValue = b[sortField as keyof typeof b];
+        if (sortDirection === 'asc') return aValue > bValue ? 1 : -1;
+        return aValue < bValue ? 1 : -1;
+      })
+    : filteredLogs;
+
+  const totalPages = Math.ceil(sortedLogs.length / parseInt(entriesPerPage));
   const startIndex = (currentPage - 1) * parseInt(entriesPerPage);
   const endIndex = startIndex + parseInt(entriesPerPage);
-  const currentLogs = filteredLogs.slice(startIndex, endIndex);
+  const currentLogs = sortedLogs.slice(startIndex, endIndex);
 
   const getTypeBadge = (type: string) => {
     const variants: Record<string, "default" | "secondary" | "destructive"> = {
@@ -62,20 +91,14 @@ export default function UserLogs() {
     return <Badge variant={variants[type] || "secondary"}>{type}</Badge>;
   };
 
-  return (
-    <div className="flex min-h-screen w-full bg-background-subtle">
-      <Sidebar />
-      
-      <main className="flex-1 overflow-y-auto">
-        {/* Header */}
-        <header className="bg-card border-b border-border sticky top-0 z-10 shadow-sm">
-          <div className="px-8 py-6">
-            <h1 className="text-3xl font-bold text-foreground">User Logs</h1>
-            <p className="text-muted-foreground mt-1">Track user activity and changes</p>
-          </div>
-        </header>
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "User Logs" },
+  ];
 
-        <div className="p-8">
+  return (
+    <MainLayout title="User Logs" breadcrumbs={breadcrumbs}>
+      <div className="p-8">
           <Card className="p-6">
             {/* Filters */}
             <div className="flex flex-col md:flex-row gap-4 mb-6">
@@ -113,13 +136,36 @@ export default function UserLogs() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Property</TableHead>
-                    <TableHead>Source</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>User Name</TableHead>
-                    <TableHead className="text-right">
+                    <TableHead 
+                      className="cursor-pointer hover:bg-accent/50"
+                      onClick={() => handleSort('property')}
+                    >
+                      Property {getSortIcon('property')}
+                    </TableHead>
+                    <TableHead 
+                      className="cursor-pointer hover:bg-accent/50"
+                      onClick={() => handleSort('source')}
+                    >
+                      Source {getSortIcon('source')}
+                    </TableHead>
+                    <TableHead 
+                      className="cursor-pointer hover:bg-accent/50"
+                      onClick={() => handleSort('type')}
+                    >
+                      Type {getSortIcon('type')}
+                    </TableHead>
+                    <TableHead 
+                      className="cursor-pointer hover:bg-accent/50"
+                      onClick={() => handleSort('userName')}
+                    >
+                      User Name {getSortIcon('userName')}
+                    </TableHead>
+                    <TableHead 
+                      className="text-right cursor-pointer hover:bg-accent/50"
+                      onClick={() => handleSort('timestamp')}
+                    >
                       <div className="flex items-center justify-end gap-2">
-                        Timestamp
+                        Timestamp {getSortIcon('timestamp')}
                         <Calendar className="w-4 h-4" />
                       </div>
                     </TableHead>
@@ -157,8 +203,8 @@ export default function UserLogs() {
             {/* Pagination */}
             <div className="flex items-center justify-between mt-6">
               <div className="text-sm text-muted-foreground">
-                Showing {startIndex + 1} to {Math.min(endIndex, filteredLogs.length)} of{" "}
-                {filteredLogs.length} entries
+                Showing {startIndex + 1} to {Math.min(endIndex, sortedLogs.length)} of{" "}
+                {sortedLogs.length} entries
               </div>
 
               <Pagination>
@@ -206,7 +252,6 @@ export default function UserLogs() {
             </div>
           </Card>
         </div>
-      </main>
-    </div>
+    </MainLayout>
   );
 }

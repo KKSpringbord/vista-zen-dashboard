@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { User, Lock, Building } from "lucide-react";
-import { Sidebar } from "@/components/dashboard/Sidebar";
+import { MainLayout } from "@/components/layout/MainLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
@@ -79,20 +79,14 @@ export default function AccountSettings() {
     }, 1000);
   };
 
-  return (
-    <div className="flex min-h-screen w-full bg-background-subtle">
-      <Sidebar />
-      
-      <main className="flex-1 overflow-y-auto">
-        {/* Header */}
-        <header className="bg-card border-b border-border sticky top-0 z-10 shadow-sm">
-          <div className="px-8 py-6">
-            <h1 className="text-3xl font-bold text-foreground">Account Settings</h1>
-            <p className="text-muted-foreground mt-1">Manage your account preferences</p>
-          </div>
-        </header>
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "Account Settings" },
+  ];
 
-        <div className="p-8 max-w-4xl">
+  return (
+    <MainLayout title="Account Settings" breadcrumbs={breadcrumbs}>
+      <div className="p-8 max-w-4xl">
           <Tabs defaultValue="profile" className="space-y-6">
             <TabsList className="grid w-full grid-cols-3 lg:w-auto">
               <TabsTrigger value="profile" className="gap-2">
@@ -301,7 +295,6 @@ export default function AccountSettings() {
             </TabsContent>
           </Tabs>
         </div>
-      </main>
-    </div>
+    </MainLayout>
   );
 }

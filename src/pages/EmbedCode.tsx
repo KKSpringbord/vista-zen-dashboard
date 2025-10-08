@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Copy, Check } from "lucide-react";
-import { Sidebar } from "@/components/dashboard/Sidebar";
+import { MainLayout } from "@/components/layout/MainLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -56,20 +56,14 @@ export default function EmbedCode() {
     }
   };
 
-  return (
-    <div className="flex min-h-screen w-full bg-background-subtle">
-      <Sidebar />
-      
-      <main className="flex-1 overflow-y-auto">
-        {/* Header */}
-        <header className="bg-card border-b border-border sticky top-0 z-10 shadow-sm">
-          <div className="px-8 py-6">
-            <h1 className="text-3xl font-bold text-foreground">Embed Code</h1>
-            <p className="text-muted-foreground mt-1">Generate embed code for your properties</p>
-          </div>
-        </header>
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "Embed Code" },
+  ];
 
-        <div className="p-8 max-w-4xl">
+  return (
+    <MainLayout title="Embed Code" breadcrumbs={breadcrumbs}>
+      <div className="p-8 max-w-4xl">
           <Card>
             <CardHeader>
               <CardTitle>Generate Embed Code</CardTitle>
@@ -150,7 +144,6 @@ export default function EmbedCode() {
             </CardContent>
           </Card>
         </div>
-      </main>
-    </div>
+    </MainLayout>
   );
 }

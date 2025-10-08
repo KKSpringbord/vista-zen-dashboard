@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Check, X, CreditCard } from "lucide-react";
-import { Sidebar } from "@/components/dashboard/Sidebar";
+import { MainLayout } from "@/components/layout/MainLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -30,20 +30,15 @@ const features = [
 export default function MyPlan() {
   const [autoRenewal, setAutoRenewal] = useState(true);
 
-  return (
-    <div className="flex min-h-screen w-full bg-background-subtle">
-      <Sidebar />
-      
-      <main className="flex-1 overflow-y-auto">
-        {/* Header */}
-        <header className="bg-card border-b border-border sticky top-0 z-10 shadow-sm">
-          <div className="px-8 py-6">
-            <h1 className="text-3xl font-bold text-foreground">My Subscription</h1>
-            <p className="text-muted-foreground mt-1">Manage your subscription and billing</p>
-          </div>
-        </header>
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "Subscription Management" },
+    { label: "My Plan" },
+  ];
 
-        <div className="p-8 max-w-7xl mx-auto">
+  return (
+    <MainLayout title="My Subscription" breadcrumbs={breadcrumbs}>
+      <div className="p-8 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Current Subscription Details */}
             <Card className="lg:col-span-1">
@@ -189,7 +184,6 @@ export default function MyPlan() {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+    </MainLayout>
   );
 }
