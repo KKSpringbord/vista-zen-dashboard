@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ThemeProvider } from "next-themes";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PropertyListing from "./pages/property/PropertyListing";
@@ -22,39 +23,43 @@ import Invoices from "./pages/subscription/Invoices";
 import EmbedCode from "./pages/EmbedCode";
 import AccountSettings from "./pages/account/AccountSettings";
 import UserLogs from "./pages/UserLogs";
+import Notifications from "./pages/Notifications";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/properties/listing" element={<PropertyListing />} />
-          <Route path="/properties/add-property" element={<AddProperty />} />
-          <Route path="/properties/add-floor" element={<AddFloor />} />
-          <Route path="/properties/add-suite" element={<AddSuite />} />
-          <Route path="/properties/add-tenant" element={<AddTenant />} />
-          <Route path="/properties/import-export" element={<ImportExport />} />
-          <Route path="/properties/tenant-listing" element={<TenantListing />} />
-          <Route path="/properties/view/:id" element={<PropertyView />} />
-          <Route path="/stacking" element={<StackingPlan />} />
-          <Route path="/team/roles" element={<RoleManagement />} />
-          <Route path="/team/users" element={<UserManagement />} />
-          <Route path="/team/assign-property" element={<AssignProperty />} />
-          <Route path="/subscription/my-plan" element={<MyPlan />} />
-          <Route path="/subscription/invoices" element={<Invoices />} />
-          <Route path="/embed-code" element={<EmbedCode />} />
-          <Route path="/account/settings" element={<AccountSettings />} />
-          <Route path="/user-logs" element={<UserLogs />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/properties/listing" element={<PropertyListing />} />
+            <Route path="/properties/add-property" element={<AddProperty />} />
+            <Route path="/properties/add-floor" element={<AddFloor />} />
+            <Route path="/properties/add-suite" element={<AddSuite />} />
+            <Route path="/properties/add-tenant" element={<AddTenant />} />
+            <Route path="/properties/import-export" element={<ImportExport />} />
+            <Route path="/properties/tenant-listing" element={<TenantListing />} />
+            <Route path="/properties/view/:id" element={<PropertyView />} />
+            <Route path="/stacking" element={<StackingPlan />} />
+            <Route path="/team/roles" element={<RoleManagement />} />
+            <Route path="/team/users" element={<UserManagement />} />
+            <Route path="/team/assign-property" element={<AssignProperty />} />
+            <Route path="/subscription/my-plan" element={<MyPlan />} />
+            <Route path="/subscription/invoices" element={<Invoices />} />
+            <Route path="/embed-code" element={<EmbedCode />} />
+            <Route path="/account/settings" element={<AccountSettings />} />
+            <Route path="/user-logs" element={<UserLogs />} />
+            <Route path="/notifications" element={<Notifications />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

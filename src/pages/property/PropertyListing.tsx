@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Eye, BarChart3, Edit, Trash2, ChevronUp, Menu } from "lucide-react";
+import { Eye, BarChart3, Edit, Trash2, ChevronUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { Sidebar } from "@/components/dashboard/Sidebar";
+import { MainLayout } from "@/components/layout/MainLayout";
 
 const PropertyListing = () => {
   const navigate = useNavigate();
@@ -14,7 +14,6 @@ const PropertyListing = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Mock data matching the reference image
   const properties = [
@@ -105,23 +104,14 @@ const PropertyListing = () => {
   const startEntry = (currentPage - 1) * parseInt(entriesPerPage) + 1;
   const endEntry = Math.min(currentPage * parseInt(entriesPerPage), totalEntries);
 
-  return (
-    <div className="min-h-screen bg-background flex">
-      <Sidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
-      
-      <div className="flex-1 p-6">
-        {/* Header with hamburger */}
-        <div className="mb-6">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="mb-4"
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
-        </div>
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "Properties", href: "/properties/listing" },
+  ];
 
+  return (
+    <MainLayout title="Property Listing" breadcrumbs={breadcrumbs}>
+      <div className="p-6">
         {/* Controls */}
         <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -290,10 +280,10 @@ const PropertyListing = () => {
             Next
           </Button>
         </div>
+        </div>
       </div>
-    </div>
-  </div>
-);
+    </MainLayout>
+  );
 };
 
 export default PropertyListing;

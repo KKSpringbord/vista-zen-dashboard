@@ -7,12 +7,9 @@ import {
   TrendingUp, 
   Calendar,
   AlertTriangle,
-  TrendingDown,
-  Menu
+  TrendingDown
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Sidebar } from "@/components/dashboard/Sidebar";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { MainLayout } from "@/components/layout/MainLayout";
 import { MetricCard } from "@/components/dashboard/MetricCard";
 import { ChartCard } from "@/components/dashboard/ChartCard";
 import { ChartFilters } from "@/components/dashboard/ChartFilters";
@@ -531,7 +528,6 @@ const propertyFilters = [
 ];
 
 const Index = () => {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [selectedProperties, setSelectedProperties] = useState<string[]>([]);
   const [selectedCompetitorProperty, setSelectedCompetitorProperty] = useState<string>('Crystal Unit Po...');
 
@@ -558,24 +554,10 @@ const Index = () => {
     }
   };
 
-  const toggleSidebar = () => {
-    setSidebarCollapsed(!sidebarCollapsed);
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background-subtle to-background flex">
-      <div className="fixed left-0 top-0 h-screen z-30">
-        <Sidebar collapsed={sidebarCollapsed} />
-      </div>
-      
-      <div className="flex-1 flex flex-col" style={{ marginLeft: sidebarCollapsed ? '80px' : '256px' }}>
-        <DashboardHeader 
-          sidebarCollapsed={sidebarCollapsed}
-          onToggleSidebar={toggleSidebar}
-        />
-
-        <main className="flex-1 p-6 bg-gradient-to-b from-transparent to-background-subtle/30">
-          <div className="max-w-8xl mx-auto space-y-6">
+    <MainLayout title="Dashboard" breadcrumbs={[{ label: "Home" }]}>
+      <div className="p-6 bg-gradient-to-b from-transparent to-background-subtle/30">
+        <div className="max-w-8xl mx-auto space-y-6">
             {/* Metrics Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <MetricCard
@@ -845,9 +827,8 @@ const Index = () => {
             </ChartCard>
           </div>
         </div>
-        </main>
       </div>
-    </div>
+    </MainLayout>
   );
 };
 
