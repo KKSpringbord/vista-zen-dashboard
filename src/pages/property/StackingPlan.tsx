@@ -227,6 +227,10 @@ const StackingPlan = () => {
           <div className="flex items-center gap-4">
             <h1 className="text-xl font-semibold">{property.name}</h1>
 
+            <div className="ml-6 w-48 h-32 bg-muted border-2 border-dashed rounded flex items-center justify-center text-sm text-muted-foreground">
+              Property Image
+            </div>
+
             <div className="flex items-center gap-3 ml-auto">
               <div className="w-64">
                 <Select value={selectedProperty} onValueChange={setSelectedProperty}>
@@ -245,6 +249,30 @@ const StackingPlan = () => {
 
               <Button>Show Plan</Button>
             </div>
+          </div>
+
+          <div className="flex items-center gap-2 mt-4">
+            <Button
+              variant={selectedTemplate === 'A' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setSelectedTemplate('A')}
+            >
+              Template A
+            </Button>
+            <Button
+              variant={selectedTemplate === 'B' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setSelectedTemplate('B')}
+            >
+              Template B
+            </Button>
+            <Button
+              variant={selectedTemplate === 'C' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setSelectedTemplate('C')}
+            >
+              Template C
+            </Button>
           </div>
         </div>
 
@@ -311,7 +339,7 @@ const StackingPlan = () => {
 
           <div className="bg-card border rounded-lg">
             <div className="border-b p-4 flex items-center justify-between">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 {['2025', '2026', '2027', '2028'].map(year => (
                   <Button
                     key={year}
@@ -328,45 +356,40 @@ const StackingPlan = () => {
                 </Button>
               </div>
 
-              <div className="flex items-center gap-2">
-                <Button
-                  variant={selectedTemplate === 'A' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setSelectedTemplate('A')}
-                >
-                  Template A
-                </Button>
-                <Button
-                  variant={selectedTemplate === 'B' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setSelectedTemplate('B')}
-                >
-                  Template B
-                </Button>
-                <Button
-                  variant={selectedTemplate === 'C' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setSelectedTemplate('C')}
-                >
-                  Template C
+              <div className="flex items-center gap-4">
+                {Object.entries(statusConfig).map(([key, config]) => {
+                  const suites = Object.values(suiteDataByYear[selectedYear as keyof typeof suiteDataByYear] || {})
+                    .flat()
+                    .filter(suite => suite.status === key);
+
+                  return (
+                    <div key={key} className="flex items-center gap-2 group relative cursor-pointer">
+                      <div className={`w-6 h-6 rounded ${config.bg} border`} />
+                      <span className="text-sm">{config.label}</span>
+
+                      {suites.length > 0 && (
+                        <div className="absolute top-full left-0 mt-2 bg-card border rounded-lg shadow-lg p-3 w-64 z-50 hidden group-hover:block">
+                          <div className="font-semibold mb-2 text-sm">{config.label}</div>
+                          <div className="space-y-1 max-h-48 overflow-y-auto">
+                            {suites.map((suite, idx) => (
+                              <div key={idx} className="text-xs py-1 border-b last:border-0">
+                                <div className="font-medium">{suite.id}</div>
+                                <div className="text-muted-foreground">{suite.tenant || 'Vacant'} - {suite.sf} sf</div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+                <Button variant="outline" size="sm" onClick={() => setIsFullscreen(!isFullscreen)}>
+                  <Maximize2 className="h-4 w-4" />
                 </Button>
               </div>
             </div>
 
             <div className="p-4">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-4">
-                  {Object.entries(statusConfig).map(([key, config]) => (
-                    <div key={key} className="flex items-center gap-2">
-                      <div className={`w-6 h-6 rounded ${config.bg} border`} />
-                      <span className="text-sm">{config.label}</span>
-                    </div>
-                  ))}
-                </div>
-                <Button variant="outline" size="sm" onClick={() => setIsFullscreen(!isFullscreen)}>
-                  <Maximize2 className="h-4 w-4" />
-                </Button>
-              </div>
 
               <div className="flex gap-4">
                 <div className="flex-1 space-y-1">
@@ -402,18 +425,19 @@ const StackingPlan = () => {
                 <div className="w-32 space-y-1">
                   {[5, 4, 3, 2, 1].map(floor => {
                     const stats = calculateFloorStats(floor);
+                    const vacantCount = suiteDataByYear[selectedYear as keyof typeof suiteDataByYear]?.[floor]?.filter(s => s.status === 'vacant').length || 0;
                     return (
-                      <div key={floor} className="bg-muted rounded p-3 min-h-[100px] flex flex-col justify-center items-center border">
-                        <div className="text-2xl font-bold mb-1">{floor}</div>
-                        <div className="text-xs text-muted-foreground text-center">
-                          {stats.totalSF.toLocaleString()} sf
+                      <div key={floor} className="relative min-h-[100px] flex items-center">
+                        <div className="bg-muted border rounded px-4 py-3 flex flex-col justify-center items-center min-w-[120px]">
+                          <div className="text-2xl font-bold mb-1">{floor}</div>
+                          <div className="text-xs text-muted-foreground text-center">
+                            {stats.totalSF.toLocaleString()} sf
+                          </div>
+                          <div className="text-xs font-semibold mt-1">
+                            {vacantCount} Vacant sf
+                          </div>
                         </div>
-                        <div className="text-xs font-semibold mt-1">
-                          {stats.vacantSF > 0 ? `${(stats.vacantSF / stats.totalSF * 100).toFixed(0)}% Vacant` : '0 Vacant'}
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          {stats.vacantSF > 0 ? `${stats.vacantSF} sf` : ''}
-                        </div>
+                        <div className="absolute left-full w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[12px] border-l-muted"></div>
                       </div>
                     );
                   })}
