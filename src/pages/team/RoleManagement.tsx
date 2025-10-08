@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sidebar } from "@/components/dashboard/Sidebar";
+import { MainLayout } from "@/components/layout/MainLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -132,25 +132,21 @@ export default function RoleManagement() {
     role.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "Team Management" },
+    { label: "Role Management" },
+  ];
+
   return (
-    <div className="flex min-h-screen w-full bg-background">
-      <Sidebar />
-      
-      <main className="flex-1 p-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-            <span>Team Management</span>
-            <span>/</span>
-            <span className="text-foreground">Role Management</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold text-foreground">Role Management</h1>
-            <Button onClick={handleCreate} className="gap-2">
-              <Plus className="w-4 h-4" />
-              Create New Role
-            </Button>
-          </div>
+    <MainLayout title="Role Management" breadcrumbs={breadcrumbs}>
+      <div className="p-8">
+        <div className="mb-8 flex items-center justify-between">
+          <div></div>
+          <Button onClick={handleCreate} className="gap-2">
+            <Plus className="w-4 h-4" />
+            Create New Role
+          </Button>
         </div>
 
         {/* Role Form or Table */}
@@ -177,12 +173,26 @@ export default function RoleManagement() {
                 <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="name">Role Name *</Label>
-                    <Input
-                      id="name"
-                      placeholder="e.g., Admin, Manager"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    />
+                    {editingRole ? (
+                      <Select value={formData.name} onValueChange={(value) => setFormData({ ...formData, name: value })}>
+                        <SelectTrigger id="name">
+                          <SelectValue placeholder="Select Role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Admin">Admin</SelectItem>
+                          <SelectItem value="User 1">User 1</SelectItem>
+                          <SelectItem value="User 2">User 2</SelectItem>
+                          <SelectItem value="User 3">User 3</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <Input
+                        id="name"
+                        placeholder="e.g., Admin, Manager"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      />
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="title">Title *</Label>
@@ -369,7 +379,7 @@ export default function RoleManagement() {
             </CardContent>
           </Card>
         )}
-      </main>
-    </div>
+      </div>
+    </MainLayout>
   );
 }

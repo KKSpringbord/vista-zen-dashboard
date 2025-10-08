@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sidebar } from "@/components/dashboard/Sidebar";
+import { MainLayout } from "@/components/layout/MainLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -70,20 +70,15 @@ export default function AssignProperty() {
     user.role.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "Team Management" },
+    { label: "Assign Property" },
+  ];
+
   return (
-    <div className="flex min-h-screen w-full bg-background">
-      <Sidebar />
-      
-      <main className="flex-1 p-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-            <span>Team Management</span>
-            <span>/</span>
-            <span className="text-foreground">Assign Property</span>
-          </div>
-          <h1 className="text-3xl font-bold text-foreground">Assign Property</h1>
-        </div>
+    <MainLayout title="Assign Property" breadcrumbs={breadcrumbs}>
+      <div className="p-8">
 
         <Card>
           <CardContent className="p-6">
@@ -161,7 +156,7 @@ export default function AssignProperty() {
             </div>
           </CardContent>
         </Card>
-      </main>
+      </div>
 
       {/* Property Assignment Sheet */}
       <Sheet open={!!selectedUser} onOpenChange={() => setSelectedUser(null)}>
@@ -265,6 +260,6 @@ export default function AssignProperty() {
           )}
         </SheetContent>
       </Sheet>
-    </div>
+    </MainLayout>
   );
 }

@@ -24,6 +24,7 @@ import EmbedCode from "./pages/EmbedCode";
 import AccountSettings from "./pages/account/AccountSettings";
 import UserLogs from "./pages/UserLogs";
 import Notifications from "./pages/Notifications";
+import Reports from "./pages/Reports";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +55,7 @@ const App = () => (
             <Route path="/account/settings" element={<AccountSettings />} />
             <Route path="/user-logs" element={<UserLogs />} />
             <Route path="/notifications" element={<Notifications />} />
+            <Route path="/reports" element={<Reports />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

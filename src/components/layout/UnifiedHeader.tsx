@@ -78,7 +78,7 @@ export function UnifiedHeader({
   };
 
   return (
-    <div className="bg-gradient-to-r from-primary/20 via-primary/10 to-card border-b border-primary/20 px-6 py-4 shadow-sm backdrop-blur-sm sticky top-0 z-10">
+    <div className="bg-gradient-to-r from-orange-500/15 via-orange-400/10 to-card border-b border-orange-500/20 px-6 py-4 shadow-sm backdrop-blur-sm sticky top-0 z-10">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Button

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sidebar } from "@/components/dashboard/Sidebar";
+import { MainLayout } from "@/components/layout/MainLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -124,25 +124,21 @@ export default function UserManagement() {
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "Team Management" },
+    { label: "User Management" },
+  ];
+
   return (
-    <div className="flex min-h-screen w-full bg-background">
-      <Sidebar />
-      
-      <main className="flex-1 p-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-            <span>Team Management</span>
-            <span>/</span>
-            <span className="text-foreground">User Management</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold text-foreground">User Management</h1>
-            <Button onClick={handleCreate} className="gap-2">
-              <Plus className="w-4 h-4" />
-              Add New User
-            </Button>
-          </div>
+    <MainLayout title="User Management" breadcrumbs={breadcrumbs}>
+      <div className="p-8">
+        <div className="mb-8 flex items-center justify-between">
+          <div></div>
+          <Button onClick={handleCreate} className="gap-2">
+            <Plus className="w-4 h-4" />
+            Add New User
+          </Button>
         </div>
 
         {/* User Form or Table */}
@@ -345,7 +341,7 @@ export default function UserManagement() {
             </CardContent>
           </Card>
         )}
-      </main>
-    </div>
+      </div>
+    </MainLayout>
   );
 }

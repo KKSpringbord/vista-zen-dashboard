@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Eye, BarChart3, Edit, Trash2, ChevronUp } from "lucide-react";
+import { Eye, Edit, Trash2, ChevronUp, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
 
@@ -218,13 +218,6 @@ const PropertyListing = () => {
                       onClick={() => navigate(`/properties/view/${property.id}`)}
                     >
                       <Eye className="w-3.5 h-3.5" />
-                    </Button>
-                    <Button 
-                      size="sm" 
-                      className="w-8 h-8 p-0 bg-[#d84315] hover:bg-[#bf360c] rounded"
-                      title="Analytics"
-                    >
-                      <BarChart3 className="w-3.5 h-3.5" />
                     </Button>
                     <Button 
                       size="sm" 
