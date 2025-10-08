@@ -275,8 +275,8 @@ const StackingPlan = () => {
               </Button>
             </div>
 
-            <div className="flex items-stretch gap-0">
-              <div className="w-80 h-64 border-4 border-foreground/80 rounded-l overflow-hidden flex-shrink-0">
+            <div className="flex items-stretch gap-0 shadow-md rounded-lg overflow-hidden">
+              <div className="w-80 h-64 flex-shrink-0">
                 <img
                   src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600"
                   alt={property.name}
@@ -284,7 +284,7 @@ const StackingPlan = () => {
                 />
               </div>
 
-              <div className="flex-1 border-4 border-l-0 border-foreground/80 rounded-r bg-background p-6">
+              <div className="flex-1 bg-background p-6">
                 <div className="grid grid-cols-4 gap-x-6 gap-y-4 h-full content-center">
                   <div className="border-l-4 border-orange-500 pl-4">
                     <div className="text-sm text-muted-foreground mb-1">Location</div>
