@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { User, Lock, Building, HelpCircle, BookOpen, Mail } from "lucide-react";
+import { User, Lock, Building } from "lucide-react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -88,7 +88,7 @@ export default function AccountSettings() {
     <MainLayout title="Account Settings" breadcrumbs={breadcrumbs}>
       <div className="p-8 max-w-4xl">
           <Tabs defaultValue="profile" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4 lg:w-auto">
+            <TabsList className="grid w-full grid-cols-3 lg:w-auto">
               <TabsTrigger value="profile" className="gap-2">
                 <User className="w-4 h-4" />
                 User Profile
@@ -100,10 +100,6 @@ export default function AccountSettings() {
               <TabsTrigger value="company" className="gap-2">
                 <Building className="w-4 h-4" />
                 Company
-              </TabsTrigger>
-              <TabsTrigger value="help" className="gap-2">
-                <HelpCircle className="w-4 h-4" />
-                Help
               </TabsTrigger>
             </TabsList>
 
@@ -296,62 +292,6 @@ export default function AccountSettings() {
                   </Button>
                 </CardContent>
               </Card>
-            </TabsContent>
-
-            {/* Help Tab */}
-            <TabsContent value="help">
-              <div className="space-y-6">
-                <Card className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <BookOpen className="w-5 h-5 text-[#FF6B00]" />
-                      Training Module
-                    </CardTitle>
-                    <CardDescription>
-                      Access comprehensive training materials and tutorials
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Learn how to use StackPlanner effectively with our interactive training modules.
-                      Get answers to common questions and discover best practices.
-                    </p>
-                    <Button
-                      className="bg-[#FF6B00] hover:bg-[#E56000] text-white"
-                      onClick={() => window.open('#', '_blank')}
-                    >
-                      <BookOpen className="w-4 h-4 mr-2" />
-                      Access Training Module
-                    </Button>
-                  </CardContent>
-                </Card>
-
-                <Card className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Mail className="w-5 h-5 text-[#FF6B00]" />
-                      Contact Support
-                    </CardTitle>
-                    <CardDescription>
-                      Having an issue? Our support team is here to help
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      If you encounter any issues or have questions that aren't covered in our training materials,
-                      please don't hesitate to reach out to our support team.
-                    </p>
-                    <Button
-                      variant="outline"
-                      className="border-[#FF6B00] text-[#FF6B00] hover:bg-[#FF6B00] hover:text-white"
-                      onClick={() => window.location.href = 'mailto:support@stackplanner.io'}
-                    >
-                      <Mail className="w-4 h-4 mr-2" />
-                      Email Support: support@stackplanner.io
-                    </Button>
-                  </CardContent>
-                </Card>
-              </div>
             </TabsContent>
           </Tabs>
         </div>

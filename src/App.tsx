@@ -22,6 +22,7 @@ import MyPlan from "./pages/subscription/MyPlan";
 import Invoices from "./pages/subscription/Invoices";
 import EmbedCode from "./pages/EmbedCode";
 import AccountSettings from "./pages/account/AccountSettings";
+import Help from "./pages/account/Help";
 import UserLogs from "./pages/UserLogs";
 import Notifications from "./pages/Notifications";
 import Reports from "./pages/Reports";
@@ -53,6 +54,7 @@ const App = () => (
             <Route path="/subscription/invoices" element={<Invoices />} />
             <Route path="/embed-code" element={<EmbedCode />} />
             <Route path="/account/settings" element={<AccountSettings />} />
+            <Route path="/account/help" element={<Help />} />
             <Route path="/user-logs" element={<UserLogs />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/reports" element={<Reports />} />

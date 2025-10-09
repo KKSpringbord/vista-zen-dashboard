@@ -1,10 +1,10 @@
-import { 
-  LayoutDashboard, 
-  Building2, 
-  Layers3, 
-  Users, 
-  CreditCard, 
-  FileText, 
+import {
+  LayoutDashboard,
+  Building2,
+  Layers3,
+  Users,
+  CreditCard,
+  FileText,
   BarChart3,
   Code,
   Settings,
@@ -15,7 +15,8 @@ import {
   Database,
   ChevronDown,
   ClipboardList,
-  Receipt
+  Receipt,
+  HelpCircle
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -75,6 +76,7 @@ const accountSettings = {
   icon: Settings,
   subItems: [
     { name: 'User Profile', href: '/account/settings', icon: Settings },
+    { name: 'Help', href: '/account/help', icon: HelpCircle },
   ]
 };
 
