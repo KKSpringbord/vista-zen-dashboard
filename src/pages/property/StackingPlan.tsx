@@ -208,7 +208,7 @@ const StackingPlan = () => {
   const property = propertyData[selectedProperty];
 
   const calculateFloorStats = (floor: number) => {
-    const suites = suiteDataByYear[selectedYear as keyof typeof suiteDataByYear]?.[floor] || [];
+    const suites = suiteDataByYear[selectedYear as unknown as keyof typeof suiteDataByYear]?.[floor] || [];
     const totalSF = suites.reduce((sum, suite) => sum + suite.sf, 0);
     const vacantSF = suites.filter(s => s.status === 'vacant').reduce((sum, suite) => sum + suite.sf, 0);
     return { totalSF, vacantSF };
@@ -354,7 +354,7 @@ const StackingPlan = () => {
 
               <div className="flex items-center gap-4">
                 {Object.entries(statusConfig).map(([key, config]) => {
-                  const suites = Object.values(suiteDataByYear[selectedYear as keyof typeof suiteDataByYear] || {})
+                  const suites = Object.values(suiteDataByYear[selectedYear as unknown as keyof typeof suiteDataByYear] || {})
                     .flat()
                     .filter(suite => suite.status === key);
 
@@ -389,7 +389,7 @@ const StackingPlan = () => {
 
               <div className="space-y-1">
                 {[5, 4, 3, 2, 1].map(floor => {
-                  const suites = suiteDataByYear[selectedYear as keyof typeof suiteDataByYear]?.[floor] || [];
+                  const suites = suiteDataByYear[selectedYear as unknown as keyof typeof suiteDataByYear]?.[floor] || [];
                   const stats = calculateFloorStats(floor);
                   const vacantCount = suites.filter(s => s.status === 'vacant').length;
 
