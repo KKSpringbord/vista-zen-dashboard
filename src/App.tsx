@@ -20,6 +20,7 @@ import UserManagement from "./pages/team/UserManagement";
 import AssignProperty from "./pages/team/AssignProperty";
 import MyPlan from "./pages/subscription/MyPlan";
 import Invoices from "./pages/subscription/Invoices";
+import Payment from "./pages/subscription/Payment";
 import EmbedCode from "./pages/EmbedCode";
 import AccountSettings from "./pages/account/AccountSettings";
 import Help from "./pages/account/Help";
@@ -52,6 +53,7 @@ const App = () => (
             <Route path="/team/assign-property" element={<AssignProperty />} />
             <Route path="/subscription/my-plan" element={<MyPlan />} />
             <Route path="/subscription/invoices" element={<Invoices />} />
+            <Route path="/subscription/payment" element={<Payment />} />
             <Route path="/embed-code" element={<EmbedCode />} />
             <Route path="/account/settings" element={<AccountSettings />} />
             <Route path="/account/help" element={<Help />} />

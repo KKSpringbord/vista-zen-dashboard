@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Check, X, CreditCard } from "lucide-react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,6 +29,7 @@ const features = [
 ];
 
 export default function MyPlan() {
+  const navigate = useNavigate();
   const [autoRenewal, setAutoRenewal] = useState(true);
 
   const breadcrumbs = [
@@ -124,10 +126,17 @@ export default function MyPlan() {
                       </div>
 
                       <div className="space-y-2">
-                        <Button variant="outline" className="w-full">
+                        <Button 
+                          variant="outline" 
+                          className="w-full"
+                          onClick={() => navigate("/subscription/payment?plan=Pro&action=renew")}
+                        >
                           Renew
                         </Button>
-                        <Button className="w-full">
+                        <Button 
+                          className="w-full"
+                          onClick={() => navigate("/subscription/payment?plan=Pro&action=upgrade")}
+                        >
                           Upgrade
                         </Button>
                       </div>
@@ -170,10 +179,17 @@ export default function MyPlan() {
                       </div>
 
                       <div className="space-y-2">
-                        <Button variant="outline" className="w-full">
+                        <Button 
+                          variant="outline" 
+                          className="w-full"
+                          onClick={() => navigate("/subscription/payment?plan=Premium&action=renew")}
+                        >
                           Renew
                         </Button>
-                        <Button className="w-full">
+                        <Button 
+                          className="w-full"
+                          onClick={() => navigate("/subscription/payment?plan=Premium&action=upgrade")}
+                        >
                           Upgrade
                         </Button>
                       </div>
