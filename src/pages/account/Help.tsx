@@ -80,7 +80,7 @@ export default function Help() {
                   Get answers to common questions and discover best practices.
                 </p>
                 <Button
-                  onClick={() => window.open('#', '_blank')}
+                  onClick={() => window.location.href = '/account/training'}
                 >
                   <BookOpen className="w-4 h-4 mr-2" />
                   Access Training Module

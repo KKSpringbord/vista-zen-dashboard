@@ -24,6 +24,7 @@ import Payment from "./pages/subscription/Payment";
 import EmbedCode from "./pages/EmbedCode";
 import AccountSettings from "./pages/account/AccountSettings";
 import Help from "./pages/account/Help";
+import TrainingMaterials from "./pages/account/TrainingMaterials";
 import UserLogs from "./pages/UserLogs";
 import Notifications from "./pages/Notifications";
 import Reports from "./pages/Reports";
@@ -57,6 +58,7 @@ const App = () => (
             <Route path="/embed-code" element={<EmbedCode />} />
             <Route path="/account/settings" element={<AccountSettings />} />
             <Route path="/account/help" element={<Help />} />
+            <Route path="/account/training" element={<TrainingMaterials />} />
             <Route path="/user-logs" element={<UserLogs />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/reports" element={<Reports />} />
