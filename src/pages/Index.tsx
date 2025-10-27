@@ -625,23 +625,27 @@ const Index = () => {
             onFilterChange={(filters) => console.log('Filters changed:', filters)}
           />
 
-          {/* Revenue Breakdown Chart - Full Width */}
+          {/* Revenue Breakdown Chart - Full Width with Horizontal Scroll */}
           <div className="grid grid-cols-1 gap-6">
             <ChartCard
               title="Total Revenue Breakdown by Property"
-              description="Annual rent and occupancy percentage by property"
+              description="Annual rent and occupancy percentage by property (scroll to see all)"
             >
-              <ComboChart 
-                data={revenueBreakdownData}
-                series={[
-                  { dataKey: 'annualRent', name: 'Annual Rent', color: 'hsl(20 85% 55%)', type: 'bar', yAxisId: 'left' },
-                  { dataKey: 'occupancy', name: 'Occupancy %', color: 'hsl(142 76% 36%)', type: 'line', yAxisId: 'right' }
-                ]}
-                leftAxisLabel="Annual Revenue ($)"
-                rightAxisLabel="Occupancy (%)"
-                showLegend={true}
-                onElementClick={handleChartClick}
-              />
+              <div className="overflow-x-auto">
+                <div style={{ minWidth: `${Math.max(800, revenueBreakdownData.length * 80)}px` }}>
+                  <ComboChart 
+                    data={revenueBreakdownData}
+                    series={[
+                      { dataKey: 'annualRent', name: 'Annual Rent', color: 'hsl(20 85% 55%)', type: 'bar', yAxisId: 'left' },
+                      { dataKey: 'occupancy', name: 'Occupancy %', color: 'hsl(142 76% 36%)', type: 'line', yAxisId: 'right' }
+                    ]}
+                    leftAxisLabel="Annual Revenue ($)"
+                    rightAxisLabel="Occupancy (%)"
+                    showLegend={true}
+                    onElementClick={handleChartClick}
+                  />
+                </div>
+              </div>
             </ChartCard>
           </div>
 
