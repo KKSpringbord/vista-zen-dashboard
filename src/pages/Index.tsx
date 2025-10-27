@@ -635,7 +635,7 @@ const Index = () => {
                 data={revenueBreakdownData}
                 series={[
                   { dataKey: 'annualRent', name: 'Annual Rent', color: 'hsl(20 85% 55%)', type: 'bar', yAxisId: 'left' },
-                  { dataKey: 'occupancy', name: 'Occupancy %', color: 'hsl(25 90% 65%)', type: 'bar', yAxisId: 'right' }
+                  { dataKey: 'occupancy', name: 'Occupancy %', color: 'hsl(142 76% 36%)', type: 'line', yAxisId: 'right' }
                 ]}
                 leftAxisLabel="Annual Revenue ($)"
                 rightAxisLabel="Occupancy (%)"
