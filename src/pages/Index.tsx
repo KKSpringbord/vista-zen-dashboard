@@ -13,6 +13,7 @@ import { MainLayout } from "@/components/layout/MainLayout";
 import { MetricCard } from "@/components/dashboard/MetricCard";
 import { ChartCard } from "@/components/dashboard/ChartCard";
 import { ChartFilters } from "@/components/dashboard/ChartFilters";
+import { RevenueFilterBar } from "@/components/dashboard/RevenueFilterBar";
 import { ModernLineChart } from "@/components/dashboard/charts/LineChart";
 import { ModernBarChart } from "@/components/dashboard/charts/BarChart";
 import { ModernAreaChart } from "@/components/dashboard/charts/AreaChart";
@@ -431,6 +432,19 @@ const topPerformingPropertiesData = [
   },
 ];
 
+// Total Revenue Breakdown by Property Data
+const revenueBreakdownData = [
+  { name: 'Palm Grove V...', annualRent: 1100000, occupancy: 90 },
+  { name: 'Crystal Lake...', annualRent: 1050000, occupancy: 88 },
+  { name: 'Grandview Es...', annualRent: 680000, occupancy: 85 },
+  { name: 'Ocean View Villas', annualRent: 706000, occupancy: 78 },
+  { name: 'Lakeshore...', annualRent: 450000, occupancy: 75 },
+  { name: 'Properties...', annualRent: 800000, occupancy: 80 },
+  { name: 'Maple Residen...', annualRent: 550000, occupancy: 82 },
+  { name: 'Calla Horizon', annualRent: 520000, occupancy: 79 },
+  { name: 'Sunset Apart...', annualRent: 720000, occupancy: 65 },
+];
+
 // Market & Competitor Analysis Data by Property
 const competitorAnalysisData = {
   'Crystal Unit Po...': {
@@ -604,6 +618,31 @@ const Index = () => {
               value="$8,250"
               icon={TrendingDown}
             />
+          </div>
+
+          {/* Revenue Filter Bar */}
+          <RevenueFilterBar 
+            onFilterChange={(filters) => console.log('Filters changed:', filters)}
+          />
+
+          {/* Revenue Breakdown Chart - Full Width */}
+          <div className="grid grid-cols-1 gap-6">
+            <ChartCard
+              title="Total Revenue Breakdown by Property"
+              description="Annual rent and occupancy percentage by property"
+            >
+              <ComboChart 
+                data={revenueBreakdownData}
+                series={[
+                  { dataKey: 'annualRent', name: 'Annual Rent', color: 'hsl(20 85% 55%)', type: 'bar', yAxisId: 'left' },
+                  { dataKey: 'occupancy', name: 'Occupancy %', color: 'hsl(25 90% 65%)', type: 'bar', yAxisId: 'right' }
+                ]}
+                leftAxisLabel="Annual Revenue ($)"
+                rightAxisLabel="Occupancy (%)"
+                showLegend={true}
+                onElementClick={handleChartClick}
+              />
+            </ChartCard>
           </div>
 
           {/* Enhanced Charts Section */}
