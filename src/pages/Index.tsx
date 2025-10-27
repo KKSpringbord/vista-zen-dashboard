@@ -631,8 +631,8 @@ const Index = () => {
               title="Total Revenue Breakdown by Property"
               description="Annual rent and occupancy percentage by property (scroll to see all)"
             >
-              <div className="overflow-x-auto">
-                <div style={{ minWidth: `${Math.max(800, revenueBreakdownData.length * 80)}px` }}>
+              <div className="overflow-x-auto h-full">
+                <div style={{ minWidth: `${Math.max(800, revenueBreakdownData.length * 80)}px`, height: '100%' }}>
                   <ComboChart 
                     data={revenueBreakdownData}
                     series={[
